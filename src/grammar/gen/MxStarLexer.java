@@ -1,4 +1,4 @@
-package gen;// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\ParserRules.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\MxStar.g4 by ANTLR 4.10.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class ParserRulesLexer extends Lexer {
+public class MxStarLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.10.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -106,13 +106,13 @@ public class ParserRulesLexer extends Lexer {
 	}
 
 
-	public ParserRulesLexer(CharStream input) {
+	public MxStarLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "ParserRules.g4"; }
+	public String getGrammarFileName() { return "MxStar.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

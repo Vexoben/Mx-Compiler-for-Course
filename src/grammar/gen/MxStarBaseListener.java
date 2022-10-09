@@ -1,459 +1,459 @@
-package gen;// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\ParserRules.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\MxStar.g4 by ANTLR 4.10.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link ParserRulesListener},
+ * This class provides an empty implementation of {@link MxStarListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class ParserRulesBaseListener implements ParserRulesListener {
+public class MxStarBaseListener implements MxStarListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMxstarcode(ParserRulesParser.MxstarcodeContext ctx) { }
+	@Override public void enterMxstarcode(MxStarParser.MxstarcodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMxstarcode(ParserRulesParser.MxstarcodeContext ctx) { }
+	@Override public void exitMxstarcode(MxStarParser.MxstarcodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBuildinType_without_void(ParserRulesParser.BuildinType_without_voidContext ctx) { }
+	@Override public void enterBuildinType_without_void(MxStarParser.BuildinType_without_voidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBuildinType_without_void(ParserRulesParser.BuildinType_without_voidContext ctx) { }
+	@Override public void exitBuildinType_without_void(MxStarParser.BuildinType_without_voidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBuildinType_with_void(ParserRulesParser.BuildinType_with_voidContext ctx) { }
+	@Override public void enterBuildinType_with_void(MxStarParser.BuildinType_with_voidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBuildinType_with_void(ParserRulesParser.BuildinType_with_voidContext ctx) { }
+	@Override public void exitBuildinType_with_void(MxStarParser.BuildinType_with_voidContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarTypeDef(ParserRulesParser.VarTypeDefContext ctx) { }
+	@Override public void enterVarTypeDef(MxStarParser.VarTypeDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarTypeDef(ParserRulesParser.VarTypeDefContext ctx) { }
+	@Override public void exitVarTypeDef(MxStarParser.VarTypeDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDefSingle(ParserRulesParser.VarDefSingleContext ctx) { }
+	@Override public void enterVarDefSingle(MxStarParser.VarDefSingleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDefSingle(ParserRulesParser.VarDefSingleContext ctx) { }
+	@Override public void exitVarDefSingle(MxStarParser.VarDefSingleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDefAnyNumber(ParserRulesParser.VarDefAnyNumberContext ctx) { }
+	@Override public void enterVarDefAnyNumber(MxStarParser.VarDefAnyNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDefAnyNumber(ParserRulesParser.VarDefAnyNumberContext ctx) { }
+	@Override public void exitVarDefAnyNumber(MxStarParser.VarDefAnyNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDefBlock(ParserRulesParser.VarDefBlockContext ctx) { }
+	@Override public void enterVarDefBlock(MxStarParser.VarDefBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDefBlock(ParserRulesParser.VarDefBlockContext ctx) { }
+	@Override public void exitVarDefBlock(MxStarParser.VarDefBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncTypeDef(ParserRulesParser.FuncTypeDefContext ctx) { }
+	@Override public void enterFuncTypeDef(MxStarParser.FuncTypeDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncTypeDef(ParserRulesParser.FuncTypeDefContext ctx) { }
+	@Override public void exitFuncTypeDef(MxStarParser.FuncTypeDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncDef(ParserRulesParser.FuncDefContext ctx) { }
+	@Override public void enterFuncDef(MxStarParser.FuncDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncDef(ParserRulesParser.FuncDefContext ctx) { }
+	@Override public void exitFuncDef(MxStarParser.FuncDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncArgs(ParserRulesParser.FuncArgsContext ctx) { }
+	@Override public void enterFuncArgs(MxStarParser.FuncArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncArgs(ParserRulesParser.FuncArgsContext ctx) { }
+	@Override public void exitFuncArgs(MxStarParser.FuncArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncBlock(ParserRulesParser.FuncBlockContext ctx) { }
+	@Override public void enterFuncBlock(MxStarParser.FuncBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncBlock(ParserRulesParser.FuncBlockContext ctx) { }
+	@Override public void exitFuncBlock(MxStarParser.FuncBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncCallArgs(ParserRulesParser.FuncCallArgsContext ctx) { }
+	@Override public void enterFuncCallArgs(MxStarParser.FuncCallArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncCallArgs(ParserRulesParser.FuncCallArgsContext ctx) { }
+	@Override public void exitFuncCallArgs(MxStarParser.FuncCallArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncStatement(ParserRulesParser.FuncStatementContext ctx) { }
+	@Override public void enterFuncStatement(MxStarParser.FuncStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncStatement(ParserRulesParser.FuncStatementContext ctx) { }
+	@Override public void exitFuncStatement(MxStarParser.FuncStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassDef(ParserRulesParser.ClassDefContext ctx) { }
+	@Override public void enterClassDef(MxStarParser.ClassDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassDef(ParserRulesParser.ClassDefContext ctx) { }
+	@Override public void exitClassDef(MxStarParser.ClassDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassConstructor(ParserRulesParser.ClassConstructorContext ctx) { }
+	@Override public void enterClassConstructor(MxStarParser.ClassConstructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassConstructor(ParserRulesParser.ClassConstructorContext ctx) { }
+	@Override public void exitClassConstructor(MxStarParser.ClassConstructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfBlock(ParserRulesParser.IfBlockContext ctx) { }
+	@Override public void enterIfBlock(MxStarParser.IfBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfBlock(ParserRulesParser.IfBlockContext ctx) { }
+	@Override public void exitIfBlock(MxStarParser.IfBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhileBlock(ParserRulesParser.WhileBlockContext ctx) { }
+	@Override public void enterWhileBlock(MxStarParser.WhileBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhileBlock(ParserRulesParser.WhileBlockContext ctx) { }
+	@Override public void exitWhileBlock(MxStarParser.WhileBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForBlock(ParserRulesParser.ForBlockContext ctx) { }
+	@Override public void enterForBlock(MxStarParser.ForBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForBlock(ParserRulesParser.ForBlockContext ctx) { }
+	@Override public void exitForBlock(MxStarParser.ForBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInitializationStatement(ParserRulesParser.InitializationStatementContext ctx) { }
+	@Override public void enterInitializationStatement(MxStarParser.InitializationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInitializationStatement(ParserRulesParser.InitializationStatementContext ctx) { }
+	@Override public void exitInitializationStatement(MxStarParser.InitializationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForConditionExpression(ParserRulesParser.ForConditionExpressionContext ctx) { }
+	@Override public void enterForConditionExpression(MxStarParser.ForConditionExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForConditionExpression(ParserRulesParser.ForConditionExpressionContext ctx) { }
+	@Override public void exitForConditionExpression(MxStarParser.ForConditionExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStepExpression(ParserRulesParser.StepExpressionContext ctx) { }
+	@Override public void enterStepExpression(MxStarParser.StepExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStepExpression(ParserRulesParser.StepExpressionContext ctx) { }
+	@Override public void exitStepExpression(MxStarParser.StepExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJumpBlock(ParserRulesParser.JumpBlockContext ctx) { }
+	@Override public void enterJumpBlock(MxStarParser.JumpBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJumpBlock(ParserRulesParser.JumpBlockContext ctx) { }
+	@Override public void exitJumpBlock(MxStarParser.JumpBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtomicBlock(ParserRulesParser.AtomicBlockContext ctx) { }
+	@Override public void enterAtomicBlock(MxStarParser.AtomicBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtomicBlock(ParserRulesParser.AtomicBlockContext ctx) { }
+	@Override public void exitAtomicBlock(MxStarParser.AtomicBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPostfixExpr(ParserRulesParser.PostfixExprContext ctx) { }
+	@Override public void enterPostfixExpr(MxStarParser.PostfixExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPostfixExpr(ParserRulesParser.PostfixExprContext ctx) { }
+	@Override public void exitPostfixExpr(MxStarParser.PostfixExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLambdaExpr(ParserRulesParser.LambdaExprContext ctx) { }
+	@Override public void enterLambdaExpr(MxStarParser.LambdaExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLambdaExpr(ParserRulesParser.LambdaExprContext ctx) { }
+	@Override public void exitLambdaExpr(MxStarParser.LambdaExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinaryExpr(ParserRulesParser.BinaryExprContext ctx) { }
+	@Override public void enterBinaryExpr(MxStarParser.BinaryExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinaryExpr(ParserRulesParser.BinaryExprContext ctx) { }
+	@Override public void exitBinaryExpr(MxStarParser.BinaryExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNewExpr(ParserRulesParser.NewExprContext ctx) { }
+	@Override public void enterNewExpr(MxStarParser.NewExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNewExpr(ParserRulesParser.NewExprContext ctx) { }
+	@Override public void exitNewExpr(MxStarParser.NewExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMemberVisitExpr(ParserRulesParser.MemberVisitExprContext ctx) { }
+	@Override public void enterMemberVisitExpr(MxStarParser.MemberVisitExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMemberVisitExpr(ParserRulesParser.MemberVisitExprContext ctx) { }
+	@Override public void exitMemberVisitExpr(MxStarParser.MemberVisitExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParenthesesExpr(ParserRulesParser.ParenthesesExprContext ctx) { }
+	@Override public void enterParenthesesExpr(MxStarParser.ParenthesesExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParenthesesExpr(ParserRulesParser.ParenthesesExprContext ctx) { }
+	@Override public void exitParenthesesExpr(MxStarParser.ParenthesesExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtomExpr(ParserRulesParser.AtomExprContext ctx) { }
+	@Override public void enterAtomExpr(MxStarParser.AtomExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtomExpr(ParserRulesParser.AtomExprContext ctx) { }
+	@Override public void exitAtomExpr(MxStarParser.AtomExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpr(ParserRulesParser.UnaryExprContext ctx) { }
+	@Override public void enterUnaryExpr(MxStarParser.UnaryExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpr(ParserRulesParser.UnaryExprContext ctx) { }
+	@Override public void exitUnaryExpr(MxStarParser.UnaryExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrefixExpr(ParserRulesParser.PrefixExprContext ctx) { }
+	@Override public void enterPrefixExpr(MxStarParser.PrefixExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrefixExpr(ParserRulesParser.PrefixExprContext ctx) { }
+	@Override public void exitPrefixExpr(MxStarParser.PrefixExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignExpr(ParserRulesParser.AssignExprContext ctx) { }
+	@Override public void enterAssignExpr(MxStarParser.AssignExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignExpr(ParserRulesParser.AssignExprContext ctx) { }
+	@Override public void exitAssignExpr(MxStarParser.AssignExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncCallExpr(ParserRulesParser.FuncCallExprContext ctx) { }
+	@Override public void enterFuncCallExpr(MxStarParser.FuncCallExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncCallExpr(ParserRulesParser.FuncCallExprContext ctx) { }
+	@Override public void exitFuncCallExpr(MxStarParser.FuncCallExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayVisitExpr(ParserRulesParser.ArrayVisitExprContext ctx) { }
+	@Override public void enterArrayVisitExpr(MxStarParser.ArrayVisitExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArrayVisitExpr(ParserRulesParser.ArrayVisitExprContext ctx) { }
+	@Override public void exitArrayVisitExpr(MxStarParser.ArrayVisitExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArraySizeDeclare(ParserRulesParser.ArraySizeDeclareContext ctx) { }
+	@Override public void enterArraySizeDeclare(MxStarParser.ArraySizeDeclareContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArraySizeDeclare(ParserRulesParser.ArraySizeDeclareContext ctx) { }
+	@Override public void exitArraySizeDeclare(MxStarParser.ArraySizeDeclareContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtom(ParserRulesParser.AtomContext ctx) { }
+	@Override public void enterAtom(MxStarParser.AtomContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtom(ParserRulesParser.AtomContext ctx) { }
+	@Override public void exitAtom(MxStarParser.AtomContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

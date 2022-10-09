@@ -1,6 +1,7 @@
-grammar ParserRules;
+grammar MxStar;
 
 // parser
+
 mxstarcode: (classDef | funcDef | varDefBlock) * EOF;
 
 //normalBlock: '{' (normalstatement)* '}';
@@ -104,18 +105,7 @@ atom:
     This
 ;
 
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------------------------
 
 
 
