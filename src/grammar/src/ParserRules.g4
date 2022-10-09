@@ -1,12 +1,12 @@
 grammar ParserRules;
 
 // parser
-
 mxstarcode: (classDef | funcDef | varDefBlock) * EOF;
 
-normalBlock: '{' (normalstatement)* '}';
+//normalBlock: '{' (normalstatement)* '}';
 
-normalstatement: Int; //todo
+//normalstatement: funcStatement | funcDef | classDef;
+
 
 // type define
 buildinType_without_void: Int | Bool | String;
@@ -23,7 +23,6 @@ varDefAnyNumber: varTypeDef Identifier ('=' expression)? (',' Identifier ('=' ex
 
 varDefBlock: varDefAnyNumber ';';
 
-
 // function define
 funcTypeDef: varTypeDef | Void;
 
@@ -36,13 +35,13 @@ funcBlock: '{' funcStatement '}'; // you can't define a function or class in fun
 funcCallArgs: '(' (expression (',' expression)*)? ')';
 
 funcStatement : // you can't define a function or class in funcStatement
-    funcBlock |
-    ifBlock |
-    whileBlock |
-    forBlock |
-    jumpBlock |
-    varDefBlock |
-    atomicBlock
+      funcBlock
+    | ifBlock
+    | whileBlock
+    | forBlock
+    | jumpBlock
+    | varDefBlock
+    | atomicBlock
 ;
 
 // class define
@@ -69,15 +68,31 @@ atomicBlock: expression? ';';
 
 // expression
 expression:
-    atom |
-    '{' expression '}' |
-    funcCallExpr |
-    memberVisitExpr |
-
-
+      atom                                                            # AtomExpr
+    | '{' expression '}'                                              # ParenthesesExpr
+    | expression funcCallArgs                                         # FuncCallExpr
+    | expression '.' Identifier                                       # MemberVisitExpr
+    | expression '[' expression ']'                                   # ArrayVisitExpr
+    | New (buildinType_without_void | Identifier) arraySizeDeclare*   # NewExpr
+    | '[' '&'? ']' ('(' funcArgs ')' )? Arrow funcBlock funcCallArgs  # LambdaExpr
+    | expression op = ('++' | '--')                                   # PostfixExpr
+    | <assoc=right> op = ('++' | '--')  expression                    # PrefixExpr
+    | <assoc=right> op = ('+' | '-') expression                       # UnaryExpr
+    | <assoc=right> op = ('!' | '~') expression                       # UnaryExpr
+    | expression op = ('*' | '/' | '%') expression                    # BinaryExpr
+    | expression op = ('+' | '-') expression                          # BinaryExpr
+    | expression op = ('<<' | '>>') expression                        # BinaryExpr
+    | expression op = ('<' | '<='| '>' | '>=') expression             # BinaryExpr
+    | expression op = ('==' | '!=') expression                        # BinaryExpr
+    | expression op = '&' expression                                  # BinaryExpr
+    | expression op = '^' expression                                  # BinaryExpr
+    | expression op = '|' expression                                  # BinaryExpr
+    | expression op = '&&' expression                                 # BinaryExpr
+    | expression op = '||' expression                                 # BinaryExpr
+    | <assoc=right> expression op = '=' expression                    # AssignExpr
 ;
 
-funcCallExpr:
+arraySizeDeclare: ']' expression']';
 
 atom:
     Identifier |
@@ -169,6 +184,7 @@ RightBrace: '}';
 Colon: ':';
 Question: '?';
 Semicolon: ';';
+Arrow: '->';
 
 // Indentifier, Number and String
 Identifier: [a-zA-Z][a-zA-Z_0-9]*;
