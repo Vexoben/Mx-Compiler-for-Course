@@ -2,6 +2,7 @@ package Frontend.ast.def;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.DefNode;
+import Frontend.ast.ExprNode;
 import Frontend.ast.expr.NewExprNode;
 import Tools.Position;
 import Tools.Registry.VarRegistry;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 public class VarAnyNumberDefNode extends VarDefNode {
     public ArrayList<VarRegistry> registry_list;
-    public ArrayList<NewExprNode> assign_list;
+    public ArrayList<ExprNode> assign_list;
 
     public VarAnyNumberDefNode(Position _pos) {
         super(_pos);

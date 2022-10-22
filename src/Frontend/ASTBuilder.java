@@ -7,6 +7,7 @@ import Tools.Error.SemanticError;
 import Tools.Position;
 import Tools.Registry.ClassRegistry;
 import Tools.Registry.FuncRegistry;
+import Tools.Registry.VarRegistry;
 import Tools.Type.BaseType;
 import Tools.Type.ClassType;
 import Tools.Type.FuncType;
@@ -70,7 +71,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             throw new SemanticError(new Position(ctx.getStart()), "I'm lost. Where is main() function?");
         }
         if (!main.func_type.ret_type.match_type(BaseType.BuiltinType.INT)) {
-            throw new SemanticError(new Position(ctx.getStart()), "I never accept main() function of this type!")
+            throw new SemanticError(new Position(ctx.getStart()), "I never accept main() function of this type!");
         }
 
         return ret;
@@ -104,22 +105,102 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         FuncType type = new FuncType();
         ret.return_value = (VarSingleDefNode) visit(ctx.funcTypeDef());
         type.ret_type = ret.return_value.registry.var_type;
-        ctx.funcArgs().varTypeDef().forEach(i -> {
-            VarSingleDefNode tmp = (VarSingleDefNode) visit(i);
+        int number = ctx.funcArgs().varTypeDef().size();
+        for (int i = 0; i < number; ++i) {
+            VarSingleDefNode tmp = (VarSingleDefNode) visit(ctx.funcArgs().varTypeDef().get(i));
+            tmp.registry.name = ctx.funcArgs().Identifier().get(i).toString();
             ret.arg_list.add(tmp);
             type.func_args_type.add(tmp.registry.var_type);
             ret.func_scope.insert_registry(tmp.registry);
-        });
+        }
         ret.Block_node = (BlockNode) visit(ctx.funcBlock());
         return ret;
     }
 
-    @Override
-    public ASTNode visitVarDefBlock(MxStarParser.VarDefBlockContext ctx) {
-        VarAnyNumberDefNode ret = new VarAnyNumberDefNode(new Position(ctx.getStart()));
-        if (ctx.varDefAnyNumber().varTypeDef().Identifier() != null)
-        ret.
-        VarType type = new;
+    private VarType get_var_type(MxStarParser.VarDefAnyNumberContext ctx) {
+        VarType type;
+        if (ctx.varTypeDef().Identifier() != null) {
+            type = new VarType(ctx.varTypeDef().Identifier().toString());
+        } else {
+            if (ctx.varTypeDef().buildinType_without_void().Int() != null) {
+                type = new VarType(BaseType.BuiltinType.INT);
+            } else if (ctx.varTypeDef().buildinType_without_void().String() != null) {
+                type = new VarType(BaseType.BuiltinType.STRING);
+            } else if (ctx.varTypeDef().buildinType_without_void().Bool() != null) {
+                type = new VarType(BaseType.BuiltinType.BOOL);
+            } else {
+                throw new SemanticError(new Position(ctx.getStart()), "You give me a wrong variable type!");
+            }
+        }
+        type.dimension = ctx.varTypeDef().LeftBracket().size();
+        return type;
     }
 
+    private VarType get_var_type(MxStarParser.VarDefSingleContext ctx) {
+        VarType type;
+        if (ctx.varTypeDef().Identifier() != null) {
+            type = new VarType(ctx.varTypeDef().Identifier().toString());
+        } else {
+            if (ctx.varTypeDef().buildinType_without_void().Int() != null) {
+                type = new VarType(BaseType.BuiltinType.INT);
+            } else if (ctx.varTypeDef().buildinType_without_void().String() != null) {
+                type = new VarType(BaseType.BuiltinType.STRING);
+            } else if (ctx.varTypeDef().buildinType_without_void().Bool() != null) {
+                type = new VarType(BaseType.BuiltinType.BOOL);
+            } else {
+                throw new SemanticError(new Position(ctx.getStart()), "You give me a wrong variable type!");
+            }
+        }
+        type.dimension = ctx.varTypeDef().LeftBracket().size();
+        return type;
+    }
+
+    private VarType get_func_ret_type(MxStarParser.FuncTypeDefContext ctx) {
+        VarType type;
+        if (ctx.varTypeDef().Identifier() != null) {
+            type = new VarType(ctx.varTypeDef().Identifier().toString());
+            type.dimension = ctx.varTypeDef().LeftBracket().size();
+        } else if (ctx.Void() != null) {
+            type = new VarType(BaseType.BuiltinType.VOID);
+        } else {
+            if (ctx.varTypeDef().buildinType_without_void().Int() != null) {
+                type = new VarType(BaseType.BuiltinType.INT);
+            } else if (ctx.varTypeDef().buildinType_without_void().String() != null) {
+                type = new VarType(BaseType.BuiltinType.STRING);
+            } else if (ctx.varTypeDef().buildinType_without_void().Bool() != null) {
+                type = new VarType(BaseType.BuiltinType.BOOL);
+            } else {
+                throw new SemanticError(new Position(ctx.getStart()), "You give me a wrong function return type!");
+            }
+            type.dimension = ctx.varTypeDef().LeftBracket().size();
+        }
+        return type;
+    }
+
+    @Override
+    public ASTNode visitVarDefBlock(MxStarParser.VarDefBlockContext ctx) {
+        return visitVarDefAnyNumber(ctx.varDefAnyNumber());
+    }
+
+    @Override
+    public ASTNode visitVarDefAnyNumber(MxStarParser.VarDefAnyNumberContext ctx) {
+        VarAnyNumberDefNode ret = new VarAnyNumberDefNode(new Position(ctx.getStart()));
+        VarType type = get_var_type(ctx);
+        int number = ctx.expression().size();
+        for (int i = 0; i < number; ++i) {
+            ExprNode tmp = (ExprNode) visit(ctx.expression().get(i));
+            ret.registry_list.add(new VarRegistry(type, ctx.Identifier().get(i).toString(), new Position(ctx.getStart())));
+            ret.assign_list.add(tmp);
+        }
+        return ret;
+    }
+
+    @Override
+    public ASTNode visitVarDefSingle(MxStarParser.VarDefSingleContext ctx) {
+        VarSingleDefNode ret = new VarSingleDefNode(new Position(ctx.getStart()));
+        VarType type = get_var_type(ctx);
+        ret.registry = new VarRegistry(type, ctx.Identifier().toString(), new Position(ctx.getStart()));
+        ret.assign =
+        return ret;
+    }
 }

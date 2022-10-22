@@ -20,7 +20,9 @@ varTypeDef: (buildinType_without_void | Identifier)('[' ']')*;
 
 varDefSingle: varTypeDef Identifier ('=' expression)?;
 
-varDefAnyNumber: varTypeDef Identifier ('=' expression)? (',' Identifier ('=' expression)?)*;
+varDefWithoutType: Identifier ('=' expression)?;
+
+varDefAnyNumber: varTypeDef varDefWithoutType (',' varDefWithoutType)*;
 
 varDefBlock: varDefAnyNumber ';';
 

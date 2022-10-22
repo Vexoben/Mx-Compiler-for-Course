@@ -5,7 +5,7 @@ import Tools.Error.SemanticError;
 import Tools.Position;
 
 public class VarType extends BaseType {
-    private int dimension;
+    public int dimension;
     private boolean is_class;
 
     public VarType(BuiltinType type) {
