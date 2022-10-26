@@ -1,4 +1,4 @@
-// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\MxStar.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/Frontend/parser/g4-source\MxStar.g4 by ANTLR 4.10.1
 package Frontend.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -40,6 +40,12 @@ public interface MxStarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVarDefSingle(MxStarParser.VarDefSingleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxStarParser#varDefWithoutType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDefWithoutType(MxStarParser.VarDefWithoutTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxStarParser#varDefAnyNumber}.
 	 * @param ctx the parse tree

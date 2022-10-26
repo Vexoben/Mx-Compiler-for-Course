@@ -8,13 +8,15 @@ public interface ASTVisitor {
     public void visit(RootNode obj);
     public void visit(BlockNode obj);
     public void visit(StmtNode obj);
-
+    public void visit(DefNode obj);
+    public void visit(ExprNode obj);
 
     //def
     public void visit(FuncDefNode obj);
     public void visit(ClassDefNode obj);
     public void visit(VarSingleDefNode obj);
     public void visit(VarAnyNumberDefNode obj);
+    public void visit(VarDefNode obj);
 
     //expr
     public void visit(VarExprNode obj);

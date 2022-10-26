@@ -13,7 +13,15 @@ public class LambdaExprNode extends ExprNode {
     public FuncScope func_scope;
     public BlockNode suite_node;
     public ArrayList<VarSingleDefNode> arg_list;
+    public ArrayList<ExprNode> call_args;
     public boolean outside_visit;
+
+    public LambdaExprNode(Position _pos) {
+        super(_pos);
+        func_scope = new FuncScope();
+        arg_list = new ArrayList<>();
+        call_args = new ArrayList<>();
+    }
 
     public LambdaExprNode(Position _pos, BlockNode _suite_node, ArrayList<VarSingleDefNode> _arg, boolean _outside) {
         super(_pos);

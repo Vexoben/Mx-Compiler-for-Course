@@ -1,5 +1,6 @@
-// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\MxStar.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/Frontend/parser/g4-source\MxStar.g4 by ANTLR 4.10.1
 package Frontend.parser;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -70,6 +71,18 @@ public class MxStarBaseListener implements MxStarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVarDefSingle(MxStarParser.VarDefSingleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarDefWithoutType(MxStarParser.VarDefWithoutTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarDefWithoutType(MxStarParser.VarDefWithoutTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

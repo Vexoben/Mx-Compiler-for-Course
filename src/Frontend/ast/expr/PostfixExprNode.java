@@ -9,6 +9,10 @@ public class PostfixExprNode extends ExprNode {
     public VarExprNode var;
     public boolean is_add, is_sub;
 
+    public PostfixExprNode(Position _pos) {
+        super(_pos);
+    }
+
     public PostfixExprNode(Position _pos, String op, VarExprNode _var) {
         super(_pos);
         var = _var;

@@ -1,17 +1,20 @@
 package Frontend.ast.stmt;
 
+import Frontend.ast.ASTNode;
 import Frontend.ast.ASTVisitor;
+import Frontend.ast.ExprNode;
 import Frontend.ast.StmtNode;
 import Tools.Position;
 
 public class JumpStmtNode extends StmtNode {
-    String jump_case;
 
-    public JumpStmtNode(Position _pos, String _case) {
+    public enum JUMP_CASE {RETURN, CONTINUE, BREAK};
+    public JUMP_CASE jump_case;
+    public ExprNode return_value;
+
+    public JumpStmtNode(Position _pos) {
         super(_pos);
-        jump_case = _case;
     }
-
     public void accept(ASTVisitor visitor) {
         visitor.visit(this);
     }

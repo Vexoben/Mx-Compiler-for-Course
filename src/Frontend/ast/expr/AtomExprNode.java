@@ -5,15 +5,25 @@ import Frontend.ast.ExprNode;
 import Frontend.parser.MxStarParser;
 import Tools.Position;
 import Tools.Type.BaseType;
+import Tools.Type.VarType;
 
 import javax.swing.text.html.parser.Parser;
 
 public class AtomExprNode extends ExprNode {
-    public MxStarParser.AtomContext ctx;
+    public boolean maybe_var, maybe_func;
+    public String identifier;
 
-    public AtomExprNode(Position _pos, MxStarParser.AtomContext _ctx) {
+    public AtomExprNode(Position _pos, MxStarParser.AtomContext ctx) {
         super(_pos);
-        ctx = _ctx;
+        if (ctx.IntConst() != null) expr_type = new VarType(BaseType.BuiltinType.INT);
+        if (ctx.True() != null || ctx.False() != null) expr_type = new VarType(BaseType.BuiltinType.BOOL);
+        if (ctx.StringConst() != null) expr_type = new VarType(BaseType.BuiltinType.STRING);
+        if (ctx.Null() != null) expr_type = new VarType(BaseType.BuiltinType.NULL);
+        if (ctx.This() != null) expr_type = new VarType(BaseType.BuiltinType.CLASS);
+        if (ctx.Identifier() == null) {
+            identifier = ctx.Identifier().toString();
+            // find in scopes when semantic check
+        }
     }
 
     @Override
@@ -23,6 +33,6 @@ public class AtomExprNode extends ExprNode {
 
     @Override
     public boolean is_left_value() {
-        return ctx.Identifier() != null;
+        return maybe_var;
     }
 }

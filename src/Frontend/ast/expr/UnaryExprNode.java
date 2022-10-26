@@ -4,13 +4,12 @@ import Frontend.ast.ExprNode;
 import Tools.Position;
 
 public class UnaryExprNode extends ExprNode {
-    public String op;
+    public enum UnaryOperator { Not, ReverseBit, Positive, Negative};
+    public UnaryOperator op;
     public ExprNode origin_expr;
 
-    public UnaryExprNode(Position _pos, String _op, ExprNode _origin) {
+    public UnaryExprNode(Position _pos) {
         super(_pos);
-        op = _op;
-        origin_expr = _origin;
     }
 
     @Override

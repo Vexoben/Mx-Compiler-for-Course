@@ -7,18 +7,12 @@ import Tools.Position;
 import Tools.Scope.SuiteScope;
 
 public class IfStmtNode extends StmtNode {
-    ExprNode if_cond, else_cond;
-    StmtNode if_stmt, else_stmt;
-    SuiteScope if_scope, else_scope;
+    public ExprNode condition;
+    public StmtNode if_stmt, else_stmt;
+    public SuiteScope if_scope, else_scope;
 
-    public IfStmtNode(Position _pos,
-                      ExprNode _if_cond, ExprNode _else_cond,
-                      StmtNode _if_stmt, StmtNode _else_stmt) {
+    public IfStmtNode(Position _pos) {
         super(_pos);
-        if_stmt = _if_stmt;
-        else_stmt = _else_stmt;
-        if_cond = _if_cond;
-        else_cond = _else_cond;
         if_scope = new SuiteScope();
         else_scope = new SuiteScope();
     }

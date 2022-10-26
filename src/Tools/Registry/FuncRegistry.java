@@ -12,7 +12,4 @@ public class FuncRegistry extends BaseRegistry {
         func_type = type;
     }
 
-    public FuncRegistry(MxStarParser.FuncDefContext ctx) {
-        _name = ctx.
-    }
 }

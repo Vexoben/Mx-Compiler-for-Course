@@ -8,6 +8,9 @@ import Tools.Position;
 public class AtomStmtNode extends StmtNode {
     public ExprNode expr;
 
+    public AtomStmtNode(Position _pos) {
+        super(_pos);
+    }
     public AtomStmtNode(Position _pos, ExprNode _expr) {
         super(_pos);
         expr = _expr;

@@ -4,6 +4,7 @@ import Frontend.ast.ASTVisitor;
 import Frontend.ast.DefNode;
 import Tools.Position;
 import Tools.Registry.ClassRegistry;
+import Tools.Registry.FuncRegistry;
 import Tools.Scope.ClassScope;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class ClassDefNode extends DefNode {
 
     public ArrayList<FuncDefNode> func_list;
     public ArrayList<VarDefNode> var_list;
+    public FuncDefNode constructor;
     public ClassScope class_scope;
 
     public ClassDefNode(Position _pos) {

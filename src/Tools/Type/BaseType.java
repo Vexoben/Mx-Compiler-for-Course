@@ -8,13 +8,13 @@ public abstract class BaseType {
     BaseType(BuiltinType _type) {
         built_in_type = _type;
         switch (_type) {
-            case NULL: typename = "null";
-            case INT: typename = "int";
-            case BOOL: typename = "bool";
-            case STRING: typename = "string";
-            case VOID: typename = "void";
-            case CLASS: typename = "class";
-            case FUNC: typename = "func";
+            case NULL: typename = "null"; break;
+            case INT: typename = "int"; break;
+            case BOOL: typename = "bool"; break;
+            case STRING: typename = "string"; break;
+            case VOID: typename = "void"; break;
+            case CLASS: typename = "class"; break;
+            case FUNC: typename = "func"; break;
         }
     }
 
@@ -26,4 +26,7 @@ public abstract class BaseType {
 
     public abstract boolean is_array();
 
+    public boolean is_class() {
+        return built_in_type == BuiltinType.CLASS;
+    }
 }

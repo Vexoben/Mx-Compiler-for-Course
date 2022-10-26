@@ -1,4 +1,4 @@
-// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\MxStar.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/Frontend/parser/g4-source\MxStar.g4 by ANTLR 4.10.1
 package Frontend.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -57,6 +57,16 @@ public interface MxStarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVarDefSingle(MxStarParser.VarDefSingleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxStarParser#varDefWithoutType}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarDefWithoutType(MxStarParser.VarDefWithoutTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxStarParser#varDefWithoutType}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarDefWithoutType(MxStarParser.VarDefWithoutTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxStarParser#varDefAnyNumber}.
 	 * @param ctx the parse tree

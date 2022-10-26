@@ -6,17 +6,19 @@ import Tools.Error.RedefineError;
 import java.util.HashMap;
 public class FuncScope extends BaseScope {
 
+    public FuncRegistry func_registry;
+
     public FuncScope() {
         super();
     }
 
     @Override
-    public FuncRegistry find_func(String name) {
+    protected FuncRegistry find_func_in_this(String name) {
         return null;
     }
 
     @Override
-    public ClassRegistry find_class(String name) {
+    protected ClassRegistry find_class_in_this(String name) {
         return null;
     }
 

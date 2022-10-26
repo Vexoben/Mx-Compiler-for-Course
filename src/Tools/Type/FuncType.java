@@ -14,13 +14,21 @@ public class FuncType extends BaseType {
 
     @Override
     public boolean match_type(BaseType type) {
-        // todo
-        return false;
+        if (type instanceof FuncType) {
+            if (!ret_type.match_type(((FuncType) type).ret_type)) return false;
+            int n1 = func_args_type.size(), n2 = ((FuncType) type).func_args_type.size();
+            if (n1 != n2) return false;
+            for (int i = 0; i < n1; ++i) {
+                if (!func_args_type.get(i).match_type(((FuncType) type).func_args_type.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        } else return false;
     }
 
     @Override
     public boolean match_type(BuiltinType type) {
-        // todo
         return false;
     }
 

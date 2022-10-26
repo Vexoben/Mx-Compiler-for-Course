@@ -17,12 +17,12 @@ public class GlobalScope extends BaseScope {
     }
 
     @Override
-    public FuncRegistry find_func(String name) {
+    protected FuncRegistry find_func_in_this(String name) {
         return func_map.get(name);
     }
 
     @Override
-    public ClassRegistry find_class(String name) {
+    protected ClassRegistry find_class_in_this(String name) {
         return class_map.get(name);
     }
 

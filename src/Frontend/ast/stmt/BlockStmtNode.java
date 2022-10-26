@@ -6,7 +6,7 @@ import Frontend.ast.StmtNode;
 import Tools.Position;
 
 public class BlockStmtNode extends StmtNode {
-    BlockNode block;
+    public BlockNode block;
 
     public BlockStmtNode(Position _pos, BlockNode _block) {
         super(_pos);

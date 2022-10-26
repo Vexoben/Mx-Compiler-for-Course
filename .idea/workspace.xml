@@ -5,26 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="241afd03-8f0b-4994-87e4-0ca6420387b8" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/antlr_4_10_1_complete.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/antlr_4_9_2_complete.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/antlr_4_9_2_complete__2_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/antlr-runtime-4.8.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/antlr-4.9.2-complete.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Compiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Compiler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/ASTNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/ASTNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/ast/ASTVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/ASTVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/DefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/DefNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/ast/ExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/ExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/RootNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/RootNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/StmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/StmtNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/VarAnyNumberDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/VarAnyNumberDefNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/ClassDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/ClassDefNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/FuncDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/FuncDefNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/VarSingleDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/VarSingleDefNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/AssignExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/AssignExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/AtomExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/AtomExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/BinaryExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/BinaryExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/FuncCallExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/FuncCallExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/LambdaExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/LambdaExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/MemberVisitExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/MemberVisitExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/NewExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/NewExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/PostfixExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/PostfixExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/PrefixExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/PrefixExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/UnaryExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/UnaryExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/VarExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/VarExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/AtomStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/AtomStmtNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/BlockStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/BlockStmtNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/ForStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/ForStmtNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/IfStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/IfStmtNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/JumpStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/JumpStmtNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/WhileStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/WhileStmtNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStar.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.interp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/parser/g4-source/MxStar.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/g4-source/MxStar.g4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mx-Compiler-for-Course.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Mx-Compiler-for-Course.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Type/VarType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/VarType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Registry/FuncRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Registry/FuncRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/BaseScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/BaseScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/ClassScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/ClassScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/FuncScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/FuncScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/GlobalScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/GlobalScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/SuiteScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/SuiteScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Type/BaseType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/BaseType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Type/ClassType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/ClassType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Type/FuncType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/FuncType.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +76,6 @@
     <setting file="file://$PROJECT_DIR$/src/Frontend/ast/ASTNode.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Frontend/ast/ASTVisitor.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Frontend/ast/DefNode.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Tools/Error/BaseError.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Tools/MxStarErrorListener.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Tools/Position.java" root0="FORCE_HIGHLIGHTING" />
@@ -71,16 +97,21 @@
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "jdk.selected.JAVA_MODULE": "openjdk-19",
-    "last_opened_file_path": "F:/github/Mx-Compiler-for-Course",
-    "project.structure.last.edited": "模块",
+    "last_opened_file_path": "C:/Users/26034/Downloads/antlr-intellij-plugin-v4-1.17.zip",
+    "project.structure.last.edited": "库",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\github\Mx-Compiler-for-Course\src\Frontend" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="Frontend" />
     </key>
   </component>
   <component name="RunManager">
@@ -102,5 +133,30 @@
       <updated>1666332274230</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ExceptionInInitializerError" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

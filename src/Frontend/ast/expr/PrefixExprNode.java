@@ -9,6 +9,9 @@ public class PrefixExprNode extends ExprNode {
     public VarExprNode var;
     public boolean is_add, is_sub;
 
+    public PrefixExprNode(Position _pos) {
+        super(_pos);
+    }
     public PrefixExprNode(Position _pos, String op, VarExprNode _var) {
         super(_pos);
         var = _var;

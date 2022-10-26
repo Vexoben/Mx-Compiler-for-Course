@@ -3,20 +3,16 @@ package Frontend.ast.expr;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Tools.Position;
+import Tools.Type.VarType;
 
 import java.util.ArrayList;
 
 public class NewExprNode extends ExprNode {
-    public ExprNode var_type;
-    public ArrayList<Integer> index;
+    public VarType var_type;
+    public ArrayList<ExprNode> index;
 
-    public NewExprNode(Position _pos, ExprNode _var_type) {
+    public NewExprNode(Position _pos) {
         super(_pos);
-        var_type = _var_type;
-    }
-
-    public void modify_index(ArrayList<Integer> _index) {
-        index = _index;
     }
 
     @Override

@@ -6,13 +6,12 @@ import Tools.Position;
 import java.util.ArrayList;
 
 public class VarExprNode extends ExprNode {
-    public String var_name;
-    public ArrayList<Integer> index_list;
+    public ExprNode array, index;
 
-    public VarExprNode(Position _pos, String _name, ArrayList<Integer> _index_list) {
+    public VarExprNode(Position _pos) {
         super(_pos);
-        var_name = _name;
-        index_list = _index_list;
+        array = null;
+        index = null;
     }
 
     @Override

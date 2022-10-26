@@ -1,4 +1,4 @@
-// Generated from F:/github/Mx-Compiler-for-Course/src/grammar/src\MxStar.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/Frontend/parser/g4-source\MxStar.g4 by ANTLR 4.10.1
 package Frontend.parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -46,6 +46,13 @@ public class MxStarBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitVarDefSingle(MxStarParser.VarDefSingleContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitVarDefWithoutType(MxStarParser.VarDefWithoutTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
