@@ -5,26 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="241afd03-8f0b-4994-87e4-0ca6420387b8" name="变更" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Compiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Compiler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/SemanticChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/SemanticChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStar.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.interp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStar.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.tokens" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.interp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.tokens" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/g4-source/MxStar.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.g4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Compiler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Compiler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ASTBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ASTBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/SemanticChecker.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/SemanticChecker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.mx" beforeDir="false" afterPath="$PROJECT_DIR$/test.mx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
