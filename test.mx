@@ -1,26 +1,17 @@
 /*
 Test Package: Sema_Local_Preview
 Test Target: Basic
-Author: 16' Zhou Fan
-Time: 2019-11-11
+Author: 15' Siqi Liu
+Time: 2019-10-20
 Verdict: Success
-Origin Package: Semantic Pretest
+Origin Package: Semantic Extended
 */
-string a = "\n\n\n\"\\\"";
-
-class A {
-    bool b;
-};
+void haha(){
+	int a;
+	return;
+}
 
 int main() {
-    println(a + " " + a);
-    // what a mess
-    int [] [] [] a;
-    a = new int [2] [] [];
-    if (true) {
-        int[] b = a [1] [1];
-        int [][] c = a [1];
-        A[][] a = new A[2][];
-        if (a[1][1].b) {}
-    }
+	print("hehe\n");
+	return 0;
 }

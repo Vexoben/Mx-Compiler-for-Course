@@ -17,9 +17,9 @@ import java.io.InputStream;
 public class Compiler {
 
     public static void main(String[] args) throws Exception {
-        String inputfile = "test.mx";
-        String ouputfile = "data.out";
-        InputStream input = new FileInputStream(inputfile);
+        //String inputfile = "test.mx";
+        //String ouputfile = "data.out";
+        //InputStream input = new FileInputStream(inputfile);
 
         try {
             System.out.println("-----------------Start!--------------------");
