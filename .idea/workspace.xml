@@ -5,55 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="241afd03-8f0b-4994-87e4-0ca6420387b8" name="变更" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Compiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Compiler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/SemanticChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/SemanticChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/BlockNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/BlockNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/DefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/DefNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/FuncDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/FuncDefNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/VarDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/VarDefNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/def/VarSingleDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/def/VarSingleDefNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/AtomExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/AtomExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/FuncCallExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/FuncCallExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/LambdaExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/LambdaExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/NewExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/NewExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/PostfixExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/PostfixExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/PrefixExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/PrefixExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/BlockStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/BlockStmtNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/stmt/ForStmtNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/stmt/ForStmtNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Registry/FuncRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Registry/FuncRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/ClassScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/ClassScope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/FuncScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/FuncScope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/GlobalScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/GlobalScope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/RepeatScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/RepeatScope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/SuiteScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/SuiteScope.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Type/FuncType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/FuncType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tools/Type/VarType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/VarType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStar.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStar.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarBaseVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarLexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/MxStarVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStarVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/parser/g4-source/MxStar.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/parser/MxStar.g4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Compiler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Compiler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ASTBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ASTBuilder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Frontend/SemanticChecker.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/SemanticChecker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/ASTVisitor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/ASTVisitor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/BlockNode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/DefNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/DefNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/def/FuncDefNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/def/FuncDefNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/def/VarDefNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/def/VarDefNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/def/VarSingleDefNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/def/VarSingleDefNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/AtomExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/AtomExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/FuncCallExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/FuncCallExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/LambdaExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/LambdaExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/NewExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/NewExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PostfixExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PostfixExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PrefixExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PrefixExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/stmt/BlockStmtNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/stmt/BlockStmtNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/stmt/ForStmtNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/stmt/ForStmtNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Registry/FuncRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Registry/FuncRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Scope/ClassScope.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Scope/ClassScope.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Scope/FuncScope.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Scope/FuncScope.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Scope/GlobalScope.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Scope/GlobalScope.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Scope/RepeatScope.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Scope/RepeatScope.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Scope/SuiteScope.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Scope/SuiteScope.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Type/VarType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Type/VarType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.mx" beforeDir="false" afterPath="$PROJECT_DIR$/test.mx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,23 +64,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-19&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/26034/Downloads/antlr-intellij-plugin-v4-1.17.zip&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;库&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "jdk.selected.JAVA_MODULE": "openjdk-19",
+    "last_opened_file_path": "F:/github/Mx-Compiler-for-Course/src",
+    "project.structure.last.edited": "库",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\github\Mx-Compiler-for-Course\src\Frontend\parser" />
       <recent name="F:\github\Mx-Compiler-for-Course\src\Frontend" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">

@@ -23,8 +23,8 @@ public class Compiler {
 
         try {
             System.out.println("-----------------Start!--------------------");
-            //MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(input));
-            MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(System.in));
+            MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(input));
+            //MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(System.in));
             lexer.removeErrorListeners();
             lexer.addErrorListener(new MxStarErrorListener());
             CommonTokenStream tokens = new CommonTokenStream(lexer);

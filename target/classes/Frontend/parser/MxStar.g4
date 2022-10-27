@@ -65,7 +65,7 @@ forConditionExpression: expression;
 
 stepExpression: expression;
 
-jumpBlock: (Return expression | Continue | Break) ';';
+jumpBlock: (Return expression? | Continue | Break) ';';
 
 atomicBlock: expression? ';';
 
@@ -95,7 +95,7 @@ expression:
     | <assoc=right> expression op = '=' expression                    # AssignExpr
 ;
 
-arraySizeDeclare: '[' expression']';
+arraySizeDeclare: '[' expression?']';
 
 atom:
     Identifier |
@@ -187,6 +187,7 @@ fragment ESC : '\\"' | '\\\\';
 // Comment
 BlockComment : '/*' .*? '*/' -> skip;
 LineComment : '//' .*? '\r'? '\n' -> skip;
+EndFileComment : '//' ~[\r\n]* -> skip;
 
 // WhiteSpace and NewLine
 WhiteSpace: [ \t] -> skip;

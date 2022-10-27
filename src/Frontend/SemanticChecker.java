@@ -36,7 +36,15 @@ public class SemanticChecker implements ASTVisitor {
             }
         });
         scopes.push(obj.global_scope);
-        obj.child_list.forEach(i -> i.accept(this));
+        obj.child_list.forEach(i -> {
+            if (i instanceof VarDefNode) i.accept(this);
+        });
+        obj.child_list.forEach(i -> {
+            if (i instanceof FuncDefNode) i.accept(this);
+        });
+        obj.child_list.forEach(i -> {
+            if (i instanceof ClassDefNode) i.accept(this);
+        });
         scopes.pop();
         if (debug_mode) System.out.println("Leave RootNode");
     }
@@ -57,8 +65,8 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(FuncDefNode obj) {
         if (debug_mode) System.out.println("Access FuncDefNode");
-        obj.arg_list.forEach(i -> i.accept(this));
         scopes.push(obj.func_scope);
+        obj.arg_list.forEach(i -> i.accept(this));
         obj.block_node.accept(this);
         scopes.pop();
         if (debug_mode) System.out.println("Leave FuncDefNode");
@@ -66,9 +74,11 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(ClassDefNode obj) {
         scopes.push(obj.class_scope);
-        obj.func_list.forEach(i -> i.accept(this));
         obj.var_list.forEach(i -> i.accept(this));
-        obj.constructor.accept(this);
+        obj.func_list.forEach(i -> i.accept(this));
+        if (obj.constructor != null) {
+            obj.constructor.accept(this);
+        }
         scopes.pop();
     }
     @Override
@@ -85,6 +95,7 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(VarAnyNumberDefNode obj) {
         if (debug_mode) System.out.println("Access VarAnyNumberDefNode");
+        obj.registry_list.forEach(i -> scopes.peek().insert_registry(i));
         obj.assign_list.forEach(i -> {
             if (i != null) {
                 i.accept(this);

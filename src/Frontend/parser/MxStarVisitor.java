@@ -1,4 +1,4 @@
-// Generated from F:/github/Mx-Compiler-for-Course/src/Frontend/parser/g4-source\MxStar.g4 by ANTLR 4.10.1
+// Generated from F:/github/Mx-Compiler-for-Course/src/Frontend/parser\MxStar.g4 by ANTLR 4.10.1
 package Frontend.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

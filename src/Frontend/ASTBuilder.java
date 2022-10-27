@@ -102,7 +102,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             DefNode tmp = (DefNode) visit(i);
             ret.var_list.add((VarAnyNumberDefNode) tmp);
             ((VarAnyNumberDefNode)tmp).registry_list.forEach(j -> {
-                ret.class_scope.insert_registry(j);
+                //ret.class_scope.insert_registry(j);
                 type.var_list.add(j.var_type);
             });
         });
@@ -241,7 +241,9 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         JumpStmtNode ret = new JumpStmtNode(new Position(ctx.getStart()));
         if (ctx.Return() != null) {
             ret.jump_case = JumpStmtNode.JUMP_CASE.RETURN;
-            ret.return_value = (ExprNode) visit(ctx.expression());
+            if (ctx.expression() != null) {
+                ret.return_value = (ExprNode) visit(ctx.expression());
+            }
         } else if (ctx.Continue() != null) {
             ret.jump_case = JumpStmtNode.JUMP_CASE.CONTINUE;
         } else if (ctx.Break() != null) {
@@ -297,11 +299,11 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
 
     private VarType get_func_ret_type(MxStarParser.FuncTypeDefContext ctx) {
         VarType type;
-        if (ctx.varTypeDef().Identifier() != null) {
+        if (ctx.Void() != null) {
+            type = new VarType(BaseType.BuiltinType.VOID);
+        } else if (ctx.varTypeDef().Identifier() != null) {
             type = new VarType(ctx.varTypeDef().Identifier().toString());
             type.dimension = ctx.varTypeDef().LeftBracket().size();
-        } else if (ctx.Void() != null) {
-            type = new VarType(BaseType.BuiltinType.VOID);
         } else {
             if (ctx.varTypeDef().buildinType_without_void().Int() != null) {
                 type = new VarType(BaseType.BuiltinType.INT);
@@ -335,8 +337,6 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             ret.assign_list.add(ass);
             VarRegistry reg = new VarRegistry(type, i.Identifier().toString(), new Position(ctx.getStart()));
             ret.registry_list.add(reg);
-            scopes.forEach(j -> System.out.println(j.toString()));
-            scopes.peek().insert_registry(reg);
         });
         return ret;
     }
@@ -452,7 +452,9 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         NewExprNode ret = new NewExprNode(new Position(ctx.getStart()));
         ret.expr_type = get_var_type(ctx);
         ctx.arraySizeDeclare().forEach(i -> {
-            ret.index.add((ExprNode) visit(i.expression()));
+            if (i.expression() != null) {
+                ret.index.add((ExprNode) visit(i.expression()));
+            }
         });
         return ret;
     }
