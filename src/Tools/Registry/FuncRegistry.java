@@ -1,5 +1,6 @@
 package Tools.Registry;
 
+import Frontend.ast.def.FuncDefNode;
 import Frontend.parser.MxStarParser;
 import Tools.Position;
 import Tools.Type.FuncType;

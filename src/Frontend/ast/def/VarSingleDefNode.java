@@ -20,6 +20,7 @@ public class VarSingleDefNode extends VarDefNode {
         super(_reg.pos);
         registry = _reg;
         assign = _assign;
+        var_type = _reg.var_type;
     }
 
     @Override

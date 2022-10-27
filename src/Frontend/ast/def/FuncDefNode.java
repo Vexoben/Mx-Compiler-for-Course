@@ -2,7 +2,7 @@ package Frontend.ast.def;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.DefNode;
-import Frontend.ast.BlockNode;
+import Frontend.ast.stmt.BlockNode;
 import Tools.Position;
 import Tools.Registry.FuncRegistry;
 import Tools.Scope.FuncScope;

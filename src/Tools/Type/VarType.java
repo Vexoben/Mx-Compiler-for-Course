@@ -50,6 +50,8 @@ public class VarType extends BaseType {
                 return true;
             }
             return typename == type.typename && dimension == ((VarType) type).dimension;
+        } else if (type instanceof FuncType) {
+            return this.match_type(((FuncType) type).ret_type);
         } else {
             return false;
         }

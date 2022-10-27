@@ -12,6 +12,7 @@ public class FuncCallExprNode extends ExprNode {
 
     public FuncCallExprNode(Position _pos) {
         super(_pos);
+        args = new ArrayList<>();
     }
 
     public FuncCallExprNode(Position _pos, ExprNode _func_name, ArrayList<ExprNode> _args) {

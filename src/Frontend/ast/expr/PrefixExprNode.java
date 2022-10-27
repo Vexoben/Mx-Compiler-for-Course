@@ -6,7 +6,7 @@ import Tools.Error.SemanticError;
 import Tools.Position;
 
 public class PrefixExprNode extends ExprNode {
-    public VarExprNode var;
+    public ExprNode var;
     public boolean is_add, is_sub;
 
     public PrefixExprNode(Position _pos) {

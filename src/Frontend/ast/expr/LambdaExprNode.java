@@ -2,7 +2,7 @@ package Frontend.ast.expr;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Frontend.ast.BlockNode;
+import Frontend.ast.stmt.BlockNode;
 import Frontend.ast.def.VarSingleDefNode;
 import Tools.Position;
 import Tools.Scope.FuncScope;

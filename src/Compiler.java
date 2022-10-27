@@ -15,14 +15,16 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 public class Compiler {
+
     public static void main(String[] args) throws Exception {
-        String inputfile = "e1.mx";
+        String inputfile = "test.mx";
         String ouputfile = "data.out";
         InputStream input = new FileInputStream(inputfile);
 
         try {
-            System.out.println("Start!");
-            MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(input));
+            System.out.println("-----------------Start!--------------------");
+            //MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(input));
+            MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(System.in));
             lexer.removeErrorListeners();
             lexer.addErrorListener(new MxStarErrorListener());
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -31,10 +33,10 @@ public class Compiler {
             parser.addErrorListener(new MxStarErrorListener());
             ParseTree parse_tree_root = parser.mxstarcode();
             ASTBuilder astbuilder = new ASTBuilder();
-            System.out.println("AST building");
+            System.out.println("-----------------AST building------------------");
             RootNode astroot = (RootNode) astbuilder.visit(parse_tree_root);
             SemanticChecker semantic_checker = new SemanticChecker();
-            System.out.println("Semantic Checking");
+            System.out.println("-----------------Semantic Checking-------------------");
             semantic_checker.visit(astroot);
         }
         catch (BaseError error){

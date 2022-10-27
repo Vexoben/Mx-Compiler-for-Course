@@ -14,37 +14,24 @@ import Tools.Type.FuncType;
 import Tools.Type.VarType;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Stack;
 
-public class SemanticChecker implements ASTVisitor {
-
-    boolean debug_mode = true;
+public class SemanticChecker_debug implements ASTVisitor {
     Stack<BaseScope> scopes = new Stack<>();
     HashMap<String, ClassScope> class_scopes = new HashMap<>();
 
-    void printf(Object obj) {
-        System.out.println(obj.toString());
-    }
-
     @Override
     public void visit(RootNode obj) {
-        if (debug_mode) System.out.println("Access RootNode");
         obj.child_list.forEach(i -> {
             if (i instanceof ClassDefNode) {
                 class_scopes.put(((ClassDefNode)i).class_registry.name, ((ClassDefNode)i).class_scope);
             }
         });
-        scopes.push(obj.global_scope);
         obj.child_list.forEach(i -> i.accept(this));
-        scopes.pop();
-        if (debug_mode) System.out.println("Leave RootNode");
     }
     @Override
     public void visit(BlockNode obj) {
-        scopes.push(obj.suite_scope);
         obj.stmt_list.forEach(i -> i.accept(this));
-        scopes.pop();
     }
     @Override
     public void visit(StmtNode obj) {} // abstract node
@@ -56,12 +43,10 @@ public class SemanticChecker implements ASTVisitor {
     //def
     @Override
     public void visit(FuncDefNode obj) {
-        if (debug_mode) System.out.println("Access FuncDefNode");
-        obj.arg_list.forEach(i -> i.accept(this));
         scopes.push(obj.func_scope);
+        obj.arg_list.forEach(i -> i.accept(this));
         obj.block_node.accept(this);
         scopes.pop();
-        if (debug_mode) System.out.println("Leave FuncDefNode");
     }
     @Override
     public void visit(ClassDefNode obj) {
@@ -73,27 +58,15 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(VarSingleDefNode obj) {
-        if (debug_mode) System.out.println("Access VarSingleDefNode");
         if (obj.assign != null) {
             obj.assign.accept(this);
-            if (!obj.var_type.match_type(obj.assign.expr_type)) {
-                throw new SemanticError(obj.pos, "type doesn't match!");
-            }
         }
-        if (debug_mode) System.out.println("Leave VarSingleDefNode");
     }
     @Override
     public void visit(VarAnyNumberDefNode obj) {
-        if (debug_mode) System.out.println("Access VarAnyNumberDefNode");
         obj.assign_list.forEach(i -> {
-            if (i != null) {
-                i.accept(this);
-                if (!obj.var_type.match_type(i.expr_type)) {
-                    throw new SemanticError(obj.pos, "type doesn't match!");
-                }
-            }
+            if (i != null) i.accept(this);
         });
-        if (debug_mode) System.out.println("Leave VarAnyNumberDefNode");
     }
     @Override
     public void visit(VarDefNode obj) {} // abstract node
@@ -118,7 +91,6 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(AssignExprNode obj) {
-        if (debug_mode) System.out.println("Access AssignExprNode");
         obj.left_expr.accept(this);
         obj.right_expr.accept(this);
         if (obj.left_expr.is_left_value() == false) {
@@ -127,29 +99,27 @@ public class SemanticChecker implements ASTVisitor {
             if (((AtomExprNode)obj.left_expr).identifier == null || ((AtomExprNode) obj.left_expr).maybe_var == false) {
                 throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
             } else {
-                printf("!!!");
-                printf(obj.right_expr);
-                printf(obj.right_expr.expr_type);
                 if (!obj.left_expr.expr_type.match_type(obj.right_expr.expr_type)) {
-                    throw new SemanticError(obj.pos, "Type doesn't match!");
+                    throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
                 }
             }
         } else if (obj.right_expr.expr_type.match_type(BaseType.BuiltinType.NULL)) {
             if (obj.left_expr.expr_type.is_array() || obj.left_expr.expr_type.is_class());
-            else throw new SemanticError(obj.pos, "Type doesn't match!");
+            else throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
         } else if (obj.left_expr.expr_type.is_array()) {
             if (!obj.left_expr.expr_type.match_type(obj.right_expr.expr_type)) {
-                throw new SemanticError(obj.pos, "Type doesn't match!");
+                throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
             }
-        } else if (obj.left_expr.expr_type.match_type(BaseType.BuiltinType.INT)) {
-            if (!(obj.right_expr.expr_type.match_type(BaseType.BuiltinType.INT)
-                    || obj.right_expr.expr_type.match_type(BaseType.BuiltinType.BOOL))) {
-                throw new SemanticError(obj.pos, "Type doesn't match!");
-            }
-        } else if (!obj.left_expr.expr_type.match_type(obj.right_expr.expr_type)) {
-            throw new SemanticError(obj.pos, "Type doesn't match!");
         }
-        if (debug_mode) System.out.println("Leave AssignExprNode");
+        if (obj.left_expr.expr_type.match_type(BaseType.BuiltinType.INT)) {
+            if (!(obj.right_expr.expr_type.match_type(BaseType.BuiltinType.INT)
+                    ||obj.right_expr.expr_type.match_type(BaseType.BuiltinType.BOOL))) {
+                throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
+            }
+        }
+        if (!obj.left_expr.expr_type.match_type(obj.right_expr.expr_type)) {
+            throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
+        }
     }
 
     boolean binary_type_check(VarType a, VarType b, BinaryExprNode.BinaryOperator op) {
@@ -158,13 +128,13 @@ public class SemanticChecker implements ASTVisitor {
                     && (a.match_type(BaseType.BuiltinType.NULL) || b.match_type(BaseType.BuiltinType.NULL));
         }
         if (a.match_type(BaseType.BuiltinType.INT) || a.match_type(BaseType.BuiltinType.BOOL)
-        || b.match_type(BaseType.BuiltinType.INT) || b.match_type(BaseType.BuiltinType.BOOL)) {
-            if (!a.match_type(b)) return false;
-            if (a.match_type(BaseType.BuiltinType.BOOL) && !(op.is_check_equal() || op.is_logic())) return false;
+                || b.match_type(BaseType.BuiltinType.INT) || b.match_type(BaseType.BuiltinType.BOOL)) {
+            if (a.match_type(b) == false) return false;
+            if (a.match_type(BaseType.BuiltinType.BOOL) && (op.is_check_equal() || op.is_logic())) return false;
             return true;
         }
         if (a.match_type(BaseType.BuiltinType.STRING) || b.match_type(BaseType.BuiltinType.STRING)) {
-            if (!a.match_type(b)) return false;
+            if (a.match_type(b) == false) return false;
             boolean flag = false;
             if (op == BinaryExprNode.BinaryOperator.ADD || op.is_compare()) flag = true;
             return flag;
@@ -188,14 +158,12 @@ public class SemanticChecker implements ASTVisitor {
 
     @Override
     public void visit(BinaryExprNode obj) {
-        if (debug_mode) printf("Access BinaryExprNode");
         obj.left_expr.accept(this);
         obj.right_expr.accept(this);
-        if (!binary_type_check((VarType) obj.left_expr.expr_type, (VarType) obj.right_expr.expr_type, obj.op)) {
+        if (binary_type_check((VarType) obj.left_expr.expr_type, (VarType) obj.right_expr.expr_type, obj.op) == false) {
             throw new SemanticError(obj.pos, "Mismatched types of this operator");
         }
         obj.expr_type = binary_type_get((VarType) obj.left_expr.expr_type, (VarType) obj.right_expr.expr_type, obj.op);
-        if (debug_mode) printf("Leave BinaryExprNode");
     }
     @Override
     public void visit(ConstExprNode obj) {} // did not be used
@@ -207,17 +175,12 @@ public class SemanticChecker implements ASTVisitor {
             if (scopes.peek().find_func(((AtomExprNode) obj.func_name).identifier) == null) {
                 throw new SemanticError(obj.pos, "I lost: can't find the function you call");
             }
-            obj.expr_type = ((AtomExprNode) obj.func_name).func_type.ret_type;
-            printf(obj.expr_type);
         } else if (obj.func_name instanceof MemberVisitExprNode) {
             if (!((MemberVisitExprNode)obj.func_name).is_func) {
                 throw new SemanticError(obj.pos, "I lost: can't find the function you call(maybe you called a variable");
             }
-            obj.expr_type = ((FuncType)obj.func_name.expr_type).ret_type;
         } else throw new SemanticError(obj.pos, "Unknown error");
-        FuncType ret_type;
-        if (obj.func_name instanceof AtomExprNode) ret_type = (FuncType) ((AtomExprNode) obj.func_name).func_type;
-        else ret_type = (FuncType) obj.func_name.expr_type;
+        FuncType ret_type = (FuncType) obj.func_name.expr_type;
         if (ret_type.func_args_type.size() != obj.args.size()) {
             throw new SemanticError(obj.pos, "Functions arguments' number doesn't match!");
         }
@@ -230,7 +193,6 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(MemberVisitExprNode obj) {
-        if (debug_mode) printf("Access MemberVisitExprNode");
         obj.class_expr.accept(this);
         if (obj.class_expr instanceof AtomExprNode) {
             if (((AtomExprNode)obj.class_expr).maybe_var == false) {
@@ -239,7 +201,6 @@ public class SemanticChecker implements ASTVisitor {
         }
         if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
             if (obj.member_name.equals("length")) {
-                printf("!!!");
                 obj.is_func = true;
                 obj.is_var = false;
                 FuncType tmp = new FuncType();
@@ -284,14 +245,10 @@ public class SemanticChecker implements ASTVisitor {
                 throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "doesn't have a member naming" + obj.member_name);
             }
         }
-        printf("!!!!!" + obj.expr_type);
-        if (debug_mode) printf("Leave MemberVisitExprNode");
     }
     @Override
     public void visit(NewExprNode obj) {
-        if (debug_mode) printf("Access NewExprNode");
         obj.index.forEach(i -> i.accept(this));
-        if (debug_mode) printf("Leave NewExprNode");
     }
     @Override
     public void visit(LambdaExprNode obj) {
@@ -339,26 +296,20 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(AtomExprNode obj) {
-        if (debug_mode) System.out.println("Access AtomExprNode");
         if (obj.identifier != null) {
-            if (debug_mode) System.out.println("Find identifier " + obj.identifier);
             FuncRegistry reg2 = scopes.peek().find_func(obj.identifier);
             if (reg2 == null) obj.maybe_func = false;
             else {
-                if (debug_mode) System.out.println("maybe function");
-                System.out.println(reg2.func_type.ret_type.toString());
                 obj.maybe_func = true;
-                obj.func_type = reg2.func_type;
+                obj.expr_type = reg2.func_type;
             }
             VarRegistry reg1 = scopes.peek().find_var(obj.identifier);
             if (reg1 == null) obj.maybe_var = false;
             else {
-                if (debug_mode) System.out.println("maybe variable");
                 obj.maybe_var = true;
                 obj.expr_type = reg1.var_type;
             }
         }
-        if (debug_mode) System.out.println("Leave AtomExprNode");
     }
 
     // stmt
@@ -389,7 +340,7 @@ public class SemanticChecker implements ASTVisitor {
         obj.if_stmt.accept(this);
         scopes.pop();
         if (obj.else_stmt != null) {
-            scopes.push(obj.else_scope);
+            obj.else_stmt.accept(this);;
             obj.else_stmt.accept(this);
             scopes.pop();
         }
@@ -401,26 +352,18 @@ public class SemanticChecker implements ASTVisitor {
                 throw new SemanticError(obj.pos, "I don't know where to jump");
             }
         } else if (obj.jump_case == JumpStmtNode.JUMP_CASE.RETURN) {
+            obj.return_value.accept(this);
             FuncRegistry tmp = scopes.peek().in_function();
             if (tmp == null) {
                 throw new SemanticError(obj.pos, "Where is the function? Are you kidding?");
             }
-            if (tmp.func_type.match_type(BaseType.BuiltinType.VOID)) {
-                if (obj.return_value != null) {
-                    throw new SemanticError(obj.pos, "return value doesn't match!");
-                }
-            } else {
-                obj.return_value.accept(this);
-                if (!tmp.func_type.ret_type.match_type(obj.return_value.expr_type)) {
-                    throw new SemanticError(obj.pos, "return value doesn't match!");
-                }
+            if (tmp.func_type.match_type(obj.return_value.expr_type) == false) {
+                throw new SemanticError(obj.pos, "return value doesn't match!");
             }
         }
     }
     @Override
     public void visit(AtomStmtNode obj) {
-        if (obj.expr != null) {
-            obj.expr.accept(this);
-        }
+        obj.expr.accept(this);
     }
 }

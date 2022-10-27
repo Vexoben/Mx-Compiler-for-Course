@@ -14,7 +14,8 @@ public class FuncType extends BaseType {
 
     @Override
     public boolean match_type(BaseType type) {
-        if (type instanceof FuncType) {
+        return this.ret_type.match_type(type);
+/*        if (type instanceof FuncType) {
             if (!ret_type.match_type(((FuncType) type).ret_type)) return false;
             int n1 = func_args_type.size(), n2 = ((FuncType) type).func_args_type.size();
             if (n1 != n2) return false;
@@ -24,12 +25,13 @@ public class FuncType extends BaseType {
                 }
             }
             return true;
-        } else return false;
+        } else return false;*/
     }
 
     @Override
     public boolean match_type(BuiltinType type) {
-        return false;
+        return this.ret_type.match_type(type);
+ /*       return false;*/
     }
 
     @Override

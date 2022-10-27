@@ -1,7 +1,6 @@
 package Frontend.ast.stmt;
 
 import Frontend.ast.ASTVisitor;
-import Frontend.ast.BlockNode;
 import Frontend.ast.StmtNode;
 import Tools.Position;
 

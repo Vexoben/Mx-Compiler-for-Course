@@ -6,7 +6,7 @@ import Tools.Error.SemanticError;
 import Tools.Position;
 
 public class PostfixExprNode extends ExprNode {
-    public VarExprNode var;
+    public ExprNode var;
     public boolean is_add, is_sub;
 
     public PostfixExprNode(Position _pos) {

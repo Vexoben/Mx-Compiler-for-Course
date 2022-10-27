@@ -21,7 +21,7 @@ import java.util.Stack;
 
 public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
 
-    Stack<BaseScope> scopes;
+    Stack<BaseScope> scopes = new Stack<>();;
 
     @Override
     public ASTNode visitMxstarcode(MxStarParser.MxstarcodeContext ctx) {
@@ -58,15 +58,15 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
 
         // classes, functions, global-variables
         scopes.push(ret.global_scope);
+        ctx.varDefBlock().forEach(i -> {
+            DefNode tmp = (DefNode) visit(i);
+            ret.child_list.add(tmp);
+            // ((VarAnyNumberDefNode)tmp).registry_list.forEach(j -> ret.global_scope.insert_registry(j));
+        });
         ctx.funcDef().forEach(i -> {
             DefNode tmp = (DefNode) visit(i);
             ret.child_list.add(tmp);
             ret.global_scope.insert_registry(((FuncDefNode) tmp).func_registry);
-        });
-        ctx.varDefBlock().forEach(i -> {
-            DefNode tmp = (DefNode) visit(i);
-            ret.child_list.add(tmp);
-            ((VarAnyNumberDefNode)tmp).registry_list.forEach(j -> ret.global_scope.insert_registry(j));
         });
         ctx.classDef().forEach(i -> {
             DefNode tmp = (DefNode) visit(i);
@@ -132,6 +132,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         }
         ret.block_node = (BlockNode) visit(ctx.funcBlock());
         scopes.pop();
+        ret.func_registry = new FuncRegistry(type, ctx.Identifier().toString(), new Position(ctx.getStart()));
         ret.func_scope.func_registry = ret.func_registry;
         return ret;
     }
@@ -194,9 +195,15 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         ForStmtNode ret = new ForStmtNode(new Position(ctx.getStart()));
         ret.scope.father_scope = scopes.peek();
         scopes.push(ret.scope);
-        ret.init = (StmtNode) visit(ctx.initializationStatement());
-        ret.condition = (StmtNode) visit(ctx.forConditionExpression());
-        ret.step = (StmtNode) visit(ctx.stepExpression());
+        if (ctx.initializationStatement() != null) {
+            ret.init = (AtomStmtNode) visit(ctx.initializationStatement());
+        } else ret.init = null;
+        if (ctx.forConditionExpression() != null) {
+            ret.condition = (AtomStmtNode) visit(ctx.forConditionExpression());
+        } else ret.condition = null;
+        if (ctx.stepExpression() != null) {
+            ret.step = (AtomStmtNode) visit(ctx.stepExpression());
+        } else ret.step = null;
         ret.stmt = (StmtNode) visit(ctx.funcStatement());
         scopes.pop();
         return ret;
@@ -205,21 +212,28 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitInitializationStatement(MxStarParser.InitializationStatementContext ctx) {
         if (ctx == null) return null;
-        if (ctx.expression() != null) return visit(ctx.expression());
-        else if (ctx.varDefAnyNumber() != null) return visit(ctx.varDefAnyNumber());
+        AtomStmtNode ret = new AtomStmtNode(new Position(ctx.getStart()));
+        if (ctx.expression() != null) {
+            ret.expr = (ExprNode) visit(ctx.expression());
+            return ret;
+        }
+        else if (ctx.varDefAnyNumber() != null) {
+            ret.expr = (ExprNode) visit(ctx.varDefAnyNumber());
+            return ret;
+        }
         else throw new SemanticError(new Position(ctx.getStart()), "You gives me a wrong initialization statement");
     }
 
     @Override
     public ASTNode visitForConditionExpression(MxStarParser.ForConditionExpressionContext ctx) {
         if (ctx == null) return null;
-        return visit(ctx.expression());
+        return new AtomStmtNode(new Position(ctx.getStart()), (ExprNode) visit(ctx.expression()));
     }
 
     @Override
     public ASTNode visitStepExpression(MxStarParser.StepExpressionContext ctx) {
         if (ctx == null) return null;
-        return visit(ctx.expression());
+        return new AtomStmtNode(new Position(ctx.getStart()), (ExprNode) visit(ctx.expression()));
     }
 
     @Override
@@ -249,7 +263,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     public ASTNode visitVarTypeDef(MxStarParser.VarTypeDefContext ctx) {
         VarSingleDefNode ret = new VarSingleDefNode(new Position(ctx.getStart()));
         VarType type = get_var_type(ctx);
-        ret.registry = new VarRegistry(type, ctx.Identifier().toString(), new Position(ctx.getStart()));
+        ret.registry = new VarRegistry(type, "to_be_write", new Position(ctx.getStart()));
         scopes.peek().insert_registry(ret.registry);
         return ret;
     }
@@ -312,6 +326,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     public ASTNode visitVarDefAnyNumber(MxStarParser.VarDefAnyNumberContext ctx) {
         VarAnyNumberDefNode ret = new VarAnyNumberDefNode(new Position(ctx.getStart()));
         VarType type = get_var_type(ctx);
+        ret.var_type = type;
         ctx.varDefWithoutType().forEach(i -> {
             ExprNode ass = null;
             if (i.expression() != null) {
@@ -320,6 +335,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             ret.assign_list.add(ass);
             VarRegistry reg = new VarRegistry(type, i.Identifier().toString(), new Position(ctx.getStart()));
             ret.registry_list.add(reg);
+            scopes.forEach(j -> System.out.println(j.toString()));
             scopes.peek().insert_registry(reg);
         });
         return ret;
@@ -329,6 +345,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     public ASTNode visitVarDefSingle(MxStarParser.VarDefSingleContext ctx) {
         VarSingleDefNode ret = new VarSingleDefNode(new Position(ctx.getStart()));
         VarType type = get_var_type(ctx);
+        ret.var_type = type;
         ret.registry = new VarRegistry(type, ctx.Identifier().toString(), new Position(ctx.getStart()));
         scopes.peek().insert_registry(ret.registry);
         if (ctx.expression() != null) {
@@ -382,12 +399,13 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         else if (ctx.Less() != null) ret.op = BinaryExprNode.BinaryOperator.LESS;
         else if (ctx.Greater() != null) ret.op = BinaryExprNode.BinaryOperator.GREATER;
         else if (ctx.Or() != null) ret.op = BinaryExprNode.BinaryOperator.OR;
-        else if (ctx.Add() != null) ret.op = BinaryExprNode.BinaryOperator.ADD;
+        else if (ctx.And() != null) ret.op = BinaryExprNode.BinaryOperator.AND;
         else if (ctx.Xor() != null) ret.op = BinaryExprNode.BinaryOperator.XOR;
         else if (ctx.AndBit() != null) ret.op = BinaryExprNode.BinaryOperator.BITAND;
         else if (ctx.OrBit() != null) ret.op = BinaryExprNode.BinaryOperator.BITOR;
         else if (ctx.Equal() != null) ret.op = BinaryExprNode.BinaryOperator.EQUAL;
         else if (ctx.NotEqual() != null) ret.op = BinaryExprNode.BinaryOperator.NOTEQUAL;
+        else throw new SemanticError(ret.pos, "Known binary operator");
         return ret;
     }
 
@@ -432,7 +450,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitNewExpr(MxStarParser.NewExprContext ctx) {
         NewExprNode ret = new NewExprNode(new Position(ctx.getStart()));
-        ret.var_type = get_var_type(ctx);
+        ret.expr_type = get_var_type(ctx);
         ctx.arraySizeDeclare().forEach(i -> {
             ret.index.add((ExprNode) visit(i.expression()));
         });
@@ -468,7 +486,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             ret.is_sub = true;
             ret.is_add = false;
         }
-        ret.var = (VarExprNode) visit(ctx.expression());
+        ret.var = (ExprNode) visit(ctx.expression());
         return ret;
     }
 
@@ -482,7 +500,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             ret.is_sub = true;
             ret.is_add = false;
         }
-        ret.var = (VarExprNode) visit(ctx.expression());
+        ret.var = (ExprNode) visit(ctx.expression());
         return ret;
     }
 

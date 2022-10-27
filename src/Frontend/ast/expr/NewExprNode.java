@@ -8,11 +8,11 @@ import Tools.Type.VarType;
 import java.util.ArrayList;
 
 public class NewExprNode extends ExprNode {
-    public VarType var_type;
     public ArrayList<ExprNode> index;
 
     public NewExprNode(Position _pos) {
         super(_pos);
+        index = new ArrayList<>();
     }
 
     @Override
