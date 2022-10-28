@@ -11,12 +11,12 @@ public class SuiteScope extends BaseScope {
     }
 
     @Override
-    protected FuncRegistry find_func_in_this(String name) {
+    public FuncRegistry find_func_in_this(String name) {
         return null;
     }
 
     @Override
-    protected ClassRegistry find_class_in_this(String name) {
+    public ClassRegistry find_class_in_this(String name) {
         return null;
     }
 

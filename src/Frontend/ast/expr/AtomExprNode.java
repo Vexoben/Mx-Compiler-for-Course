@@ -32,7 +32,7 @@ public class AtomExprNode extends ExprNode {
         else if (ctx.True() != null || ctx.False() != null) expr_type = new VarType(BaseType.BuiltinType.BOOL);
         else if (ctx.StringConst() != null) expr_type = new VarType(BaseType.BuiltinType.STRING);
         else if (ctx.Null() != null) expr_type = new VarType(BaseType.BuiltinType.NULL);
-        else if (ctx.This() != null) expr_type = new VarType(BaseType.BuiltinType.CLASS);
+        else if (ctx.This() != null) expr_type = new VarType(BaseType.BuiltinType.THIS);
         else if (ctx.Identifier() != null) {
             identifier = ctx.Identifier().toString();
             // find in scopes when semantic check

@@ -1,7 +1,7 @@
 package Tools.Type;
 
 public abstract class BaseType {
-    public enum BuiltinType {NULL, INT, BOOL, STRING, VOID, CLASS, FUNC};
+    public enum BuiltinType {NULL, INT, BOOL, STRING, VOID, CLASS, FUNC, THIS};
     public BuiltinType built_in_type;
     public String typename;
 
@@ -15,6 +15,7 @@ public abstract class BaseType {
             case VOID: typename = "void"; break;
             case CLASS: typename = "class"; break;
             case FUNC: typename = "func"; break;
+            case THIS: typename = "this"; break;
         }
     }
 

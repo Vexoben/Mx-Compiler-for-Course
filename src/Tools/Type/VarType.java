@@ -49,7 +49,7 @@ public class VarType extends BaseType {
             if (type.built_in_type == BuiltinType.NULL && (dimension > 0 || built_in_type == BuiltinType.CLASS)) {
                 return true;
             }
-            return typename == type.typename && dimension == ((VarType) type).dimension;
+            return typename.equals(type.typename) && dimension == ((VarType) type).dimension;
         } else if (type instanceof FuncType) {
             return this.match_type(((FuncType) type).ret_type);
         } else {

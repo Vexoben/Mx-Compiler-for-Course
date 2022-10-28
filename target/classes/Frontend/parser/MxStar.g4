@@ -76,7 +76,7 @@ expression:
     | expression '(' funcCallArgs ')'                                 # FuncCallExpr
     | expression '.' Identifier                                       # MemberVisitExpr
     | expression '[' expression ']'                                   # ArrayVisitExpr
-    | New (buildinType_without_void | Identifier) arraySizeDeclare*   # NewExpr
+    | New (buildinType_without_void | Identifier) arraySizeDeclare* ('(' ')')?   # NewExpr
     | '[' '&'? ']' ('(' funcArgs ')' )? Arrow funcBlock '(' funcCallArgs ')' # LambdaExpr
     | expression op = ('++' | '--')                                   # PostfixExpr
     | <assoc=right> op = ('++' | '--')  expression                    # PrefixExpr

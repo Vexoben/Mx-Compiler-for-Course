@@ -11,6 +11,7 @@ import Tools.Registry.ClassRegistry;
 import Tools.Registry.FuncRegistry;
 import Tools.Registry.VarRegistry;
 import Tools.Scope.BaseScope;
+import Tools.Scope.GlobalScope;
 import Tools.Type.BaseType;
 import Tools.Type.ClassType;
 import Tools.Type.FuncType;
@@ -107,8 +108,13 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             });
         });
         if (ctx.classConstructor() != null) {
-            type.constructor = new FuncType();
+            if (!ctx.classConstructor().Identifier().toString().equals(ctx.Identifier().toString())) {
+                throw new SemanticError(new Position(ctx.getStart()), "Constructor's name should be consistent with class");
+            }
             ret.constructor = (FuncDefNode) visit(ctx.classConstructor());
+        } else {
+            FuncRegistry reg = new FuncRegistry(new FuncType(), ctx.Identifier().toString(), new Position(ctx.getStart()));
+            ret.constructor = new FuncDefNode(reg);
         }
         ret.class_registry = new ClassRegistry(ctx.Identifier().toString(), new Position(ctx.getStart()), type);
         scopes.pop();
@@ -454,7 +460,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         ctx.arraySizeDeclare().forEach(i -> {
             if (i.expression() != null) {
                 ret.index.add((ExprNode) visit(i.expression()));
-            }
+            } else ret.index.add(null);
         });
         return ret;
     }

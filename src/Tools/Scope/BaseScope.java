@@ -12,7 +12,7 @@ abstract public class BaseScope {
         var_map = new HashMap<>();
     }
 
-    protected final VarRegistry find_var_in_this(String name) {
+    public final VarRegistry find_var_in_this(String name) {
         return var_map.get(name);
     }
 
@@ -25,7 +25,7 @@ abstract public class BaseScope {
         }
     }
 
-    protected abstract FuncRegistry find_func_in_this(String name);
+    public abstract FuncRegistry find_func_in_this(String name);
     public FuncRegistry find_func(String name) {
         FuncRegistry tmp = find_func_in_this(name);
         if (tmp != null) return tmp;
@@ -59,12 +59,12 @@ abstract public class BaseScope {
         return false;
     }
 
-    public boolean in_class() {
+    public ClassScope in_class() {
         BaseScope tmp = this;
         while (tmp != null) {
-            if (tmp instanceof ClassScope) return true;
+            if (tmp instanceof ClassScope) return (ClassScope) tmp;
             else tmp = tmp.father_scope;
         }
-        return false;
+        return null;
     }
 }

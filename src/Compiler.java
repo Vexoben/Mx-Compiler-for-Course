@@ -16,15 +16,20 @@ import java.io.InputStream;
 
 public class Compiler {
 
-    public static void main(String[] args) throws Exception {
-        //String inputfile = "test.mx";
-        //String ouputfile = "data.out";
-        //InputStream input = new FileInputStream(inputfile);
+    static boolean is_online_judge = true;
 
+    public static void main(String[] args) throws Exception {
+        String inputfile = "test.mx";
+        String ouputfile = "data.out";
         try {
             System.out.println("-----------------Start!--------------------");
-            //MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(input));
-            MxStarLexer lexer = new MxStarLexer(CharStreams.fromStream(System.in));
+            MxStarLexer lexer;
+            if (!is_online_judge) {
+                InputStream input = new FileInputStream(inputfile);
+                lexer = new MxStarLexer(CharStreams.fromStream(input));
+            } else {
+                lexer = new MxStarLexer(CharStreams.fromStream(System.in));
+            }
             lexer.removeErrorListeners();
             lexer.addErrorListener(new MxStarErrorListener());
             CommonTokenStream tokens = new CommonTokenStream(lexer);

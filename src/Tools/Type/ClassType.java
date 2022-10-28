@@ -6,13 +6,11 @@ import java.util.ArrayList;
 public class ClassType extends BaseType {
     public ArrayList<VarType> var_list;
     public ArrayList<FuncType> func_list;
-    public FuncType constructor;
 
     public ClassType() {
         super(BuiltinType.CLASS);
         var_list = new ArrayList<>();
         func_list = new ArrayList<>();
-        constructor = null;
     }
 
     public ClassType(ArrayList<VarType> _var, ArrayList<FuncType> _func) {
@@ -26,7 +24,6 @@ public class ClassType extends BaseType {
         if (type instanceof ClassType) {
             if (var_list.size() != ((ClassType) type).var_list.size()) return false;
             if (func_list.size() != ((ClassType) type).func_list.size()) return false;
-            if (!constructor.match_type(((ClassType) type).constructor)) return false;
             int n1 = var_list.size(), n2 = func_list.size();
             for (int i = 0; i < n1; ++i) {
                 if (!var_list.get(i).match_type(((ClassType) type).var_list.get(i))) return false;
@@ -52,7 +49,6 @@ public class ClassType extends BaseType {
         for (int i = 0; i < func_list.size(); ++i) {
             ret.func_list.add((FuncType) func_list.get(i).copy());
         }
-        ret.constructor = (FuncType) constructor.copy();
         return ret;
     }
 

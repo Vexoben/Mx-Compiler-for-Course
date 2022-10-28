@@ -17,12 +17,12 @@ public class GlobalScope extends BaseScope {
     }
 
     @Override
-    protected FuncRegistry find_func_in_this(String name) {
+    public FuncRegistry find_func_in_this(String name) {
         return func_map.get(name);
     }
 
     @Override
-    protected ClassRegistry find_class_in_this(String name) {
+    public ClassRegistry find_class_in_this(String name) {
         return class_map.get(name);
     }
 
@@ -45,4 +45,14 @@ public class GlobalScope extends BaseScope {
             }
         }
     }
+/*
+    public void insert_registry_constructor(FuncRegistry registry) {
+        if (var_map.containsKey(registry.name)) {
+            throw new RedefineError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
+        } else if (func_map.containsKey(registry.name)) {
+            throw new RedefineError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
+        } else {
+            func_map.put(registry.name, (FuncRegistry) registry);
+        }
+    }*/
 }

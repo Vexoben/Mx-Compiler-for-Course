@@ -14,8 +14,8 @@ import Tools.Type.FuncType;
 import Tools.Type.VarType;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SemanticChecker implements ASTVisitor {
 
@@ -243,14 +243,19 @@ public class SemanticChecker implements ASTVisitor {
     public void visit(MemberVisitExprNode obj) {
         if (debug_mode) printf("Access MemberVisitExprNode");
         obj.class_expr.accept(this);
+        BaseScope scope = null;
         if (obj.class_expr instanceof AtomExprNode) {
-            if (((AtomExprNode)obj.class_expr).maybe_var == false) {
+            if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.THIS)) {
+                scope = scopes.peek().in_class();
+                if (scope == null) {
+                    throw new SemanticError(obj.pos, "I can't find the class");
+                }
+            } else if (((AtomExprNode)obj.class_expr).maybe_var == false) {
                 throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "is not a class");
             }
         }
         if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
             if (obj.member_name.equals("length")) {
-                printf("!!!");
                 obj.is_func = true;
                 obj.is_var = false;
                 FuncType tmp = new FuncType();
@@ -282,12 +287,14 @@ public class SemanticChecker implements ASTVisitor {
                 throw new SemanticError(obj.pos, "String doesn't have a member naming" + obj.member_name);
             }
         } else {
-            BaseScope scope = class_scopes.get(obj.class_expr.expr_type.typename);
-            if (scope.find_var(obj.member_name) != null) {
+            if (scope == null) {
+                scope = class_scopes.get(obj.class_expr.expr_type.typename);
+            }
+            if (scope.find_var_in_this(obj.member_name) != null) {
                 obj.is_var = true;
                 obj.is_func = false;
                 obj.expr_type = scope.find_var(obj.member_name).var_type;
-            } else if (scope.find_func(obj.member_name) != null) {
+            } else if (scope.find_func_in_this(obj.member_name) != null) {
                 obj.is_func = true;
                 obj.is_var = false;
                 obj.expr_type = scope.find_func(obj.member_name).func_type;
@@ -295,13 +302,26 @@ public class SemanticChecker implements ASTVisitor {
                 throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "doesn't have a member naming" + obj.member_name);
             }
         }
-        printf("!!!!!" + obj.expr_type);
         if (debug_mode) printf("Leave MemberVisitExprNode");
     }
     @Override
     public void visit(NewExprNode obj) {
         if (debug_mode) printf("Access NewExprNode");
-        obj.index.forEach(i -> i.accept(this));
+        if (obj.expr_type.match_type(BaseType.BuiltinType.CLASS)) {
+            if (scopes.peek().find_class(obj.expr_type.typename) == null) {
+                throw new SemanticError(obj.pos, "Class not found");
+            }
+        }
+        AtomicBoolean flag = new AtomicBoolean(true);
+        obj.index.forEach(i -> {
+            if (i != null) {
+                if (!flag.get()) {
+                    throw new SemanticError(obj.pos, "You should follow the order from the higher dimension");
+                }
+                i.accept(this);
+            } else flag.set(false);
+        });
+
         if (debug_mode) printf("Leave NewExprNode");
     }
     @Override
@@ -422,6 +442,9 @@ public class SemanticChecker implements ASTVisitor {
                 }
             } else {
                 obj.return_value.accept(this);
+                printf(tmp.func_type.ret_type.built_in_type);
+                printf(obj.return_value.expr_type.built_in_type);
+                printf(tmp.func_type.ret_type.match_type(obj.return_value.expr_type));
                 if (!tmp.func_type.ret_type.match_type(obj.return_value.expr_type)) {
                     throw new SemanticError(obj.pos, "return value doesn't match!");
                 }
