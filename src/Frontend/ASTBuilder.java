@@ -400,9 +400,12 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitLambdaExpr(MxStarParser.LambdaExprContext ctx) {
         LambdaExprNode ret = new LambdaExprNode(new Position(ctx.getStart()));
+        ret.func_scope.father_scope = scopes.peek();
         if (ctx.AndBit() != null) ret.outside_visit = true;
         else ret.outside_visit = false;
-        ret.func_scope.father_scope = scopes.peek();
+        if (ret.outside_visit == true) {
+            ret.func_scope.father_scope = null;
+        }
         scopes.push(ret.func_scope);
         int number = ctx.funcArgs().varTypeDef().size();
         for (int i = 0; i < number; ++i) {
@@ -418,6 +421,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             ret.func_scope.father_scope = null;
         }
         ret.func_scope.func_registry = new FuncRegistry(new FuncType(), "Lambda", ret.pos);
+        ret.func_scope.func_registry.is_lambda = true;
         return ret;
     }
 

@@ -23,6 +23,7 @@ public class SemanticChecker implements ASTVisitor {
     boolean debug_mode = true;
     Stack<BaseScope> scopes = new Stack<>();
     HashMap<String, ClassScope> class_scopes = new HashMap<>();
+    VarType lambda_type;
 
     void printf(Object obj) {
         System.out.println(obj.toString());
@@ -183,8 +184,9 @@ public class SemanticChecker implements ASTVisitor {
             return flag;
         }
         if (a.is_class() || b.is_class()) {
-            if (!a.is_class() || !b.is_class()) return false;
-            return op == BinaryExprNode.BinaryOperator.EQUAL || op == BinaryExprNode.BinaryOperator.NOTEQUAL;
+            return a.match_type(b) || b.match_type(a);
+//            if (!a.is_class() || !b.is_class()) return false;
+//            return op == BinaryExprNode.BinaryOperator.EQUAL || op == BinaryExprNode.BinaryOperator.NOTEQUAL;
         }
         if (a.match_type(BaseType.BuiltinType.NULL) && b.match_type(BaseType.BuiltinType.NULL)) {
             return op.is_check_equal();
@@ -366,8 +368,10 @@ public class SemanticChecker implements ASTVisitor {
         obj.arg_list.forEach(i -> i.accept(this));
         scopes.push(obj.func_scope);
         obj.suite_node.accept(this);
+        obj.expr_type = lambda_type;
         scopes.pop();
     }
+
     @Override
     public void visit(PostfixExprNode obj) {
         obj.var.accept(this);
@@ -483,19 +487,22 @@ public class SemanticChecker implements ASTVisitor {
             if (tmp == null) {
                 throw new SemanticError(obj.pos, "Where is the function? Are you kidding?");
             }
-            if (tmp.func_type.match_type(BaseType.BuiltinType.VOID)) {
-                if (obj.return_value != null) {
-                    throw new SemanticError(obj.pos, "return value doesn't match!");
-                }
-            } else {
-                obj.return_value.accept(this);
-                printf(tmp.func_type.ret_type.built_in_type);
-                printf(obj.return_value.expr_type.built_in_type);
-                printf(tmp.func_type.ret_type.typename);
-                printf(obj.return_value.expr_type.typename);
-                printf(tmp.func_type.ret_type.match_type(obj.return_value.expr_type));
-                if (!tmp.func_type.ret_type.match_type(obj.return_value.expr_type)) {
-                    throw new SemanticError(obj.pos, "return value doesn't match!");
+            if (obj.return_value != null) obj.return_value.accept(this);
+            if (tmp.is_lambda) {
+                if (obj.return_value != null)
+                    lambda_type = (VarType) obj.return_value.expr_type;
+                else lambda_type = new VarType(BaseType.BuiltinType.VOID);
+                printf(lambda_type);
+            }
+            if (!tmp.is_lambda) {
+                if (tmp.func_type.match_type(BaseType.BuiltinType.VOID)) {
+                    if (obj.return_value != null) {
+                        throw new SemanticError(obj.pos, "return value doesn't match!");
+                    }
+                } else {
+                    if (!tmp.func_type.ret_type.match_type(obj.return_value.expr_type)) {
+                        throw new SemanticError(obj.pos, "return value doesn't match!");
+                    }
                 }
             }
         }
