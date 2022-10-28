@@ -1,4 +1,4 @@
 int main() {
-	int c;
+	String c;
 	int sum = [&](int a, int b) -> { return a + c; }(1, 2);
 }

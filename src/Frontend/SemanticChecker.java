@@ -366,6 +366,15 @@ public class SemanticChecker implements ASTVisitor {
     public void visit(LambdaExprNode obj) {
         obj.call_args.forEach(i -> i.accept(this));
         obj.arg_list.forEach(i -> i.accept(this));
+        if (obj.call_args.size() != obj.arg_list.size()) {
+            throw new SemanticError(obj.pos, "Parameters don't match!");
+        }
+        int number = obj.call_args.size();
+        for (int i = 0; i < number; ++i) {
+            if (!obj.arg_list.get(i).registry.var_type.match_type(obj.call_args.get(i).expr_type)) {
+                throw new SemanticError(obj.pos, (i + 1) + "th argument has a wrong type!");
+            }
+        }
         scopes.push(obj.func_scope);
         obj.suite_node.accept(this);
         obj.expr_type = lambda_type;
