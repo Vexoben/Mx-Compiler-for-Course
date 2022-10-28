@@ -106,7 +106,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             DefNode tmp = (DefNode) visit(i);
             ret.var_list.add((VarAnyNumberDefNode) tmp);
             ((VarAnyNumberDefNode)tmp).registry_list.forEach(j -> {
-                //ret.class_scope.insert_registry(j);
+                ret.class_scope.insert_registry(j);
                 type.var_list.add(j.var_type);
             });
         });
@@ -121,6 +121,17 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         }
         ret.class_registry = new ClassRegistry(ctx.Identifier().toString(), new Position(ctx.getStart()), type);
         scopes.pop();
+        return ret;
+    }
+
+    @Override
+    public ASTNode visitClassConstructor(MxStarParser.ClassConstructorContext ctx) {
+        FuncDefNode ret = new FuncDefNode(new Position(ctx.getStart()));
+        ret.func_scope.father_scope = scopes.peek();
+        scopes.push(ret.func_scope);
+        ret.block_node = (BlockNode) visit(ctx.funcBlock());
+        scopes.pop();
+        ret.func_registry = new FuncRegistry(new FuncType(), ctx.Identifier().toString(), ret.pos);
         return ret;
     }
 

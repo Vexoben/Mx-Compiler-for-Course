@@ -65,6 +65,7 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(ClassDefNode obj) {
+        if (debug_mode) printf("Access ClassDefNode");
         scopes.push(obj.class_scope);
         obj.var_list.forEach(i -> i.accept(this));
         obj.func_list.forEach(i -> i.accept(this));
@@ -72,6 +73,7 @@ public class SemanticChecker implements ASTVisitor {
             obj.constructor.accept(this);
         }
         scopes.pop();
+        if (debug_mode) printf("Leave ClassDefNode");
     }
     @Override
     public void visit(VarSingleDefNode obj) {
@@ -95,7 +97,9 @@ public class SemanticChecker implements ASTVisitor {
                 }
             }
         });
-        obj.registry_list.forEach(i -> scopes.peek().insert_registry(i));
+        if (!(scopes.peek() instanceof ClassScope)) {
+            obj.registry_list.forEach(i -> scopes.peek().insert_registry(i));
+        }
         if (debug_mode) System.out.println("Leave VarAnyNumberDefNode");
     }
     @Override
@@ -107,6 +111,11 @@ public class SemanticChecker implements ASTVisitor {
         obj.array.accept(this);
         if (obj.index != null) {
             obj.index.accept(this);
+            printf(obj.index.expr_type);
+            printf(((VarType)obj.index.expr_type).dimension);
+            if (!obj.index.expr_type.match_type(BaseType.BuiltinType.INT)) {
+                throw new SemanticError(obj.pos, "You offered me a wrong index");
+            }
         }
         VarType type = (VarType) obj.array.expr_type;
         if (!obj.array.expr_type.is_array() && obj.index != null) {
@@ -241,6 +250,7 @@ public class SemanticChecker implements ASTVisitor {
         if (debug_mode) printf("Access MemberVisitExprNode");
         obj.class_expr.accept(this);
         BaseScope scope = null;
+        printf(obj.class_expr.expr_type.typename);
         // array visit member
         if (obj.class_expr.expr_type.is_array()) {
             if (obj.member_name.equals("size")) {
@@ -340,6 +350,9 @@ public class SemanticChecker implements ASTVisitor {
                     throw new SemanticError(obj.pos, "You should follow the order from the higher dimension");
                 }
                 i.accept(this);
+                if (!i.expr_type.match_type(BaseType.BuiltinType.INT)) {
+                    throw new SemanticError(obj.pos, "You offered me a wrong index");
+                }
             } else flag.set(false);
         });
 
@@ -356,7 +369,7 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(PostfixExprNode obj) {
         obj.var.accept(this);
-        if (!obj.var.is_left_value()) {
+        if (!obj.var.is_left_value() || !obj.var.expr_type.match_type(BaseType.BuiltinType.INT)) {
             throw new SemanticError(obj.pos, "This expression can't apply self-operator");
         }
         obj.expr_type = obj.var.expr_type;
@@ -364,7 +377,7 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(PrefixExprNode obj) {
         obj.var.accept(this);
-        if (!obj.var.is_left_value()) {
+        if (!obj.var.is_left_value() || !obj.var.expr_type.match_type(BaseType.BuiltinType.INT)) {
             throw new SemanticError(obj.pos, "This expression can't apply self-operator");
         }
         obj.expr_type = obj.var.expr_type;
@@ -418,6 +431,9 @@ public class SemanticChecker implements ASTVisitor {
     public void visit(ForStmtNode obj) {
         if (obj.init != null) obj.init.accept(this);
         if (obj.condition != null) obj.condition.accept(this);
+        if (!obj.condition.expr.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+            throw new SemanticError(obj.pos, "Condition must be boolean");
+        }
         if (obj.step != null) obj.step.accept(this);
         scopes.push(obj.scope);
         obj.stmt.accept(this);
@@ -426,6 +442,9 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(WhileStmtNode obj) {
         obj.condition.accept(this);
+        if (!obj.condition.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+            throw new SemanticError(obj.pos, "Condition must be boolean");
+        }
         scopes.push(obj.scope);
         obj.stmt.accept(this);
         scopes.pop();
@@ -437,6 +456,9 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(IfStmtNode obj) {
         obj.condition.accept(this);
+        if (!obj.condition.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+            throw new SemanticError(obj.pos, "Condition must be boolean");
+        }
         scopes.push(obj.if_scope);
         obj.if_stmt.accept(this);
         scopes.pop();

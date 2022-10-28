@@ -33,6 +33,6 @@ public class PrefixExprNode extends ExprNode {
 
     @Override
     public boolean is_left_value() {
-        return false;
+        return var.is_left_value();
     }
 }
