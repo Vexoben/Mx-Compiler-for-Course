@@ -98,6 +98,19 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         ret.class_scope.class_name = ctx.Identifier().toString();
         ret.class_scope.father_scope = scopes.peek();
         scopes.push(ret.class_scope);
+        if (ctx.classConstructor() != null) {
+            if (!ctx.classConstructor().Identifier().toString().equals(ctx.Identifier().toString())) {
+                throw new SemanticError(new Position(ctx.getStart()), "Constructor's name should be consistent with class");
+            }
+            ret.constructor = (FuncDefNode) visit(ctx.classConstructor());
+            ret.constructor.func_registry.func_type.ret_type = new VarType(BaseType.BuiltinType.VOID);
+            ret.constructor.func_scope.func_registry = ret.constructor.func_registry;
+        } else {
+            FuncRegistry reg = new FuncRegistry(new FuncType(), ctx.Identifier().toString(), new Position(ctx.getStart()));
+            reg.func_type.ret_type = new VarType(BaseType.BuiltinType.VOID);
+            ret.constructor = new FuncDefNode(reg);
+            ret.constructor.func_scope.func_registry = ret.constructor.func_registry;
+        }
         ctx.funcDef().forEach(i -> {
             DefNode tmp = (DefNode) visit(i);
             ret.func_list.add((FuncDefNode) tmp);
@@ -112,15 +125,6 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
                 type.var_list.add(j.var_type);
             });
         });
-        if (ctx.classConstructor() != null) {
-            if (!ctx.classConstructor().Identifier().toString().equals(ctx.Identifier().toString())) {
-                throw new SemanticError(new Position(ctx.getStart()), "Constructor's name should be consistent with class");
-            }
-            ret.constructor = (FuncDefNode) visit(ctx.classConstructor());
-        } else {
-            FuncRegistry reg = new FuncRegistry(new FuncType(), ctx.Identifier().toString(), new Position(ctx.getStart()));
-            ret.constructor = new FuncDefNode(reg);
-        }
         ret.class_registry = new ClassRegistry(ctx.Identifier().toString(), new Position(ctx.getStart()), type);
         scopes.pop();
         return ret;
@@ -143,6 +147,10 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         FuncType type = new FuncType();
         type.ret_type = get_func_ret_type(ctx.funcTypeDef());
         ret.func_scope.father_scope = scopes.peek();
+        ClassScope class_scope = scopes.peek().in_class();
+        if (class_scope != null && class_scope.class_name.equals(ctx.Identifier().toString())) {
+            throw new SemanticError(ret.pos, "Constructor Type Error");
+        }
         scopes.push(ret.func_scope);
         int number = ctx.funcArgs().varTypeDef().size();
         for (int i = 0; i < number; ++i) {
@@ -409,6 +417,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         if (ret.outside_visit == false) {
             ret.func_scope.father_scope = null;
         }
+        ret.func_scope.func_registry = new FuncRegistry(new FuncType(), "Lambda", ret.pos);
         return ret;
     }
 

@@ -9,6 +9,7 @@ import Tools.Registry.FuncRegistry;
 import Tools.Registry.VarRegistry;
 import Tools.Scope.BaseScope;
 import Tools.Scope.ClassScope;
+import Tools.Scope.GlobalScope;
 import Tools.Type.BaseType;
 import Tools.Type.FuncType;
 import Tools.Type.VarType;
@@ -269,7 +270,8 @@ public class SemanticChecker implements ASTVisitor {
                 if (scope == null) {
                     throw new SemanticError(obj.pos, "I can't find the class");
                 }
-            } else if (((AtomExprNode)obj.class_expr).maybe_var == false) { // identifier
+            } else if (((AtomExprNode)obj.class_expr).maybe_var == false
+                    && !(obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING))) { // identifier
                 throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "is not a class");
             }
         }
