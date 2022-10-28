@@ -1,3 +1,4 @@
 int main() {
-	int sum = [&](int a, int b) -> { return a + b; }(1, 2);
+	int c;
+	int sum = [&](int a, int b) -> { return a + c; }(1, 2);
 }

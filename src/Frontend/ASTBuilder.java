@@ -403,7 +403,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         ret.func_scope.father_scope = scopes.peek();
         if (ctx.AndBit() != null) ret.outside_visit = true;
         else ret.outside_visit = false;
-        if (ret.outside_visit == true) {
+        if (ret.outside_visit == false) {
             ret.func_scope.father_scope = null;
         }
         scopes.push(ret.func_scope);
