@@ -11,6 +11,7 @@ import Tools.Registry.ClassRegistry;
 import Tools.Registry.FuncRegistry;
 import Tools.Registry.VarRegistry;
 import Tools.Scope.BaseScope;
+import Tools.Scope.ClassScope;
 import Tools.Scope.GlobalScope;
 import Tools.Type.BaseType;
 import Tools.Type.ClassType;
@@ -94,6 +95,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     public ASTNode visitClassDef(MxStarParser.ClassDefContext ctx) {
         ClassDefNode ret = new ClassDefNode(new Position(ctx.getStart()));
         ClassType type = new ClassType();
+        ret.class_scope.class_name = ctx.Identifier().toString();
         ret.class_scope.father_scope = scopes.peek();
         scopes.push(ret.class_scope);
         ctx.funcDef().forEach(i -> {
@@ -376,7 +378,15 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitAtomExpr(MxStarParser.AtomExprContext ctx) {
-        return new AtomExprNode(new Position(ctx.getStart()), ctx.atom());
+        AtomExprNode ret = new AtomExprNode(new Position(ctx.getStart()), ctx.atom());
+        if (ret.expr_type != null && ret.expr_type.match_type(BaseType.BuiltinType.THIS)) {
+            ClassScope scope = scopes.peek().in_class();
+            if (scope == null) {
+                throw new SemanticError(ret.pos, "Not in a class");
+            }
+            ret.expr_type.typename = scope.class_name;
+        }
+        return ret;
     }
 
     @Override

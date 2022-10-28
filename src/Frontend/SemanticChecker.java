@@ -430,9 +430,11 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(ForStmtNode obj) {
         if (obj.init != null) obj.init.accept(this);
-        if (obj.condition != null) obj.condition.accept(this);
-        if (!obj.condition.expr.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
-            throw new SemanticError(obj.pos, "Condition must be boolean");
+        if (obj.condition != null) {
+            obj.condition.accept(this);
+            if (!obj.condition.expr.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+                throw new SemanticError(obj.pos, "Condition must be boolean");
+            }
         }
         if (obj.step != null) obj.step.accept(this);
         scopes.push(obj.scope);
@@ -487,6 +489,8 @@ public class SemanticChecker implements ASTVisitor {
                 obj.return_value.accept(this);
                 printf(tmp.func_type.ret_type.built_in_type);
                 printf(obj.return_value.expr_type.built_in_type);
+                printf(tmp.func_type.ret_type.typename);
+                printf(obj.return_value.expr_type.typename);
                 printf(tmp.func_type.ret_type.match_type(obj.return_value.expr_type));
                 if (!tmp.func_type.ret_type.match_type(obj.return_value.expr_type)) {
                     throw new SemanticError(obj.pos, "return value doesn't match!");

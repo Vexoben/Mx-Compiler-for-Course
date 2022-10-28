@@ -6,6 +6,7 @@ import Tools.Error.RedefineError;
 import java.util.HashMap;
 public class ClassScope extends BaseScope {
     HashMap<String, FuncRegistry> func_map;
+    public String class_name;
 
     public ClassScope() {
         super();

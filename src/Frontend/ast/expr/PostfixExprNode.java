@@ -34,6 +34,6 @@ public class PostfixExprNode extends ExprNode {
 
     @Override
     public boolean is_left_value() {
-        return var.is_left_value();
+        return false;
     }
 }

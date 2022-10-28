@@ -10,11 +10,13 @@
       <change beforePath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ASTBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/SemanticChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/SemanticChecker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/PostfixExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/PostfixExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/ast/expr/PrefixExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/ast/expr/PrefixExprNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Scope/ClassScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Scope/ClassScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Type/VarType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tools/Type/VarType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ASTBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ASTBuilder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Frontend/SemanticChecker.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/SemanticChecker.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PostfixExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PostfixExprNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PrefixExprNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Frontend/ast/expr/PrefixExprNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Scope/ClassScope.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Scope/ClassScope.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tools/Type/VarType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tools/Type/VarType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.mx" beforeDir="false" afterPath="$PROJECT_DIR$/test.mx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

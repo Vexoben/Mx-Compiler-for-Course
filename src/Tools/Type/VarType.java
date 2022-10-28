@@ -46,6 +46,9 @@ public class VarType extends BaseType {
     @Override
     public boolean match_type(BaseType type) {
         if (type instanceof VarType) {
+            if (type.built_in_type == BuiltinType.THIS) {
+                return dimension == 0 && typename.equals(type.typename);
+            }
             if (type.built_in_type == BuiltinType.NULL && (dimension > 0 || built_in_type == BuiltinType.CLASS)) {
                 return true;
             }
