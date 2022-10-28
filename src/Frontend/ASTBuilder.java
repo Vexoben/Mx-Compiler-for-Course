@@ -59,20 +59,20 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
 
         // classes, functions, global-variables
         scopes.push(ret.global_scope);
-        ctx.varDefBlock().forEach(i -> {
-            DefNode tmp = (DefNode) visit(i);
+        ctx.defs().forEach(i -> {
+            DefNode tmp;
+            if (i.varDefBlock() != null) {
+                tmp = (DefNode) visit(i.varDefBlock());
+            }
+            else if (i.funcDef() != null) {
+                tmp = (DefNode) visit(i.funcDef());
+                ret.global_scope.insert_registry(((FuncDefNode) tmp).func_registry);
+            }
+            else {
+                tmp = (ClassDefNode) visit(i.classDef());
+                ret.global_scope.insert_registry(((ClassDefNode) tmp).class_registry);
+            }
             ret.child_list.add(tmp);
-            // ((VarAnyNumberDefNode)tmp).registry_list.forEach(j -> ret.global_scope.insert_registry(j));
-        });
-        ctx.funcDef().forEach(i -> {
-            DefNode tmp = (DefNode) visit(i);
-            ret.child_list.add(tmp);
-            ret.global_scope.insert_registry(((FuncDefNode) tmp).func_registry);
-        });
-        ctx.classDef().forEach(i -> {
-            DefNode tmp = (DefNode) visit(i);
-            ret.child_list.add(tmp);
-            ret.global_scope.insert_registry(((ClassDefNode) tmp).class_registry);
         });
 
         // check main function
@@ -82,6 +82,9 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         }
         if (!main.func_type.ret_type.match_type(BaseType.BuiltinType.INT)) {
             throw new SemanticError(new Position(ctx.getStart()), "I never accept main() function of this type!");
+        }
+        if (main.func_type.func_args_type.size() > 0) {
+            throw new SemanticError(new Position(ctx.getStart()), "main() function should not have parameters");
         }
 
         scopes.pop();
@@ -272,7 +275,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         VarSingleDefNode ret = new VarSingleDefNode(new Position(ctx.getStart()));
         VarType type = get_var_type(ctx);
         ret.registry = new VarRegistry(type, "to_be_write", new Position(ctx.getStart()));
-        scopes.peek().insert_registry(ret.registry);
+        // scopes.peek().insert_registry(ret.registry);
         return ret;
     }
 
@@ -353,7 +356,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         VarType type = get_var_type(ctx);
         ret.var_type = type;
         ret.registry = new VarRegistry(type, ctx.Identifier().toString(), new Position(ctx.getStart()));
-        scopes.peek().insert_registry(ret.registry);
+        // scopes.peek().insert_registry(ret.registry);
         if (ctx.expression() != null) {
             ret.assign = (ExprNode) visit(ctx.expression());
         }

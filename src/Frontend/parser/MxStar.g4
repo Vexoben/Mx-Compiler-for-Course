@@ -2,7 +2,9 @@ grammar MxStar;
 
 // parser
 
-mxstarcode: (classDef | funcDef | varDefBlock) * EOF;
+mxstarcode: defs* EOF;
+
+defs: classDef | funcDef | varDefBlock;
 
 //normalBlock: '{' (normalstatement)* '}';
 

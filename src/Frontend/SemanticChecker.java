@@ -36,15 +36,7 @@ public class SemanticChecker implements ASTVisitor {
             }
         });
         scopes.push(obj.global_scope);
-        obj.child_list.forEach(i -> {
-            if (i instanceof VarDefNode) i.accept(this);
-        });
-        obj.child_list.forEach(i -> {
-            if (i instanceof FuncDefNode) i.accept(this);
-        });
-        obj.child_list.forEach(i -> {
-            if (i instanceof ClassDefNode) i.accept(this);
-        });
+        obj.child_list.forEach(i -> i.accept(this));
         scopes.pop();
         if (debug_mode) System.out.println("Leave RootNode");
     }
@@ -95,7 +87,6 @@ public class SemanticChecker implements ASTVisitor {
     @Override
     public void visit(VarAnyNumberDefNode obj) {
         if (debug_mode) System.out.println("Access VarAnyNumberDefNode");
-        obj.registry_list.forEach(i -> scopes.peek().insert_registry(i));
         obj.assign_list.forEach(i -> {
             if (i != null) {
                 i.accept(this);
@@ -104,6 +95,7 @@ public class SemanticChecker implements ASTVisitor {
                 }
             }
         });
+        obj.registry_list.forEach(i -> scopes.peek().insert_registry(i));
         if (debug_mode) System.out.println("Leave VarAnyNumberDefNode");
     }
     @Override
@@ -184,6 +176,9 @@ public class SemanticChecker implements ASTVisitor {
             if (!a.is_class() || !b.is_class()) return false;
             return op == BinaryExprNode.BinaryOperator.EQUAL || op == BinaryExprNode.BinaryOperator.NOTEQUAL;
         }
+        if (a.match_type(BaseType.BuiltinType.NULL) && b.match_type(BaseType.BuiltinType.NULL)) {
+            return op.is_check_equal();
+        }
         return false;
     }
 
@@ -212,6 +207,7 @@ public class SemanticChecker implements ASTVisitor {
     public void visit(ConstExprNode obj) {} // did not be used
     @Override
     public void visit(FuncCallExprNode obj) {
+        if (debug_mode) printf("Access FuncCallExprNode");
         obj.func_name.accept(this);
         obj.args.forEach(i -> i.accept(this));
         if (obj.func_name instanceof AtomExprNode) {
@@ -219,13 +215,13 @@ public class SemanticChecker implements ASTVisitor {
                 throw new SemanticError(obj.pos, "I lost: can't find the function you call");
             }
             obj.expr_type = ((AtomExprNode) obj.func_name).func_type.ret_type;
-            printf(obj.expr_type);
         } else if (obj.func_name instanceof MemberVisitExprNode) {
             if (!((MemberVisitExprNode)obj.func_name).is_func) {
                 throw new SemanticError(obj.pos, "I lost: can't find the function you call(maybe you called a variable");
             }
             obj.expr_type = ((FuncType)obj.func_name.expr_type).ret_type;
         } else throw new SemanticError(obj.pos, "Unknown error");
+        // check args type
         FuncType ret_type;
         if (obj.func_name instanceof AtomExprNode) ret_type = (FuncType) ((AtomExprNode) obj.func_name).func_type;
         else ret_type = (FuncType) obj.func_name.expr_type;
@@ -238,22 +234,36 @@ public class SemanticChecker implements ASTVisitor {
                 throw new SemanticError(obj.pos, (i + 1) + "th argument has a wrong type!");
             }
         }
+        if (debug_mode) printf("Leave FuncCallExprNode");
     }
     @Override
     public void visit(MemberVisitExprNode obj) {
         if (debug_mode) printf("Access MemberVisitExprNode");
         obj.class_expr.accept(this);
         BaseScope scope = null;
+        // array visit member
+        if (obj.class_expr.expr_type.is_array()) {
+            if (obj.member_name.equals("size")) {
+                obj.is_func = true;
+                obj.is_var = false;
+                FuncType tmp = new FuncType();
+                tmp.ret_type = new VarType(BaseType.BuiltinType.INT);
+                obj.expr_type = tmp;
+                return;
+            } else throw new SemanticError(obj.pos, "Array can't call this members");
+        }
+        // class_expr is AtomExpr(this or Identifier)
         if (obj.class_expr instanceof AtomExprNode) {
-            if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.THIS)) {
+            if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.THIS)) { // this
                 scope = scopes.peek().in_class();
                 if (scope == null) {
                     throw new SemanticError(obj.pos, "I can't find the class");
                 }
-            } else if (((AtomExprNode)obj.class_expr).maybe_var == false) {
+            } else if (((AtomExprNode)obj.class_expr).maybe_var == false) { // identifier
                 throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "is not a class");
             }
         }
+        // string
         if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
             if (obj.member_name.equals("length")) {
                 obj.is_func = true;
@@ -286,9 +296,20 @@ public class SemanticChecker implements ASTVisitor {
             } else {
                 throw new SemanticError(obj.pos, "String doesn't have a member naming" + obj.member_name);
             }
+            return;
         } else {
+            // FuncCallExpr
+       /*     if (obj.class_expr instanceof FuncCallExprNode) {
+                scope = class_scopes.get(((FuncType) obj.class_expr.expr_type).ret_type.typename);
+                if (scope == null) {
+                    throw new SemanticError(obj.pos, "Class not found");
+                }
+            }*/
             if (scope == null) {
                 scope = class_scopes.get(obj.class_expr.expr_type.typename);
+                if (scope == null) {
+                    throw new SemanticError(obj.pos, "Class not found");
+                }
             }
             if (scope.find_var_in_this(obj.member_name) != null) {
                 obj.is_var = true;
