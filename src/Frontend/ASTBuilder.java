@@ -407,14 +407,23 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             ret.func_scope.father_scope = null;
         }
         scopes.push(ret.func_scope);
-        int number = ctx.funcArgs().varTypeDef().size();
-        for (int i = 0; i < number; ++i) {
-            VarSingleDefNode tmp = (VarSingleDefNode) visit(ctx.funcArgs().varTypeDef().get(i));
-            tmp.registry.name = ctx.funcArgs().Identifier().get(i).toString();
-            ret.arg_list.add(tmp);
-            ret.func_scope.insert_registry(tmp.registry);
+        if (ctx.funcArgs() == null) {
+            if (ctx.funcCallArgs().expression().size() != 0) {
+                throw new SemanticError(ret.pos, "Args don't match!");
+            }
+        } else {
+            if (ctx.funcArgs().Identifier().size() != ctx.funcCallArgs().expression().size()) {
+                throw new SemanticError(ret.pos, "Args don't match!");
+            }
+            int number = ctx.funcArgs().varTypeDef().size();
+            for (int i = 0; i < number; ++i) {
+                VarSingleDefNode tmp = (VarSingleDefNode) visit(ctx.funcArgs().varTypeDef().get(i));
+                tmp.registry.name = ctx.funcArgs().Identifier().get(i).toString();
+                ret.arg_list.add(tmp);
+                ret.func_scope.insert_registry(tmp.registry);
+            }
+            ret.call_args = visit(ctx.funcCallArgs());
         }
-        ret.call_args = visit(ctx.funcCallArgs());
         ret.suite_node = (BlockNode) visit(ctx.funcBlock());
         scopes.pop();
         if (ret.outside_visit == false) {

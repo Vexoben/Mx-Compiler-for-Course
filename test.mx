@@ -1,4 +1,11 @@
+class A {
+	int foo;
+	void f() {
+		int b = 0;
+    	int a = [&] -> { if (b > 0) return "1"; else return 1; }();
+	}
+};
+
 int main() {
-	String c;
-	int sum = [&](int a, int b) -> { return a + c; }(1, 2);
+	string c;
 }

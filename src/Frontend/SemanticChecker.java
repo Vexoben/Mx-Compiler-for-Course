@@ -364,6 +364,7 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(LambdaExprNode obj) {
+        lambda_type = null;
         obj.call_args.forEach(i -> i.accept(this));
         obj.arg_list.forEach(i -> i.accept(this));
         if (obj.call_args.size() != obj.arg_list.size()) {
@@ -377,7 +378,8 @@ public class SemanticChecker implements ASTVisitor {
         }
         scopes.push(obj.func_scope);
         obj.suite_node.accept(this);
-        obj.expr_type = lambda_type;
+        if (lambda_type == null) obj.expr_type = new VarType(BaseType.BuiltinType.VOID);
+        else obj.expr_type = lambda_type.copy();
         scopes.pop();
     }
 
@@ -498,10 +500,19 @@ public class SemanticChecker implements ASTVisitor {
             }
             if (obj.return_value != null) obj.return_value.accept(this);
             if (tmp.is_lambda) {
-                if (obj.return_value != null)
-                    lambda_type = (VarType) obj.return_value.expr_type;
-                else lambda_type = new VarType(BaseType.BuiltinType.VOID);
-                printf(lambda_type);
+                VarType new_type;
+                if (obj.return_value != null) {
+                    new_type = (VarType) obj.return_value.expr_type;
+                } else {
+                    new_type = new VarType(BaseType.BuiltinType.VOID);
+                }
+                if (lambda_type == null) {
+                        lambda_type = (VarType) obj.return_value.expr_type;
+                } else {
+                    if (!lambda_type.match_type(new_type)) {
+                        throw new SemanticError(obj.pos, "I'm not able to infer lambda function's type");
+                    }
+                }
             }
             if (!tmp.is_lambda) {
                 if (tmp.func_type.match_type(BaseType.BuiltinType.VOID)) {
