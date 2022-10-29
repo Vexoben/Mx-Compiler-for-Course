@@ -23,7 +23,7 @@ public class SemanticChecker implements ASTVisitor {
     boolean debug_mode = true;
     Stack<BaseScope> scopes = new Stack<>();
     HashMap<String, ClassScope> class_scopes = new HashMap<>();
-    VarType lambda_type;
+    Stack<VarType> lambda_types = new Stack<>();
 
     void printf(Object obj) {
         System.out.println(obj.toString());
@@ -364,7 +364,7 @@ public class SemanticChecker implements ASTVisitor {
     }
     @Override
     public void visit(LambdaExprNode obj) {
-        lambda_type = null;
+        lambda_types.push(null);
         obj.call_args.forEach(i -> i.accept(this));
         obj.arg_list.forEach(i -> i.accept(this));
         if (obj.call_args.size() != obj.arg_list.size()) {
@@ -378,9 +378,10 @@ public class SemanticChecker implements ASTVisitor {
         }
         scopes.push(obj.func_scope);
         obj.suite_node.accept(this);
-        if (lambda_type == null) obj.expr_type = new VarType(BaseType.BuiltinType.VOID);
-        else obj.expr_type = lambda_type.copy();
+        if (lambda_types.peek() == null) obj.expr_type = new VarType(BaseType.BuiltinType.VOID);
+        else obj.expr_type = lambda_types.peek().copy();
         scopes.pop();
+        lambda_types.pop();
     }
 
     @Override
@@ -438,6 +439,9 @@ public class SemanticChecker implements ASTVisitor {
                 if (debug_mode) System.out.println("maybe variable");
                 obj.maybe_var = true;
                 obj.expr_type = reg1.var_type;
+            }
+            if (!obj.maybe_func && !obj.maybe_var) {
+                throw new SemanticError(obj.pos, "I can't recognize this identifier");
             }
         }
         if (debug_mode) System.out.println("Leave AtomExprNode");
@@ -506,10 +510,11 @@ public class SemanticChecker implements ASTVisitor {
                 } else {
                     new_type = new VarType(BaseType.BuiltinType.VOID);
                 }
-                if (lambda_type == null) {
-                        lambda_type = (VarType) obj.return_value.expr_type;
+                if (lambda_types.peek() == null) {
+                    lambda_types.pop();
+                    lambda_types.push((VarType) obj.return_value.expr_type);
                 } else {
-                    if (!lambda_type.match_type(new_type)) {
+                    if (!lambda_types.peek().match_type(new_type)) {
                         throw new SemanticError(obj.pos, "I'm not able to infer lambda function's type");
                     }
                 }
