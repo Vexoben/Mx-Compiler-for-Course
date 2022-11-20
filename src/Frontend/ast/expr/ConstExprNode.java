@@ -2,8 +2,8 @@ package Frontend.ast.expr;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
-import Tools.Type.BaseType;
+import Frontend.Tools.Position;
+import Frontend.Tools.Type.BaseType;
 
 public class ConstExprNode extends ExprNode {
     public BaseType.BuiltinType built_in_type;

@@ -1,7 +1,6 @@
 package Frontend.ast;
 
-import Tools.Position;
-import Frontend.parser.*;
+import Frontend.Tools.Position;
 
 abstract public class ASTNode {
     public Position pos;

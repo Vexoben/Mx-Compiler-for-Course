@@ -1,5 +1,5 @@
-package Tools.Error;
-import Tools.Position;
+package Frontend.Tools.Error;
+import Frontend.Tools.Position;
 
 public class SemanticError extends BaseError {
     public SemanticError(Position _pos, String _msg) {

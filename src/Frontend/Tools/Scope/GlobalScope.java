@@ -1,9 +1,9 @@
-package Tools.Scope;
+package Frontend.Tools.Scope;
 
-import Tools.Error.SemanticError;
-import Tools.Registry.*;
-import Tools.Error.RedefineError;
-import java.util.ArrayList;
+import Frontend.Tools.Error.SemanticError;
+import Frontend.Tools.Registry.*;
+import Frontend.Tools.Error.RedefineError;
+
 import java.util.HashMap;
 
 public class GlobalScope extends BaseScope {

@@ -1,7 +1,6 @@
-package Tools;
+package Frontend.Tools;
 
-import Tools.Error.SyntaxError;
-import Tools.Position;
+import Frontend.Tools.Error.SyntaxError;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;

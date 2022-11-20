@@ -4,8 +4,8 @@ import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.ast.stmt.BlockNode;
 import Frontend.ast.def.VarSingleDefNode;
-import Tools.Position;
-import Tools.Scope.FuncScope;
+import Frontend.Tools.Position;
+import Frontend.Tools.Scope.FuncScope;
 
 import java.util.ArrayList;
 

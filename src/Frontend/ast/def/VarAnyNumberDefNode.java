@@ -1,11 +1,9 @@
 package Frontend.ast.def;
 
 import Frontend.ast.ASTVisitor;
-import Frontend.ast.DefNode;
 import Frontend.ast.ExprNode;
-import Frontend.ast.expr.NewExprNode;
-import Tools.Position;
-import Tools.Registry.VarRegistry;
+import Frontend.Tools.Position;
+import Frontend.Tools.Registry.VarRegistry;
 
 import java.util.ArrayList;
 

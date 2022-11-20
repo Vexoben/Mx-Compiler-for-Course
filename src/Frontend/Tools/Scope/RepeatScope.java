@@ -1,12 +1,12 @@
-package Tools.Scope;
+package Frontend.Tools.Scope;
 
-import Tools.Error.SemanticError;
-import Tools.Registry.*;
-import Tools.Error.RedefineError;
-import java.util.HashMap;
-public class SuiteScope extends BaseScope {
+import Frontend.Tools.Error.SemanticError;
+import Frontend.Tools.Registry.*;
+import Frontend.Tools.Error.RedefineError;
 
-    public SuiteScope() {
+public class RepeatScope extends BaseScope {
+
+    public RepeatScope() {
         super();
     }
 

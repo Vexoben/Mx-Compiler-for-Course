@@ -1,7 +1,7 @@
-package Tools.Registry;
+package Frontend.Tools.Registry;
 
-import Tools.Type.ClassType;
-import Tools.Position;
+import Frontend.Tools.Type.ClassType;
+import Frontend.Tools.Position;
 
 public class ClassRegistry extends BaseRegistry{
     public ClassType class_type;

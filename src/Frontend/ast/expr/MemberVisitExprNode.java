@@ -2,7 +2,7 @@ package Frontend.ast.expr;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public class MemberVisitExprNode extends ExprNode {
     public ExprNode class_expr;

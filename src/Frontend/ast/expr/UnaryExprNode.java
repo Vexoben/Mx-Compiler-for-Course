@@ -1,7 +1,7 @@
 package Frontend.ast.expr;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public class UnaryExprNode extends ExprNode {
     public enum UnaryOperator { Not, ReverseBit, Positive, Negative};

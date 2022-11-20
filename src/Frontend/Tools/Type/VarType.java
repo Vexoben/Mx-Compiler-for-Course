@@ -1,8 +1,4 @@
-package Tools.Type;
-
-import Tools.Error.SyntaxError;
-import Tools.Error.SemanticError;
-import Tools.Position;
+package Frontend.Tools.Type;
 
 public class VarType extends BaseType {
     public int dimension;

@@ -2,12 +2,8 @@ package Frontend.ast.stmt;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.StmtNode;
-import Frontend.ast.def.VarSingleDefNode;
-import Tools.Position;
-import Tools.Scope.RepeatScope;
-import Tools.Scope.SuiteScope;
-
-import java.util.ArrayList;
+import Frontend.Tools.Position;
+import Frontend.Tools.Scope.RepeatScope;
 
 public class ForStmtNode extends StmtNode {
     public AtomStmtNode init, condition, step;

@@ -1,7 +1,7 @@
 package Frontend.ast;
 
-import Tools.Position;
-import Tools.Scope.GlobalScope;
+import Frontend.Tools.Position;
+import Frontend.Tools.Scope.GlobalScope;
 
 import java.util.ArrayList;
 public class RootNode extends ASTNode {

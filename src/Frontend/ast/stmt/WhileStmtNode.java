@@ -3,9 +3,8 @@ package Frontend.ast.stmt;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.ast.StmtNode;
-import Tools.Position;
-import Tools.Scope.RepeatScope;
-import Tools.Scope.SuiteScope;
+import Frontend.Tools.Position;
+import Frontend.Tools.Scope.RepeatScope;
 
 public class WhileStmtNode extends StmtNode {
     public ExprNode condition;

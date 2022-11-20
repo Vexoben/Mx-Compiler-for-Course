@@ -1,5 +1,5 @@
 package Frontend.ast;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public abstract class StmtNode extends ASTNode {
     public StmtNode(Position _pos) {

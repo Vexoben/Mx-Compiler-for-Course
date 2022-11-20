@@ -1,8 +1,8 @@
 package Frontend.ast.def;
 
 import Frontend.ast.DefNode;
-import Tools.Position;
-import Tools.Type.VarType;
+import Frontend.Tools.Position;
+import Frontend.Tools.Type.VarType;
 
 public abstract class VarDefNode extends DefNode {
 

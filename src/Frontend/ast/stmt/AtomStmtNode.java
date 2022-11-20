@@ -3,7 +3,7 @@ package Frontend.ast.stmt;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.ast.StmtNode;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public class AtomStmtNode extends StmtNode {
     public ExprNode expr;

@@ -2,7 +2,7 @@ package Frontend.ast.expr;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public class AssignExprNode extends ExprNode {
     public ExprNode left_expr, right_expr;

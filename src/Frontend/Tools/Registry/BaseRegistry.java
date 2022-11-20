@@ -1,6 +1,6 @@
-package Tools.Registry;
+package Frontend.Tools.Registry;
 
-import Tools.Position;
+import Frontend.Tools.Position;
 
 abstract public class BaseRegistry {
     public String name;

@@ -1,5 +1,5 @@
-package Tools.Error;
-import Tools.Position;
+package Frontend.Tools.Error;
+import Frontend.Tools.Position;
 
 abstract public class BaseError extends RuntimeException {
     private Position pos;

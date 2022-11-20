@@ -1,7 +1,7 @@
 package Frontend.ast.expr;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public class BinaryExprNode extends ExprNode {
     public enum BinaryOperator {MUL, DIV, MOD, ADD, SUB, LESS, GREATER, LEQ, GEQ, EQUAL, NOTEQUAL,

@@ -2,8 +2,8 @@ package Frontend.ast.expr;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Error.SemanticError;
-import Tools.Position;
+import Frontend.Tools.Error.SemanticError;
+import Frontend.Tools.Position;
 
 public class PrefixExprNode extends ExprNode {
     public ExprNode var;

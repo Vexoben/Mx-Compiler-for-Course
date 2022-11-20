@@ -2,8 +2,7 @@ package Frontend.ast.expr;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
-import Tools.Type.VarType;
+import Frontend.Tools.Position;
 
 import java.util.ArrayList;
 

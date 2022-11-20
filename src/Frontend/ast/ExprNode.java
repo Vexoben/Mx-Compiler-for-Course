@@ -1,6 +1,6 @@
 package Frontend.ast;
-import Tools.Position;
-import Tools.Type.BaseType;
+import Frontend.Tools.Position;
+import Frontend.Tools.Type.BaseType;
 
 public abstract class ExprNode extends ASTNode {
 

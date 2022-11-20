@@ -3,8 +3,8 @@ package Frontend.ast.stmt;
 import Frontend.ast.ASTNode;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.StmtNode;
-import Tools.Position;
-import Tools.Scope.SuiteScope;
+import Frontend.Tools.Position;
+import Frontend.Tools.Scope.SuiteScope;
 
 import java.util.ArrayList;
 

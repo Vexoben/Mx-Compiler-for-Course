@@ -1,9 +1,7 @@
 package Frontend.ast.expr;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
-import Tools.Position;
-
-import java.util.ArrayList;
+import Frontend.Tools.Position;
 
 public class VarExprNode extends ExprNode {
     public ExprNode array, index;

@@ -1,7 +1,7 @@
-package Tools.Registry;
+package Frontend.Tools.Registry;
 
-import Tools.Position;
-import Tools.Type.VarType;
+import Frontend.Tools.Position;
+import Frontend.Tools.Type.VarType;
 
 public class VarRegistry extends BaseRegistry {
     public VarType var_type;

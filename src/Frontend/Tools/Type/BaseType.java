@@ -1,4 +1,4 @@
-package Tools.Type;
+package Frontend.Tools.Type;
 
 public abstract class BaseType {
     public enum BuiltinType {NULL, INT, BOOL, STRING, VOID, CLASS, FUNC, THIS};

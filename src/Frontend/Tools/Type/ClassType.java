@@ -1,6 +1,5 @@
-package Tools.Type;
+package Frontend.Tools.Type;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.ArrayList;
 
 public class ClassType extends BaseType {

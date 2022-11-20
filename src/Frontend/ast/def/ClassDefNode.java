@@ -2,10 +2,9 @@ package Frontend.ast.def;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.DefNode;
-import Tools.Position;
-import Tools.Registry.ClassRegistry;
-import Tools.Registry.FuncRegistry;
-import Tools.Scope.ClassScope;
+import Frontend.Tools.Position;
+import Frontend.Tools.Registry.ClassRegistry;
+import Frontend.Tools.Scope.ClassScope;
 
 import java.util.ArrayList;
 

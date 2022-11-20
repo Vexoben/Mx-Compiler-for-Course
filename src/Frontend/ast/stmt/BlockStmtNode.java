@@ -2,7 +2,7 @@ package Frontend.ast.stmt;
 
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.StmtNode;
-import Tools.Position;
+import Frontend.Tools.Position;
 
 public class BlockStmtNode extends StmtNode {
     public BlockNode block;

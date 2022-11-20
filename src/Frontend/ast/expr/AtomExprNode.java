@@ -3,13 +3,11 @@ package Frontend.ast.expr;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.parser.MxStarParser;
-import Tools.Error.SemanticError;
-import Tools.Position;
-import Tools.Type.BaseType;
-import Tools.Type.FuncType;
-import Tools.Type.VarType;
-
-import javax.swing.text.html.parser.Parser;
+import Frontend.Tools.Error.SemanticError;
+import Frontend.Tools.Position;
+import Frontend.Tools.Type.BaseType;
+import Frontend.Tools.Type.FuncType;
+import Frontend.Tools.Type.VarType;
 
 public class AtomExprNode extends ExprNode {
     public boolean maybe_var, maybe_func;

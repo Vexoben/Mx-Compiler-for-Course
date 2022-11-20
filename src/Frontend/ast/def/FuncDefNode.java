@@ -3,9 +3,9 @@ package Frontend.ast.def;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.DefNode;
 import Frontend.ast.stmt.BlockNode;
-import Tools.Position;
-import Tools.Registry.FuncRegistry;
-import Tools.Scope.FuncScope;
+import Frontend.Tools.Position;
+import Frontend.Tools.Registry.FuncRegistry;
+import Frontend.Tools.Scope.FuncScope;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,6 @@
-package Tools.Scope;
+package Frontend.Tools.Scope;
 
-import Frontend.ast.stmt.ForStmtNode;
-import Tools.Registry.*;
+import Frontend.Tools.Registry.*;
 import java.util.HashMap;
 
 abstract public class BaseScope {
