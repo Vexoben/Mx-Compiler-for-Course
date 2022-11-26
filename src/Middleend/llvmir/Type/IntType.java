@@ -1,18 +1,35 @@
 package Middleend.llvmir.Type;
 
-public class IntType extends BaseType{
+public class IntType extends DerivedType{
+
+    int width;
+
+    public IntType() {
+        super();
+        width = 32;
+    }
+
+    public IntType(int _width) {
+        super();
+        width = _width;
+    }
+
     @Override
     public int size() {
-        return 0;
+        if ((width & 7) > 0) {
+            return (width >> 3) + 1;
+        } else {
+            return width >> 3;
+        }
     }
 
     @Override
     public boolean match(BaseType type) {
-        return false;
+        return type instanceof IntType && width == ((IntType) type).width;
     }
 
     @Override
     public String toString() {
-        return new String();
+        return "i" + width;
     }
 }

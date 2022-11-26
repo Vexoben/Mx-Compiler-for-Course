@@ -1,23 +1,19 @@
 package Middleend.llvmir.Type;
 
-public class BoolType extends DerivedType{
-    public BoolType() {
-
-    }
-
+public class LabelType extends BaseType{
     @Override
     public int size() {
-        return 1;
+        return 0;
     }
 
     @Override
     public boolean match(BaseType type) {
-        return type instanceof BoolType;
+        return false;
     }
-
 
     @Override
     public String toString() {
-        return "i1";
+        return "label";
     }
+
 }

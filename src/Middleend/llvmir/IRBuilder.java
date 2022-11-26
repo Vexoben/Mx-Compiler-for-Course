@@ -1,10 +1,10 @@
 package Middleend.llvmir;
 
+import Frontend.ast.*;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.def.*;
 import Frontend.ast.expr.*;
 import Frontend.ast.stmt.*;
-import Frontend.ast.*;
 
 public class IRBuilder implements ASTVisitor {
     @Override
