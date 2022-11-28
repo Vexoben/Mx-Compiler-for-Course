@@ -16,6 +16,10 @@ public class PointerType extends DerivedType{
         }
     }
 
+    public BaseType get_pointed_type() {
+        return pointed_type;
+    }
+
     @Override
     public int size() {
         return POINTER_SIZE;
