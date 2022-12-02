@@ -7,13 +7,13 @@ import Middleend.llvmir.Value;
 
 public class BrInst extends BaseInst{
 
-    BrInst(BasicBlock dest, BasicBlock _belong) {
+    public BrInst(BasicBlock dest, BasicBlock _belong) {
         super(new VoidType(), "branch_inst", _belong);
         add_operand(dest);
         dest.add_user(this);
     }
 
-    BrInst(Value condition, BasicBlock if_jump, BasicBlock else_jump, BasicBlock _belong) {
+    public BrInst(Value condition, BasicBlock if_jump, BasicBlock else_jump, BasicBlock _belong) {
         super(new VoidType(), "branch_inst", _belong);
         add_operand(condition);
         add_operand(if_jump);

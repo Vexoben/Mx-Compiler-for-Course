@@ -449,6 +449,7 @@ public class SemanticChecker implements ASTVisitor {
     // stmt
     @Override
     public void visit(ForStmtNode obj) {
+        scopes.push(obj.scope);
         if (obj.init != null) obj.init.accept(this);
         if (obj.condition != null) {
             obj.condition.accept(this);
@@ -457,7 +458,6 @@ public class SemanticChecker implements ASTVisitor {
             }
         }
         if (obj.step != null) obj.step.accept(this);
-        scopes.push(obj.scope);
         obj.stmt.accept(this);
         scopes.pop();
     }

@@ -1,6 +1,13 @@
 package Middleend.llvmir.Type;
 
 public class LabelType extends BaseType{
+
+    String label;
+
+    public LabelType(String _label) {
+        label = _label;
+    }
+
     @Override
     public int size() {
         return 0;
@@ -13,7 +20,7 @@ public class LabelType extends BaseType{
 
     @Override
     public String toString() {
-        return "label";
+        return label;
     }
 
 }

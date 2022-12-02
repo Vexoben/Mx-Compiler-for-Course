@@ -2,7 +2,6 @@ package Frontend.Tools.Scope;
 
 import Frontend.Tools.Error.SemanticError;
 import Frontend.Tools.Registry.*;
-import Frontend.Tools.Error.RedefineError;
 
 public class FuncScope extends BaseScope {
 
@@ -26,7 +25,7 @@ public class FuncScope extends BaseScope {
     public void insert_registry(BaseRegistry registry) {
         if (registry instanceof VarRegistry) {
             if (var_map.containsKey(registry.name)) {
-                throw new RedefineError(registry.pos, "Oh, it is a bad idea to define two variables naming " + registry.name);
+                throw new SemanticError(registry.pos, "Oh, it is a bad idea to define two variables naming " + registry.name);
             } else {
                 var_map.put(registry.name,  (VarRegistry) registry);
             }

@@ -8,13 +8,25 @@ import Middleend.llvmir.Value;
 import java.util.ArrayList;
 
 public class BasicBlock extends Value {
-    public ArrayList<BaseInst> instructions;
+    LabelType label;
+    ArrayList<BaseInst> instructions;
     Function parent_function;
 
     public BasicBlock(String _name, Function _parent_function) {
-        super(new LabelType(), _name);
+        super(new LabelType(_name), _name);
         parent_function = _parent_function;
-        if(parent_function != null) add_user(parent_function);
+        if(parent_function != null) {
+            add_user(parent_function);
+            parent_function.add_block(this);
+        }
+    }
+
+    public Function get_parent_function() {
+        return parent_function;
+    }
+
+    public void push_back(BaseInst inst) {
+        instructions.add(inst);
     }
 
 }

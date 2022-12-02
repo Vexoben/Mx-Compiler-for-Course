@@ -22,7 +22,7 @@ import java.util.Stack;
 
 public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
 
-    Stack<BaseScope> scopes = new Stack<>();;
+    Stack<BaseScope> scopes = new Stack<>();
 
     @Override
     public ASTNode visitMxstarcode(MxStarParser.MxstarcodeContext ctx) {
@@ -103,13 +103,12 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
             }
             ret.constructor = (FuncDefNode) visit(ctx.classConstructor());
             ret.constructor.func_registry.func_type.ret_type = new VarType(BaseType.BuiltinType.VOID);
-            ret.constructor.func_scope.func_registry = ret.constructor.func_registry;
         } else {
             FuncRegistry reg = new FuncRegistry(new FuncType(), ctx.Identifier().toString(), new Position(ctx.getStart()));
             reg.func_type.ret_type = new VarType(BaseType.BuiltinType.VOID);
             ret.constructor = new FuncDefNode(reg);
-            ret.constructor.func_scope.func_registry = ret.constructor.func_registry;
         }
+        ret.constructor.func_scope.func_registry = ret.constructor.func_registry;
         ctx.funcDef().forEach(i -> {
             DefNode tmp = (DefNode) visit(i);
             ret.func_list.add((FuncDefNode) tmp);

@@ -13,6 +13,10 @@ public class FuncType extends DerivedType{
         arg_types = _args;
     }
 
+    public BaseType get_ret_type() {
+        return ret_type;
+    }
+
     @Override
     public int size() {
         return 0;

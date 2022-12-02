@@ -2,7 +2,6 @@ package Frontend.Tools.Scope;
 
 import Frontend.Tools.Error.SemanticError;
 import Frontend.Tools.Registry.*;
-import Frontend.Tools.Error.RedefineError;
 
 import java.util.HashMap;
 
@@ -28,11 +27,11 @@ public class GlobalScope extends BaseScope {
 
     public void insert_registry(BaseRegistry registry) {
         if (var_map.containsKey(registry.name)) {
-            throw new RedefineError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
+            throw new SemanticError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
         } else if (func_map.containsKey(registry.name)) {
-            throw new RedefineError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
+            throw new SemanticError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
         } else if (class_map.containsKey(registry.name)) {
-            throw new RedefineError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
+            throw new SemanticError(registry.pos, "Oh, it is a bad idea to define two entries naming " + registry.name);
         } else {
             if (registry instanceof VarRegistry) {
                 var_map.put(registry.name,  (VarRegistry) registry);

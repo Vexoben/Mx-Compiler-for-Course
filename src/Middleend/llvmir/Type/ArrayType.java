@@ -1,5 +1,7 @@
 package Middleend.llvmir.Type;
 
+import Middleend.llvmir.Inst.BaseInst;
+
 public class ArrayType extends DerivedType {
 
     int length;
@@ -8,6 +10,10 @@ public class ArrayType extends DerivedType {
     public ArrayType(BaseType _array_type, int _length) {
         array_type = _array_type;
         length = _length;
+    }
+
+    public BaseType get_array_type() {
+        return array_type;
     }
 
     @Override
