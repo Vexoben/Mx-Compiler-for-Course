@@ -4,6 +4,7 @@ import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.Tools.Position;
 import Frontend.Tools.Registry.VarRegistry;
+import Middleend.llvmir.Value;
 
 import java.util.ArrayList;
 
@@ -21,5 +22,8 @@ public class VarAnyNumberDefNode extends VarDefNode {
     public void accept(ASTVisitor visitor) {
         visitor.visit(this);
     }
+
+    // interact with IR
+    public ArrayList<Value> value_list;
 
 }

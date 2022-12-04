@@ -1,13 +1,13 @@
 package Middleend.llvmir;
 
-import Middleend.llvmir.Type.BaseType;
+import Middleend.llvmir.Type.IRBaseType;
 
 import java.util.ArrayList;
 
 public class User extends Value{
     ArrayList<Value> operands = new ArrayList<>();
 
-    public User(BaseType _type, String _name) {
+    public User(IRBaseType _type, String _name) {
         super(_type, _name);
     }
 

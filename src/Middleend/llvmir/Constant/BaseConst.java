@@ -1,10 +1,10 @@
 package Middleend.llvmir.Constant;
 
-import Middleend.llvmir.Type.BaseType;
+import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.User;
 
 public class BaseConst extends User {
-    public BaseConst(BaseType _type, String _name) {
+    public BaseConst(IRBaseType _type, String _name) {
         super(_type, _name);
     }
 }

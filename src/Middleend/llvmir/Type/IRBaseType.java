@@ -1,10 +1,10 @@
 package Middleend.llvmir.Type;
 
-public abstract class BaseType {
+public abstract class IRBaseType {
 
     public abstract int size();
 
-    public abstract boolean match(BaseType type);
+    public abstract boolean match(IRBaseType type);
 
     public abstract String toString();
 }

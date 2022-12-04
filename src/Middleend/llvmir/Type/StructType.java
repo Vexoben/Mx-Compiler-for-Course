@@ -7,13 +7,26 @@ public class StructType extends DerivedType{
     String name;
     ArrayList<DerivedType> types;
 
+    public StructType(String _name) {
+        name = _name;
+        types = new ArrayList<>();
+    }
+
     public StructType(String _name, ArrayList<DerivedType> _types) {
         name = _name;
         types = _types;
     }
 
+    public void add_var(DerivedType var_type) {
+        types.add(var_type);
+    }
+
+    public String get_name() {
+        return name;
+    }
+
     @Override
-    public boolean match(BaseType type) {
+    public boolean match(IRBaseType type) {
         if (!(type instanceof StructType)) return false;
         if (!name.equals(((StructType) type).name)) return false;
         if (types.size() != ((StructType) type).types.size()) return false;

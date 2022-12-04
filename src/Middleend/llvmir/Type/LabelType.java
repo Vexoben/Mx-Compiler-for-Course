@@ -1,6 +1,6 @@
 package Middleend.llvmir.Type;
 
-public class LabelType extends BaseType{
+public class LabelType extends IRBaseType {
 
     String label;
 
@@ -14,7 +14,7 @@ public class LabelType extends BaseType{
     }
 
     @Override
-    public boolean match(BaseType type) {
+    public boolean match(IRBaseType type) {
         return false;
     }
 

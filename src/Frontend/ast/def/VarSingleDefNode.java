@@ -4,6 +4,7 @@ import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.Tools.Position;
 import Frontend.Tools.Registry.VarRegistry;
+import Middleend.llvmir.Value;
 
 public class VarSingleDefNode extends VarDefNode {
     public VarRegistry registry;
@@ -26,4 +27,7 @@ public class VarSingleDefNode extends VarDefNode {
         visitor.visit(this);
     }
 
+
+    // interact with IR
+    public Value value;
 }

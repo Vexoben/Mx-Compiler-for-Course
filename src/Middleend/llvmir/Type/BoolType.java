@@ -11,13 +11,13 @@ public class BoolType extends DerivedType{
     }
 
     @Override
-    public boolean match(BaseType type) {
+    public boolean match(IRBaseType type) {
         return type instanceof BoolType;
     }
 
 
     @Override
     public String toString() {
-        return "i1";
+        return "i8";
     }
 }

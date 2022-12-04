@@ -225,6 +225,8 @@ public class SemanticChecker implements ASTVisitor {
             if (scopes.peek().find_func(((AtomExprNode) obj.func_name).identifier) == null) {
                 throw new SemanticError(obj.pos, "I lost: can't find the function you call");
             }
+            ((AtomExprNode) obj.func_name).is_func = true;
+            ((AtomExprNode) obj.func_name).is_var = false;
             obj.expr_type = ((AtomExprNode) obj.func_name).func_type.ret_type;
         } else if (obj.func_name instanceof MemberVisitExprNode) {
             if (!((MemberVisitExprNode)obj.func_name).is_func) {
@@ -234,7 +236,11 @@ public class SemanticChecker implements ASTVisitor {
         } else throw new SemanticError(obj.pos, "Unknown error");
         // check args type
         FuncType ret_type;
-        if (obj.func_name instanceof AtomExprNode) ret_type = (FuncType) ((AtomExprNode) obj.func_name).func_type;
+        if (obj.func_name instanceof AtomExprNode) {
+            ((AtomExprNode) obj.func_name).is_func = true;
+            ((AtomExprNode) obj.func_name).is_var = false;
+            ret_type = (FuncType) ((AtomExprNode) obj.func_name).func_type;
+        }
         else ret_type = (FuncType) obj.func_name.expr_type;
         if (ret_type.func_args_type.size() != obj.args.size()) {
             throw new SemanticError(obj.pos, "Functions arguments' number doesn't match!");

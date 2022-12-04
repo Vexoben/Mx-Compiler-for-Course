@@ -1,10 +1,8 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.Block.BasicBlock;
+import Middleend.llvmir.BasicBlock;
 import Middleend.llvmir.Type.PointerType;
 import Middleend.llvmir.Value;
-
-import javax.management.ValueExp;
 
 public class LoadInst extends BaseInst{
 

@@ -24,7 +24,7 @@ public class IntType extends DerivedType{
     }
 
     @Override
-    public boolean match(BaseType type) {
+    public boolean match(IRBaseType type) {
         return type instanceof IntType && width == ((IntType) type).width;
     }
 

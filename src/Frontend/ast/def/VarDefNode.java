@@ -10,4 +10,6 @@ public abstract class VarDefNode extends DefNode {
     public VarDefNode(Position _pos) {
         super(_pos);
     }
+
+
 }

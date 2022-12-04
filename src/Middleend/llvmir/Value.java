@@ -1,25 +1,26 @@
 package Middleend.llvmir;
 
-import Middleend.llvmir.Inst.BaseInst;
-import Middleend.llvmir.Type.BaseType;
+import Middleend.llvmir.Type.IRBaseType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Value {
 
-    BaseType type;
+    IRBaseType type;
     ArrayList<User> users = new ArrayList<User>();
     boolean has_name = false;
-    String name;
+    String ori_name, name;
+    Value mem_pos;
 
-    public Value(BaseType _type) {
+    public Value(IRBaseType _type) {
         type = _type;
         has_name = false;
     }
 
-    public Value(BaseType _type, String _name) {
+    public Value(IRBaseType _type, String _name) {
         type = _type;
         has_name = true;
+        ori_name = _name;
         name = rename(_name);
     }
 
@@ -31,8 +32,12 @@ public class Value {
         users.add(user);
     }
 
-    public BaseType get_type() {
+    public IRBaseType get_type() {
         return type;
+    }
+
+    public String get_name() {
+        return name;
     }
 
     // renaming

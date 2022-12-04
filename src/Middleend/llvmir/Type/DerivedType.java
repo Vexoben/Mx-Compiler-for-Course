@@ -1,5 +1,5 @@
 package Middleend.llvmir.Type;
 
-public abstract class DerivedType extends BaseType{
+public abstract class DerivedType extends IRBaseType {
 
 }

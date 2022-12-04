@@ -1,4 +1,4 @@
-package Middleend.llvmir.Block;
+package Middleend.llvmir;
 
 import Middleend.llvmir.Constant.Function;
 import Middleend.llvmir.Inst.BaseInst;
@@ -11,6 +11,7 @@ public class BasicBlock extends Value {
     LabelType label;
     ArrayList<BaseInst> instructions;
     Function parent_function;
+    BasicBlock next_block;
 
     public BasicBlock(String _name, Function _parent_function) {
         super(new LabelType(_name), _name);
@@ -27,6 +28,23 @@ public class BasicBlock extends Value {
 
     public void push_back(BaseInst inst) {
         instructions.add(inst);
+    }
+
+    public void cut() {   // cut the edge to next block
+        assert next_block != null;
+        next_block = null;
+    }
+
+    public void link(BasicBlock next) {  // link an edge to next_block
+        assert next != null && next_block == null;
+        next_block = next;
+    }
+
+    public void insert(BasicBlock next) {   // a -> b      // a -> c -> b
+        BasicBlock tmp = next_block;
+        cut();
+        link(next);
+        next.link(tmp);
     }
 
 }

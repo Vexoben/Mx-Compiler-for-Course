@@ -1,18 +1,16 @@
 package Middleend.llvmir.Type;
 
-import Middleend.llvmir.Inst.BaseInst;
-
 public class ArrayType extends DerivedType {
 
     int length;
-    BaseType array_type;
+    IRBaseType array_type;
 
-    public ArrayType(BaseType _array_type, int _length) {
+    public ArrayType(IRBaseType _array_type, int _length) {
         array_type = _array_type;
         length = _length;
     }
 
-    public BaseType get_array_type() {
+    public IRBaseType get_array_type() {
         return array_type;
     }
 
@@ -22,7 +20,7 @@ public class ArrayType extends DerivedType {
     }
 
     @Override
-    public boolean match(BaseType type) {
+    public boolean match(IRBaseType type) {
         if (!(type instanceof ArrayType)) return false;
         return length == ((ArrayType) type).length && array_type.match(((ArrayType) type).array_type);
     }

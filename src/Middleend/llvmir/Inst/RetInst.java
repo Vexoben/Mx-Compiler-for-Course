@@ -1,6 +1,6 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.Block.BasicBlock;
+import Middleend.llvmir.BasicBlock;
 import Middleend.llvmir.Type.VoidType;
 import Middleend.llvmir.Value;
 
