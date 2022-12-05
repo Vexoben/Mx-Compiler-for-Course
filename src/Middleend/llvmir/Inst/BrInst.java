@@ -21,4 +21,10 @@ public class BrInst extends BaseInst{
         if_jump.add_user(this);
         else_jump.add_user(this);
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }

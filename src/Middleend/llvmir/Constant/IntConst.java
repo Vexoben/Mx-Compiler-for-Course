@@ -9,4 +9,9 @@ public class IntConst extends BaseConst{
         super(new IntType(), "ConstInt");
         data = _value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(data);
+    }
 }

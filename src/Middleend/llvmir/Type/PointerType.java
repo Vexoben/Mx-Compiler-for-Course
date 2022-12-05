@@ -4,10 +4,10 @@ public class PointerType extends DerivedType{
 
     static int POINTER_SIZE = 8;
 
-    IRBaseType pointed_type;
+    DerivedType pointed_type;
     int level;
 
-    public PointerType(IRBaseType _pointed_type) {
+    public PointerType(DerivedType _pointed_type) {
         pointed_type = _pointed_type;
         if (_pointed_type instanceof PointerType) {
             level = ((PointerType) _pointed_type).level + 1;
@@ -16,7 +16,7 @@ public class PointerType extends DerivedType{
         }
     }
 
-    public IRBaseType get_pointed_type() {
+    public DerivedType get_pointed_type() {
         return pointed_type;
     }
 

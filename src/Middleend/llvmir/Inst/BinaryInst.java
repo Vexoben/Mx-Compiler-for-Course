@@ -5,7 +5,7 @@ import Middleend.llvmir.BasicBlock;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Value;
 
-public class BinaryInst extends BaseInst{
+public class BinaryInst extends BaseInst{   // binary && icmp
     BinaryExprNode.BinaryOperator operator;
 
     public BinaryInst(IRBaseType _type, String _name, BinaryExprNode.BinaryOperator op, Value v1, Value v2, BasicBlock _belong) {
@@ -15,5 +15,10 @@ public class BinaryInst extends BaseInst{
         add_operand(v1);
         add_operand(v2);
         operator = op;
+    }
+
+    @Override
+    public String toString() {
+        return operator.toString() + " " + 
     }
 }

@@ -11,4 +11,9 @@ public class StringConst extends BaseConst{
         super(new PointerType(new ArrayType(new IntType(8), _data.length() + 1)), "StringConst");
         data = _data;
     }
+
+    @Override
+    public String toString() {
+        return data;
+    }
 }

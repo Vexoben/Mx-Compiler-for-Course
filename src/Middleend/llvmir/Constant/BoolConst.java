@@ -9,4 +9,9 @@ public class BoolConst extends BaseConst{
         super(new BoolType(), "BoolConst");
         data = _data;
     }
+
+    @Override
+    public String toString() {
+        return data ? "1" : "0";
+    }
 }

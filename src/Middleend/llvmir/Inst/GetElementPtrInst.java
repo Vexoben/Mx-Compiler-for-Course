@@ -25,4 +25,10 @@ public class GetElementPtrInst extends BaseInst{
         add_operand(pointer);
         indexes.forEach(i -> add_operand(i));
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }

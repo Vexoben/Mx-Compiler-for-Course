@@ -15,4 +15,9 @@ public class TruncInst extends BaseInst{
         add_operand(data);
         data.add_user(this);
     }
+
+    @Override
+    public String toString() {
+
+    }
 }

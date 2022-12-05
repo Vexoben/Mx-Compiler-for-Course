@@ -12,4 +12,10 @@ public class StoreInst extends BaseInst{
         data.add_user(this);
         addr.add_user(this);
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }

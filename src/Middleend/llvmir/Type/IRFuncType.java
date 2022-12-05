@@ -17,6 +17,10 @@ public class IRFuncType extends DerivedType{
         return ret_type;
     }
 
+    public ArrayList<DerivedType> get_args_types() {
+        return arg_types;
+    }
+
     @Override
     public int size() {
         return 0;

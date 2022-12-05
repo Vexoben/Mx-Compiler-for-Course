@@ -12,4 +12,9 @@ public class BitCastInst extends BaseInst{
         add_operand(value);
     }
 
+    @Override
+    public String toString() {
+
+    }
+
 }

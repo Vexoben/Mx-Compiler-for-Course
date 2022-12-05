@@ -12,4 +12,10 @@ public class PhiInst extends BaseInst{
             add_operand(v);
         }
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }

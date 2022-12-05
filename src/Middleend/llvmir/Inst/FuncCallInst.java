@@ -16,4 +16,10 @@ public class FuncCallInst extends BaseInst{
             i.add_user(this);
         });
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }

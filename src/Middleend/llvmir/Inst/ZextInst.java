@@ -15,4 +15,8 @@ public class ZextInst extends BaseInst{
         data.add_user(this);
     }
 
+    @Override
+    public String toString() {
+
+    }
 }

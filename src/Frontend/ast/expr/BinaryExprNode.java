@@ -1,4 +1,5 @@
 package Frontend.ast.expr;
+import Frontend.Tools.Error.IRError;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.Tools.Position;
@@ -17,6 +18,63 @@ public class BinaryExprNode extends ExprNode {
 
         public boolean is_logic() {
             return this == AND || this == OR;
+        }
+
+        public String toString() {
+            switch (this) {
+                case MUL -> {
+                    return "mul";
+                }
+                case DIV -> {
+                    return "sdiv";
+                }
+                case MOD -> {
+                    return "srem";
+                }
+                case ADD -> {
+                    return "add";
+                }
+                case SUB -> {
+                    return "sub";
+                }
+                case LESS -> {
+                    return "icmp slt";
+                }
+                case GREATER -> {
+                    return "icmp sgt";
+                }
+                case LEQ -> {
+                    return "icmp sle";
+                }
+                case GEQ -> {
+                    return "icmp sge";
+                }
+                case EQUAL -> {
+                    return "icmp eq";
+                }
+                case NOTEQUAL -> {
+                    return "icmp ne";
+                }
+                case BITOR -> {
+                    return "or";
+                }
+                case BITAND -> {
+                    return "and";
+                }
+                case XOR -> {
+                    return "xor";
+                }
+                case OR, AND -> { // will not be used
+                    return "";
+                }
+                case LEFTSHIFT -> {
+                    return "shl";
+                }
+                case RIGHTSHIFT -> {
+                    return "arhl";
+                }
+                default -> throw new IRError(new Position(0, 0), "Unknown Error");
+            }
         }
     };
     public BinaryOperator op;

@@ -12,4 +12,10 @@ public class RetInst extends BaseInst{
             ret_value.add_user(this);
         }
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }

@@ -22,6 +22,14 @@ public class BasicBlock extends Value {
         }
     }
 
+    public LabelType get_label() {
+        return label;
+    }
+
+    public ArrayList<BaseInst> get_inst() {
+        return instructions;
+    }
+
     public Function get_parent_function() {
         return parent_function;
     }

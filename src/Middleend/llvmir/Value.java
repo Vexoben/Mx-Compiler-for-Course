@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class Value {
 
-    IRBaseType type;
-    ArrayList<User> users = new ArrayList<User>();
-    boolean has_name = false;
-    String ori_name, name;
-    Value mem_pos;
+    protected IRBaseType type;
+    protected ArrayList<User> users = new ArrayList<User>();
+    protected boolean has_name = false;
+    protected String ori_name, name;
+    protected Value mem_pos;
 
     public Value(IRBaseType _type) {
         type = _type;
@@ -52,5 +52,11 @@ public class Value {
             name_table.replace(_name, cnt + 1);
             return _name + (cnt + 1);
         }
+    }
+
+    // to printer
+    public String variable_declare() {
+        String ans = "@" + name + " = dso_local global " + type.toString() + " zeroinitializer\n";
+        return ans;
     }
 }

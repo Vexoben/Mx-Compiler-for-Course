@@ -11,4 +11,10 @@ public class LoadInst extends BaseInst{
         add_operand(addr);
         addr.add_user(this);
     }
+
+    @Override
+    public String toString() {
+
+    }
+
 }
