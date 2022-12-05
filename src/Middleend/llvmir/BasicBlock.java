@@ -6,8 +6,7 @@ import Middleend.llvmir.Type.LabelType;
 import java.util.ArrayList;
 
 public class BasicBlock extends Value {
-    LabelType label;
-    ArrayList<BaseInst> instructions;
+    ArrayList<BaseInst> instructions = new ArrayList<>();
     Function parent_function;
     BasicBlock next_block;
 
@@ -21,7 +20,7 @@ public class BasicBlock extends Value {
     }
 
     public LabelType get_label() {
-        return label;
+        return (LabelType) type;
     }
 
     public ArrayList<BaseInst> get_inst() {

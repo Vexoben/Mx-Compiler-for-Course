@@ -3,13 +3,12 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/Frontend" />
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/Tools" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Frontend" level="project" />
+    <orderEntry type="library" name="antlr-4.10.1-complete" level="project" />
     <orderEntry type="library" name="src" level="project" />
-    <orderEntry type="library" name="Mx-Compiler-for-Course" level="project" />
   </component>
 </module>

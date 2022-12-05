@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SemanticChecker implements ASTVisitor {
 
-    boolean debug_mode = true;
+    boolean debug_mode = false;
     Stack<BaseScope> scopes = new Stack<>();
     HashMap<String, ClassScope> class_scopes = new HashMap<>();
     Stack<VarType> lambda_types = new Stack<>();

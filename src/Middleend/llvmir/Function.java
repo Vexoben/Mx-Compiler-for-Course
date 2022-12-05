@@ -6,10 +6,8 @@ import Frontend.Tools.Type.BaseType;
 import Frontend.Tools.Type.FuncType;
 import Frontend.Tools.Type.VarType;
 import Middleend.llvmir.BasicBlock;
-import Middleend.llvmir.Inst.BaseInst;
-import Middleend.llvmir.Type.DerivedType;
-import Middleend.llvmir.Type.IRBaseType;
-import Middleend.llvmir.Type.IRFuncType;
+import Middleend.llvmir.Inst.*;
+import Middleend.llvmir.Type.*;
 import Middleend.llvmir.User;
 import Middleend.llvmir.Value;
 
@@ -21,7 +19,6 @@ public class Function extends User {
     ArrayList<String> args_name = new ArrayList<>();
 
     public BasicBlock entry_block, exit_block;
-    public Value ret_value_ptr;
 
     public Function(String _name, IRFuncType _type) {
         super(_type, _name);
@@ -65,17 +62,22 @@ public class Function extends User {
         String ans = "(";
         for (int i = 0; i < args_name.size(); ++i) {
             if (i > 0) ans += ", ";
-            ans += get_args_types().get(i).toString() + " "  + "%" + args_name.get(i);
+            ans += get_args_types().get(i).toString() + " "  + args_name.get(i);
         }
         ans += ")";
         return ans;
     }
 
     String print_inst(BaseInst inst) {
-        return "  %" + inst.get_name() + " = " + inst.toString() + "\n";
+        if (inst instanceof StoreInst ||
+                (inst instanceof FuncCallInst && ((FuncCallInst)inst).get_func().get_ret_type().match(new VoidType())) ||
+                (inst instanceof BrInst) || (inst instanceof RetInst)) {
+            return "  " + inst.toString() + "\n";
+        } else return "  " + inst.get_name() + " = " + inst.toString() + "\n";
     }
 
     String print_block(BasicBlock block) {
+        if (block.get_inst().size() == 0) return "";
         String ans = block.get_label().toString() + ":\n";
         for (BaseInst inst: block.get_inst()) {
             ans += print_inst(inst);
@@ -85,7 +87,7 @@ public class Function extends User {
 
     public String declare() {
         String ans = "";
-        ans += "define dso_local " + get_ret_type().toString() + " @" + name + print_args() + " #0 {\n";
+        ans += "define dso_local " + get_ret_type().toString() + " " + name + print_args() + " #0 {\n";
         for (BasicBlock block : blocks) {
             ans += print_block(block);
         }

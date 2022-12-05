@@ -24,6 +24,6 @@ public class VarAnyNumberDefNode extends VarDefNode {
     }
 
     // interact with IR
-    public ArrayList<Value> value_list;
+    public ArrayList<Value> value_list = new ArrayList<>();
 
 }

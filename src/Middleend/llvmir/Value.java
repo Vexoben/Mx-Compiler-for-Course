@@ -45,6 +45,14 @@ public class Value {
         return get_type().toString() + " " + get_name();
     }
 
+    public String get_origin_name() {
+        return ori_name;
+    }
+
+    public Value get_mem_pos() {
+        return mem_pos;
+    }
+
     // renaming
     static HashMap<String, Integer> name_table = new HashMap<>();
 
@@ -54,8 +62,13 @@ public class Value {
         else if (this instanceof GlobalVariable) _name = "@" + _name;
         else _name = "%" + _name;
         if (!name_table.containsKey(_name)) {
-            name_table.put(_name, 1);
-            return _name;
+            if (_name.equals("%")) {
+                name_table.put(_name, 0);
+                return _name + "0";
+            } else {
+                name_table.put(_name, 1);
+                return _name;
+            }
         } else {
             int cnt = name_table.get(_name);
             name_table.replace(_name, cnt + 1);

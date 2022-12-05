@@ -29,15 +29,15 @@ public class IRBuilder implements ASTVisitor {
     Function cur_func = null;
     IRScope cur_scope = new IRScope(null);
     Stack<BasicBlock> continue_jump_to = new Stack<>(), break_jump_to = new Stack<>();
-    HashMap<String, StructType> class_table;
-    HashMap<String, Function> func_table;
+    HashMap<String, StructType> class_table = new HashMap<>();
+    HashMap<String, Function> func_table = new HashMap<>();
     boolean is_constructor = false, is_member = false;
     String cur_class_name = null;
-    ClassScope cur_class_scope = null;
+    ClassScope cur_class_scope;
     Function init_func = new Function("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
 
     public IRBuilder(RootNode root) {
-        visit(root);
+        root.accept(this);
     }
 
     DerivedType translate_vartype_base(VarType type) {
@@ -93,6 +93,9 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(RootNode obj) {
         cur_func = init_func;
+        func_table.put(cur_func.name, cur_func);
+        cur_block = cur_func.entry_block;
+        cur_func.exit_block.push_back(new RetInst(null, cur_func.exit_block));
         // builtin_function
         // todo
         // declare classes, member_function, constructor
@@ -131,19 +134,19 @@ public class IRBuilder implements ASTVisitor {
         // declare global-variables
         obj.child_list.forEach(i -> {
             if (i instanceof VarDefNode) {
-                visit(i);
+                i.accept(this);
             }
         });
 
         obj.child_list.forEach(i -> {
             if (i instanceof ClassDefNode) {
                 cur_class_name = ((ClassDefNode) i).class_registry.name;
-                visit(i);
+                i.accept(this);
                 cur_class_name = null;
             }
             if (i instanceof FuncDefNode) {
                 cur_func = func_table.get(((FuncDefNode) i).func_registry.name);
-                visit(i);
+                i.accept(this);
                 cur_func = null;
             }
         });
@@ -165,7 +168,7 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(FuncDefNode obj) {
         cur_scope = new IRScope(cur_scope);
-        cur_func.entry_block.insert(new BasicBlock("__first_block__" + obj.func_registry.name, cur_func));
+        cur_func.entry_block.insert(new BasicBlock("first_block__" + obj.func_registry.name, cur_func));
         cur_block = cur_func.entry_block.next_block;
         if (is_constructor) {
             cur_func = func_table.get(rename_constructor(cur_class_name));
@@ -188,13 +191,10 @@ public class IRBuilder implements ASTVisitor {
 
         if (obj.func_registry.name.equals("main")) {    // call init function; return 0 in default
             cur_func.entry_block.push_back(new FuncCallInst(init_func, cur_func.entry_block, new ArrayList<>()));
-            cur_func.entry_block.push_back(new StoreInst(new IntConst(0), cur_func.ret_value_ptr, cur_func.entry_block));
+            cur_func.exit_block.push_back(new RetInst(new IntConst(0), cur_func.exit_block));
         }
 
         obj.block_node.accept(this);
-        if (cur_func.entry_block.next_block != null) {
-            cur_func.entry_block.push_back(new BrInst(cur_func.entry_block.next_block, cur_func.entry_block));
-        }
         cur_func.get_blocks().forEach(i -> {
             if (i.next_block != null) {
                 i.push_back(new BrInst(i.next_block, i));
@@ -229,25 +229,27 @@ public class IRBuilder implements ASTVisitor {
         Value addr;
         if (cur_func == init_func) {
             addr = new GlobalVariable(obj.registry.name, new PointerType(translate_vartype(obj.var_type)));
+            addr.mem_pos = addr;
         } else {
-            addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name, cur_func.entry_block);
-            cur_func.entry_block.push_back((BaseInst) addr);
+            addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name, cur_block);
+            cur_block.push_back((BaseInst) addr);
+            addr.mem_pos = addr;
         }
 
         if (obj.assign != null) {
             obj.assign.accept(this);
-            cur_func.entry_block.push_back(new StoreInst(obj.assign.result, addr, cur_func.entry_block));
+            cur_block.push_back(new StoreInst(obj.assign.result, addr, cur_block));
         } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
-            cur_func.entry_block.push_back(new StoreInst(new NullConst(), addr, cur_func.entry_block));
+            cur_block.push_back(new StoreInst(new NullConst(), addr, cur_block));
         } else if (cur_func == init_func) {
             if (((PointerType) addr.get_type()).get_pointed_type().match(new IntType())) {
-                cur_func.entry_block.push_back(new StoreInst(new IntConst(0), addr, cur_func.entry_block));
+                cur_block.push_back(new StoreInst(new IntConst(0), addr, cur_block));
             }
             if (((PointerType) addr.get_type()).get_pointed_type().match(new BoolType())) {
-                cur_func.entry_block.push_back(new StoreInst(new BoolConst(false), addr, cur_func.entry_block));
+                cur_block.push_back(new StoreInst(new BoolConst(false), addr, cur_block));
             }
         }
-        cur_scope.add_var(addr.get_name(), addr);
+        cur_scope.add_var(addr.get_origin_name(), addr.get_mem_pos());
         obj.value = addr;
     }
 
@@ -258,24 +260,26 @@ public class IRBuilder implements ASTVisitor {
             Value addr;
             if (cur_func == init_func) {
                 addr = new GlobalVariable(obj.registry_list.get(i).name, new PointerType(translate_vartype(obj.var_type)));
+                addr.mem_pos = addr;
             } else {
-                addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry_list.get(i).name, cur_func.entry_block);
-                cur_func.entry_block.push_back((BaseInst) addr);
+                addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry_list.get(i).name, cur_block);
+                addr.mem_pos = addr;
+                cur_block.push_back((BaseInst) addr);
             }
             if (obj.assign_list.get(i) != null) {
                 obj.assign_list.get(i).accept(this);
-                cur_func.entry_block.push_back(new StoreInst(obj.assign_list.get(i).result, addr, cur_func.entry_block));
+                cur_block.push_back(new StoreInst(obj.assign_list.get(i).result, addr, cur_block));
             } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
-                cur_func.entry_block.push_back(new StoreInst(new NullConst(), addr, cur_func.entry_block));
+                cur_block.push_back(new StoreInst(new NullConst(), addr, cur_block));
             } else if (cur_func == init_func) {
                 if (((PointerType) addr.get_type()).get_pointed_type().match(new IntType())) {
-                    cur_func.entry_block.push_back(new StoreInst(new IntConst(0), addr, cur_func.entry_block));
+                    cur_block.push_back(new StoreInst(new IntConst(0), addr, cur_block));
                 }
                 if (((PointerType) addr.get_type()).get_pointed_type().match(new BoolType())) {
-                    cur_func.entry_block.push_back(new StoreInst(new BoolConst(false), addr, cur_func.entry_block));
+                    cur_block.push_back(new StoreInst(new BoolConst(false), addr, cur_block));
                 }
             }
-            cur_scope.add_var(addr.get_name(), addr);
+            cur_scope.add_var(addr.get_origin_name(), addr.get_mem_pos());
             obj.value_list.add(addr);
         }
     }
@@ -303,9 +307,9 @@ public class IRBuilder implements ASTVisitor {
         obj.right_expr.accept(this);
         BinaryInst inst;
         if (obj.op.is_check_equal()) {
-            inst = new BinaryInst(new BoolType(), "inst", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
+            inst = new BinaryInst(new BoolType(), "", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
         } else {
-            inst = new BinaryInst(new IntType(), "inst", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
+            inst = new BinaryInst(new IntType(), "", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
         }
         cur_block.push_back(inst);
         obj.result = inst;
@@ -346,6 +350,7 @@ public class IRBuilder implements ASTVisitor {
         if (obj.expr_type.match_type(BaseType.BuiltinType.CLASS)) {
             StructType type = class_table.get(obj.expr_type.typename);
             AllocaInst allo = new AllocaInst(type, "alloca_inst", cur_block);
+            allo.mem_pos = allo;
             cur_block.push_back(allo);
             ArrayList args = new ArrayList<>();
             args.add(allo);
@@ -459,19 +464,22 @@ public class IRBuilder implements ASTVisitor {
     }
     @Override
     public void visit(AtomExprNode obj) {
-        if (obj.expr_type.match_type(BaseType.BuiltinType.INT)) {
+        if (obj.ctx.IntConst() != null) {
             obj.result = new IntConst(Integer.parseInt(obj.ctx.IntConst().toString()));
-        } else if (obj.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+        } else if (obj.ctx.True() != null || obj.ctx.False() != null) {
             obj.result = new BoolConst(obj.ctx.True() == null ? false : true);
-        } else if (obj.expr_type.match_type(BaseType.BuiltinType.STRING)) {
+        } else if (obj.ctx.StringConst() != null) {
             obj.result = new StringConst(obj.ctx.StringConst().toString());
-        } else if (obj.expr_type.match_type(BaseType.BuiltinType.NULL)) {
+        } else if (obj.ctx.Null() != null) {
             obj.result = new NullConst();
-        } else if (obj.expr_type.match_type(BaseType.BuiltinType.THIS)) {
+        } else if (obj.ctx.This() != null) {
             obj.result = cur_func.get_operand(0);
         } else {
             if (obj.is_var) {
-                obj.result = cur_scope.get_var(obj.identifier);
+                Value mem_pos = cur_scope.get_var(obj.identifier);
+                LoadInst load_inst = new LoadInst(mem_pos, "load_inst", cur_block);
+                cur_block.push_back(load_inst);
+                obj.result = load_inst;
             } else {
                 obj.result = func_table.get(obj.identifier);
             }
@@ -588,8 +596,7 @@ public class IRBuilder implements ASTVisitor {
                 obj.return_value.accept(this);
             }
             if (!((IRFuncType)cur_func.get_type()).get_ret_type().match(new VoidType())) {
-                cur_block.push_back(new StoreInst(obj.return_value.result, cur_func.ret_value_ptr, cur_block));
-                cur_block.push_back(new RetInst(cur_func.ret_value_ptr, cur_block));
+                cur_block.push_back(new RetInst(obj.return_value.result, cur_block));
             } else {
                 cur_block.push_back(new RetInst(null, cur_block));
             }
@@ -599,6 +606,17 @@ public class IRBuilder implements ASTVisitor {
     public void visit(AtomStmtNode obj) {
         if (obj.expr != null) {
             obj.expr.accept(this);
+        }
+    }
+
+
+
+
+    // for debug
+    static Boolean debug_mode = true;
+    void debug(String str) {
+        if (debug_mode) {
+            System.out.println(str);
         }
     }
 
