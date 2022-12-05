@@ -73,7 +73,7 @@ public class BinaryExprNode extends ExprNode {
                 case RIGHTSHIFT -> {
                     return "arhl";
                 }
-                default -> throw new IRError(new Position(0, 0), "Unknown Error");
+                default -> throw new IRError(new Position(0, 0), "BinaryExprNode");
             }
         }
     };

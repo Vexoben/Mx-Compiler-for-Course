@@ -37,6 +37,7 @@ public class IRBuilder implements ASTVisitor {
     Function init_func = new Function("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
 
     public IRBuilder(RootNode root) {
+        debug("start_IR_build");
         root.accept(this);
     }
 
@@ -47,7 +48,13 @@ public class IRBuilder implements ASTVisitor {
         else if (type.match_type(BaseType.BuiltinType.STRING)) basetype = new PointerType(new IntType(8));
         else if (type.built_in_type == BaseType.BuiltinType.CLASS) {
             basetype = class_table.get(type.typename);
-        } else throw new IRError(new Position(0, 0), "unknown error");
+        } else if (type.match_type(BaseType.BuiltinType.VOID)) {
+            basetype = new VoidType();
+        }
+        else {
+            debug(type.built_in_type.toString());
+            throw new IRError(new Position(0, 0), "translate_vartype_base");
+        }
         return basetype;
     }
 
@@ -196,7 +203,7 @@ public class IRBuilder implements ASTVisitor {
 
         obj.block_node.accept(this);
         cur_func.get_blocks().forEach(i -> {
-            if (i.next_block != null) {
+            if (i.next_block != null && i.next_block.get_inst().size() > 0) {
                 i.push_back(new BrInst(i.next_block, i));
             }
         });
@@ -318,6 +325,7 @@ public class IRBuilder implements ASTVisitor {
     public void visit(ConstExprNode obj) {} // did not be used
     @Override
     public void visit(FuncCallExprNode obj) {
+        obj.func_name.accept(this);
         assert obj.func_name.result instanceof Function;
         ArrayList<Value> args = new ArrayList<>();
         if (obj.func_name instanceof MemberVisitExprNode) {
@@ -342,7 +350,7 @@ public class IRBuilder implements ASTVisitor {
             args.add(new IntConst(index));
             obj.result = new GetElementPtrInst(obj.callee, args, new PointerType(type.get_type(index)), cur_block);
         } else {
-            throw new IRError(obj.pos, "Unknown error");
+            throw new IRError(obj.pos, "MemberVisitExpr");
         }
     }
     @Override
@@ -422,12 +430,14 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(PostfixExprNode obj) {
         obj.var.accept(this);
-        Value mem_pos = obj.var.result.mem_pos, tmp = null;
+        Value mem_pos = obj.var.result.mem_pos;
+        BinaryInst tmp = null;
         if (obj.is_add) {
             tmp = new BinaryInst(new IntType(), "add_inst", BinaryExprNode.BinaryOperator.ADD, new IntConst(1), obj.var.result, cur_block);
         } else {
             tmp = new BinaryInst(new IntType(), "add_inst", BinaryExprNode.BinaryOperator.SUB, obj.var.result, new IntConst(1), cur_block);
         }
+        cur_block.push_back(tmp);
         cur_block.push_back(new StoreInst(tmp, mem_pos, cur_block));
         obj.result = obj.var.result;
     }
@@ -464,6 +474,7 @@ public class IRBuilder implements ASTVisitor {
     }
     @Override
     public void visit(AtomExprNode obj) {
+        //debug("???");
         if (obj.ctx.IntConst() != null) {
             obj.result = new IntConst(Integer.parseInt(obj.ctx.IntConst().toString()));
         } else if (obj.ctx.True() != null || obj.ctx.False() != null) {
@@ -480,6 +491,7 @@ public class IRBuilder implements ASTVisitor {
                 LoadInst load_inst = new LoadInst(mem_pos, "load_inst", cur_block);
                 cur_block.push_back(load_inst);
                 obj.result = load_inst;
+                obj.result.mem_pos = mem_pos;
             } else {
                 obj.result = func_table.get(obj.identifier);
             }
@@ -576,7 +588,7 @@ public class IRBuilder implements ASTVisitor {
         obj.if_stmt.accept(this);
         cur_scope = cur_scope.parent;
         // else_block
-        if (obj.else_scope != null) {
+        if (obj.else_stmt != null) {
             cur_scope = new IRScope(cur_scope);
             cur_block = else_block;
             obj.else_stmt.accept(this);
@@ -608,9 +620,6 @@ public class IRBuilder implements ASTVisitor {
             obj.expr.accept(this);
         }
     }
-
-
-
 
     // for debug
     static Boolean debug_mode = true;

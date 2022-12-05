@@ -224,7 +224,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
         ret.scope.father_scope = scopes.peek();
         scopes.push(ret.scope);
         if (ctx.initializationStatement() != null) {
-            ret.init = (AtomStmtNode) visit(ctx.initializationStatement());
+            ret.init = visit(ctx.initializationStatement());
         } else ret.init = null;
         if (ctx.forConditionExpression() != null) {
             ret.condition = (AtomStmtNode) visit(ctx.forConditionExpression());
@@ -240,13 +240,13 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitInitializationStatement(MxStarParser.InitializationStatementContext ctx) {
         if (ctx == null) return null;
-        AtomStmtNode ret = new AtomStmtNode(new Position(ctx.getStart()));
         if (ctx.expression() != null) {
+            AtomStmtNode ret = new AtomStmtNode(new Position(ctx.getStart()));
             ret.expr = (ExprNode) visit(ctx.expression());
             return ret;
         }
         else if (ctx.varDefAnyNumber() != null) {
-            ret.expr = (ExprNode) visit(ctx.varDefAnyNumber());
+            VarAnyNumberDefNode ret = (VarAnyNumberDefNode) visit(ctx.varDefAnyNumber());
             return ret;
         }
         else throw new SemanticError(new Position(ctx.getStart()), "You gives me a wrong initialization statement");

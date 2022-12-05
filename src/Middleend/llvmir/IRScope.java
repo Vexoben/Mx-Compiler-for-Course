@@ -1,5 +1,8 @@
 package Middleend.llvmir;
 
+import Frontend.Tools.Error.IRError;
+import Frontend.Tools.Position;
+
 import java.util.HashMap;
 
 public class IRScope {
@@ -16,7 +19,14 @@ public class IRScope {
     }
 
     public Value get_var(String _name) {
-        return var_table.get(_name);
+        IRScope scope = this;
+        while (scope != null) {
+            if (scope.var_table.containsKey(_name)) {
+                return scope.var_table.get(_name);
+            }
+            else scope = scope.parent;
+        }
+        throw new IRError(new Position(0, 0), "Unknown Error");
     }
 
 }

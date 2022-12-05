@@ -1,6 +1,6 @@
 package Middleend.llvmir.Type;
 
-public class VoidType extends IRBaseType {
+public class VoidType extends DerivedType {
     public VoidType() {
 
     }

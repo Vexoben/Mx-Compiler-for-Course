@@ -1,5 +1,7 @@
-int a[10];
+void f() {
+
+}
 
 int main() {
-   
+   f();
 }

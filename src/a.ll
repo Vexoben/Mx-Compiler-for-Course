@@ -2,20 +2,14 @@
 source_filename = "test.mx"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-linux-gnu"
+define dso_local void @f() #0 {
+}
 define dso_local i32 @main() #0 {
 mainentry:
   call void @__init_function__()
-  br label %first_block__main
 mainexit:
   ret i32 0
 first_block__main:
-  %a = alloca i32
-  %0 = add i32 1, 1
-  store i32 %0, i32* %a
-  %b = alloca i32
-  %load_inst = load i32, i32* %a
-  %1 = add i32 %load_inst, 1
-  store i32 %1, i32* %b
   br label %mainexit
 }
 define dso_local void @__init_function__() #0 {

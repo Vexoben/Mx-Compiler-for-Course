@@ -87,7 +87,7 @@ public class StructType extends DerivedType{
         if (type.match_type(BaseType.BuiltinType.INT)) basetype = new IntType();
         else if (type.match_type(BaseType.BuiltinType.BOOL)) basetype = new BoolType();
         else if (type.match_type(BaseType.BuiltinType.STRING)) basetype = new PointerType(new IntType(8));
-        else throw new IRError(new Position(0, 0), "unknown error");
+        else throw new IRError(new Position(0, 0), "struct_type_translate_vartype");
         DerivedType realtype = basetype;
         for (int k = 0; k < type.dimension; ++k) {
             realtype = new PointerType(realtype);
