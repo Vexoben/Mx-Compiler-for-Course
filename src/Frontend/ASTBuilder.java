@@ -293,6 +293,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     public ASTNode visitVarTypeDef(MxStarParser.VarTypeDefContext ctx) {
         VarSingleDefNode ret = new VarSingleDefNode(new Position(ctx.getStart()));
         VarType type = get_var_type(ctx);
+        ret.var_type = type;
         ret.registry = new VarRegistry(type, "to_be_write", new Position(ctx.getStart()));
         // scopes.peek().insert_registry(ret.registry);
         return ret;
@@ -373,6 +374,7 @@ public class ASTBuilder extends MxStarBaseVisitor<ASTNode> {
     public ASTNode visitVarDefSingle(MxStarParser.VarDefSingleContext ctx) {
         VarSingleDefNode ret = new VarSingleDefNode(new Position(ctx.getStart()));
         VarType type = get_var_type(ctx);
+        assert(type != null);
         ret.var_type = type;
         ret.registry = new VarRegistry(type, ctx.Identifier().toString(), new Position(ctx.getStart()));
         // scopes.peek().insert_registry(ret.registry);

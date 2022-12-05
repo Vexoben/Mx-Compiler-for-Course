@@ -37,7 +37,7 @@ public class IRBuilder implements ASTVisitor {
     Function init_func = new Function("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
 
     public IRBuilder(RootNode root) {
-        debug("start_IR_build");
+        // debug("start_IR_build");
         root.accept(this);
     }
 
@@ -103,6 +103,7 @@ public class IRBuilder implements ASTVisitor {
         func_table.put(cur_func.name, cur_func);
         cur_block = cur_func.entry_block;
         cur_func.exit_block.push_back(new RetInst(null, cur_func.exit_block));
+        cur_func.add_block(cur_func.exit_block);
         // builtin_function
         // todo
         // declare classes, member_function, constructor
@@ -199,9 +200,12 @@ public class IRBuilder implements ASTVisitor {
         if (obj.func_registry.name.equals("main")) {    // call init function; return 0 in default
             cur_func.entry_block.push_back(new FuncCallInst(init_func, cur_func.entry_block, new ArrayList<>()));
             cur_func.exit_block.push_back(new RetInst(new IntConst(0), cur_func.exit_block));
+        } else if (cur_func.get_ret_type().match(new VoidType())) {
+            cur_func.exit_block.push_back(new RetInst(null, cur_func.exit_block));
         }
 
         obj.block_node.accept(this);
+        cur_func.add_block(cur_func.exit_block);
         cur_func.get_blocks().forEach(i -> {
             if (i.next_block != null && i.next_block.get_inst().size() > 0) {
                 i.push_back(new BrInst(i.next_block, i));
@@ -236,12 +240,12 @@ public class IRBuilder implements ASTVisitor {
         Value addr;
         if (cur_func == init_func) {
             addr = new GlobalVariable(obj.registry.name, new PointerType(translate_vartype(obj.var_type)));
-            addr.mem_pos = addr;
         } else {
-            addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name, cur_block);
+            addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name + "_addr", cur_block);
             cur_block.push_back((BaseInst) addr);
-            addr.mem_pos = addr;
+            cur_block.push_back(new StoreInst(obj.value, addr, cur_block));
         }
+        addr.mem_pos = addr;
 
         if (obj.assign != null) {
             obj.assign.accept(this);

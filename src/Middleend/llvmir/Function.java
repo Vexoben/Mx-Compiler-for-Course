@@ -24,6 +24,7 @@ public class Function extends User {
         super(_type, _name);
         entry_block = new BasicBlock(_name + "entry", this);
         exit_block = new BasicBlock(_name + "exit", this);
+        blocks.remove(blocks.size() - 1);
         entry_block.link(exit_block);
     }
 

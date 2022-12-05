@@ -11,7 +11,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Compiler {
 
@@ -19,7 +21,8 @@ public class Compiler {
 
     public static void main(String[] args) throws Exception {
         String inputfile = "a.c";
-        String ouputfile = "data.out";
+        String outputfile = "test.ll";
+        OutputStream output = new FileOutputStream(outputfile);
         try {
             // System.out.println("-----------------Start!--------------------");
             MxStarLexer lexer;
@@ -42,7 +45,7 @@ public class Compiler {
             SemanticChecker semantic_checker = new SemanticChecker();
             // System.out.println("-----------------Semantic Checking-------------------");
             semantic_checker.visit(astroot);
-            IRPrinter ir_printer = new IRPrinter(astroot);
+            IRPrinter ir_printer = new IRPrinter(astroot, output, is_online_judge);
             ir_printer.IR_print();
         }
         catch (BaseError error){

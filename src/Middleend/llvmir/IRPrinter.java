@@ -3,34 +3,46 @@ package Middleend.llvmir;
 import Frontend.ast.RootNode;
 import Middleend.llvmir.Type.StructType;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 public class IRPrinter extends IRBuilder{
-    public IRPrinter(RootNode root) {
+    OutputStream os;
+    Boolean is_online_judge;
+
+    public IRPrinter(RootNode root, OutputStream output, boolean is_online_flag) {
         super(root);
+        os = output;
+        is_online_judge = is_online_flag;
     }
 
-    void printf(String str) {
-        System.out.print(str);
+    void printf(String str) throws IOException {
+        if (is_online_judge) {
+            System.out.print(str);
+        } else {
+            os.write(str.getBytes());
+        }
     }
 
-    void struct_declare() {
+    void struct_declare() throws IOException {
         for (StructType i : class_table.values()) {
             printf(i.declare());
         }
     }
 
-    void global_variable_declare() {
+    void global_variable_declare() throws IOException {
         for (Value i : cur_scope.var_table.values()) {
             printf(i.global_variable_declare());
         }
     }
 
-    void func_declare() {
+    void func_declare() throws IOException {
         for (Function i: func_table.values()) {
             printf(i.declare());
         }
     }
 
-    public void IR_print() {
+    public void IR_print() throws IOException {
         printf("; ModuleID = 'test.mx'\n" +
                 "source_filename = \"test.mx\"\n" +
                 "target datalayout = \"e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128\"\n" +
