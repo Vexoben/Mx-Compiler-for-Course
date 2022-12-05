@@ -14,8 +14,8 @@ public class PhiInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
-
+    public String toString() { // unused
+        return null;
     }
 
 }

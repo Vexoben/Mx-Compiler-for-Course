@@ -5,6 +5,7 @@ import Frontend.parser.MxStarLexer;
 import Frontend.parser.MxStarParser;
 import Frontend.Tools.Error.BaseError;
 import Frontend.Tools.MxStarErrorListener;
+import Middleend.llvmir.IRPrinter;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -14,7 +15,7 @@ import java.io.InputStream;
 
 public class Compiler {
 
-    static boolean is_online_judge = true;
+    static boolean is_online_judge = false;
 
     public static void main(String[] args) throws Exception {
         String inputfile = "test.mx";
@@ -41,6 +42,8 @@ public class Compiler {
             SemanticChecker semantic_checker = new SemanticChecker();
             System.out.println("-----------------Semantic Checking-------------------");
             semantic_checker.visit(astroot);
+            IRPrinter ir_printer = new IRPrinter(astroot);
+            ir_printer.IR_print();
         }
         catch (BaseError error){
             System.out.println(error.get_msg());

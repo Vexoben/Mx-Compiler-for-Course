@@ -6,7 +6,7 @@ public class BoolConst extends BaseConst{
     boolean data;
 
     public BoolConst(boolean _data) {
-        super(new BoolType(), "BoolConst");
+        super(new BoolType(), _data ? "1" : "0");
         data = _data;
     }
 

@@ -3,8 +3,6 @@ package Frontend.ast.expr;
 import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.Tools.Position;
-import Middleend.llvmir.Constant.Function;
-import Middleend.llvmir.Type.PointerType;
 import Middleend.llvmir.Value;
 
 public class MemberVisitExprNode extends ExprNode {

@@ -1,11 +1,10 @@
 package Middleend.llvmir;
 
 import Frontend.ast.RootNode;
-import Middleend.llvmir.Constant.Function;
 import Middleend.llvmir.Type.StructType;
 
 public class IRPrinter extends IRBuilder{
-    IRPrinter(RootNode root) {
+    public IRPrinter(RootNode root) {
         super(root);
     }
 
@@ -21,7 +20,7 @@ public class IRPrinter extends IRBuilder{
 
     void global_variable_declare() {
         for (Value i : cur_scope.var_table.values()) {
-            printf(i.variable_declare());
+            printf(i.global_variable_declare());
         }
     }
 

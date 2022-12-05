@@ -8,7 +8,7 @@ public class StringConst extends BaseConst{
     String data;
 
     public StringConst(String _data) {
-        super(new PointerType(new ArrayType(new IntType(8), _data.length() + 1)), "StringConst");
+        super(new PointerType(new ArrayType(new IntType(8), _data.length() + 1)), _data);
         data = _data;
     }
 

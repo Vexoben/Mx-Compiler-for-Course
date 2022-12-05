@@ -24,7 +24,11 @@ public class BrInst extends BaseInst{
 
     @Override
     public String toString() {
-
+        if (get_operands_size() == 1) {
+            return "br label %" + get_operand(0).get_name();
+        } else {
+            return "br i1 %" + get_operand(0).get_name() + ", label %" + get_operand(1).get_name() + ", label %" + get_operand(2).get_name();
+        }
     }
 
 }

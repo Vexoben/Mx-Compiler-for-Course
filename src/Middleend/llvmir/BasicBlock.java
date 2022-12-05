@@ -1,9 +1,7 @@
 package Middleend.llvmir;
 
-import Middleend.llvmir.Constant.Function;
 import Middleend.llvmir.Inst.BaseInst;
 import Middleend.llvmir.Type.LabelType;
-import Middleend.llvmir.Value;
 
 import java.util.ArrayList;
 

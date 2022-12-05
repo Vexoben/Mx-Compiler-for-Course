@@ -2,12 +2,9 @@ package Middleend.llvmir;
 
 import Frontend.Tools.Error.IRError;
 import Frontend.Tools.Position;
-import Frontend.Tools.Registry.FuncRegistry;
 import Frontend.Tools.Registry.VarRegistry;
-import Frontend.Tools.Scope.BaseScope;
 import Frontend.Tools.Scope.ClassScope;
 import Frontend.Tools.Type.BaseType;
-import Frontend.Tools.Type.ClassType;
 import Frontend.Tools.Type.FuncType;
 import Frontend.Tools.Type.VarType;
 import Frontend.ast.*;
@@ -19,8 +16,6 @@ import Middleend.llvmir.Constant.*;
 import Middleend.llvmir.Inst.*;
 import Middleend.llvmir.Type.*;
 
-import java.awt.*;
-import java.awt.image.PackedColorModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -231,8 +226,13 @@ public class IRBuilder implements ASTVisitor {
     }
     @Override
     public void visit(VarSingleDefNode obj) {
-        AllocaInst addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name, cur_func.entry_block);
-        cur_func.entry_block.push_back(addr);
+        Value addr;
+        if (cur_func == init_func) {
+            addr = new GlobalVariable(obj.registry.name, new PointerType(translate_vartype(obj.var_type)));
+        } else {
+            addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name, cur_func.entry_block);
+            cur_func.entry_block.push_back((BaseInst) addr);
+        }
 
         if (obj.assign != null) {
             obj.assign.accept(this);
@@ -240,14 +240,14 @@ public class IRBuilder implements ASTVisitor {
         } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
             cur_func.entry_block.push_back(new StoreInst(new NullConst(), addr, cur_func.entry_block));
         } else if (cur_func == init_func) {
-            if (addr.get_pointed_type().match(new IntType())) {
+            if (((PointerType) addr.get_type()).get_pointed_type().match(new IntType())) {
                 cur_func.entry_block.push_back(new StoreInst(new IntConst(0), addr, cur_func.entry_block));
             }
-            if (addr.get_pointed_type().match(new BoolType())) {
+            if (((PointerType) addr.get_type()).get_pointed_type().match(new BoolType())) {
                 cur_func.entry_block.push_back(new StoreInst(new BoolConst(false), addr, cur_func.entry_block));
             }
         }
-        cur_scope.add_var(obj.registry.name, addr);
+        cur_scope.add_var(addr.get_name(), addr);
         obj.value = addr;
     }
 
@@ -255,22 +255,27 @@ public class IRBuilder implements ASTVisitor {
     public void visit(VarAnyNumberDefNode obj) {
         int size = obj.registry_list.size();
         for (int i = 0; i < size; ++i) {
-            AllocaInst addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry_list.get(i).name, cur_func.entry_block);
-            cur_func.entry_block.push_back(addr);
+            Value addr;
+            if (cur_func == init_func) {
+                addr = new GlobalVariable(obj.registry_list.get(i).name, new PointerType(translate_vartype(obj.var_type)));
+            } else {
+                addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry_list.get(i).name, cur_func.entry_block);
+                cur_func.entry_block.push_back((BaseInst) addr);
+            }
             if (obj.assign_list.get(i) != null) {
                 obj.assign_list.get(i).accept(this);
                 cur_func.entry_block.push_back(new StoreInst(obj.assign_list.get(i).result, addr, cur_func.entry_block));
             } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
                 cur_func.entry_block.push_back(new StoreInst(new NullConst(), addr, cur_func.entry_block));
             } else if (cur_func == init_func) {
-                if (addr.get_pointed_type().match(new IntType())) {
+                if (((PointerType) addr.get_type()).get_pointed_type().match(new IntType())) {
                     cur_func.entry_block.push_back(new StoreInst(new IntConst(0), addr, cur_func.entry_block));
                 }
-                if (addr.get_pointed_type().match(new BoolType())) {
+                if (((PointerType) addr.get_type()).get_pointed_type().match(new BoolType())) {
                     cur_func.entry_block.push_back(new StoreInst(new BoolConst(false), addr, cur_func.entry_block));
                 }
             }
-            cur_scope.add_var(obj.registry_list.get(i).name, addr);
+            cur_scope.add_var(addr.get_name(), addr);
             obj.value_list.add(addr);
         }
     }
@@ -365,6 +370,7 @@ public class IRBuilder implements ASTVisitor {
     }
 
     BaseInst arr_allo_dfs(int deep, ArrayList<Value> indexes, DerivedType base_type) {
+        // todo
         if (indexes.size() == 0) {
             AllocaInst inst = new AllocaInst(base_type, "base_type", cur_block);
             cur_block.push_back(inst);
@@ -403,6 +409,7 @@ public class IRBuilder implements ASTVisitor {
             StoreInst store_inst = new StoreInst(cast_inst, alloca_inst, cur_block);
             cur_block.push_back(store_inst);
         }
+        return null;
     }
 
     @Override
@@ -461,12 +468,12 @@ public class IRBuilder implements ASTVisitor {
         } else if (obj.expr_type.match_type(BaseType.BuiltinType.NULL)) {
             obj.result = new NullConst();
         } else if (obj.expr_type.match_type(BaseType.BuiltinType.THIS)) {
-            // todo
+            obj.result = cur_func.get_operand(0);
         } else {
             if (obj.is_var) {
-
+                obj.result = cur_scope.get_var(obj.identifier);
             } else {
-                obj.result = scopes.
+                obj.result = func_table.get(obj.identifier);
             }
         }
     }
@@ -581,13 +588,11 @@ public class IRBuilder implements ASTVisitor {
                 obj.return_value.accept(this);
             }
             if (!((IRFuncType)cur_func.get_type()).get_ret_type().match(new VoidType())) {
-                // assign ret value
-                // todo
                 cur_block.push_back(new StoreInst(obj.return_value.result, cur_func.ret_value_ptr, cur_block));
+                cur_block.push_back(new RetInst(cur_func.ret_value_ptr, cur_block));
             } else {
-                cur_block.push_back(new StoreInst(null, cur_func.ret_value_ptr, cur_block));
+                cur_block.push_back(new RetInst(null, cur_block));
             }
-            cur_block.push_back(new BrInst(cur_func.exit_block, cur_block));
         }
     }
     @Override

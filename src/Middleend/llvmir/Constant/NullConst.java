@@ -4,7 +4,7 @@ import Middleend.llvmir.Type.PointerType;
 
 public class NullConst extends BaseConst{
     public NullConst() {
-        super(new PointerType(null), "NullConst");
+        super(new PointerType(null), "null");
     }
 
     @Override
