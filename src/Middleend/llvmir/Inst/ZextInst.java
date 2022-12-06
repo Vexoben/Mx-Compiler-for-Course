@@ -16,7 +16,7 @@ public class ZextInst extends BaseInst{
     }
 
     @Override
-    public String toString() {   // unused
+    public String output() {   // unused
         return null;
     }
 }

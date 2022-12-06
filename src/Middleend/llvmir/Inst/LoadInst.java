@@ -14,7 +14,7 @@ public class LoadInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         return "load " + get_type().toString() + ", " + new PointerType((DerivedType) get_type()).toString() + " " + get_operand(0).get_name();
     }
 

@@ -22,7 +22,7 @@ public class FuncCallInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         String ans = "call " + func.get_ret_type().toString() + " " + func.get_name() + "(";
         for (int i = 1; i < get_operands_size(); ++i) { // operand(0) is func
             if (i > 1) ans += ", ";

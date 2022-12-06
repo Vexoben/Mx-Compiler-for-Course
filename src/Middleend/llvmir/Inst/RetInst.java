@@ -14,7 +14,7 @@ public class RetInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         if (get_operands_size() == 0) return "ret void";
         else return "ret " + get_operand(0).get_tyme();
     }

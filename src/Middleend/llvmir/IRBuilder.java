@@ -21,20 +21,49 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class IRBuilder implements ASTVisitor {
-
-    // to be implemented
-    Function malloc;
-
     BasicBlock cur_block = null;
     Function cur_func = null;
     IRScope cur_scope = new IRScope(null);
     Stack<BasicBlock> continue_jump_to = new Stack<>(), break_jump_to = new Stack<>();
     HashMap<String, StructType> class_table = new HashMap<>();
     HashMap<String, Function> func_table = new HashMap<>();
+    HashMap<String, GlobalValue> const_string_table = new HashMap<>();
     boolean is_constructor = false, is_member = false;
     String cur_class_name = null;
-    ClassScope cur_class_scope;
     Function init_func = new Function("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
+
+
+    static PointerType char_ptr = new PointerType(new IntType(8));
+    static VoidType void_type = new VoidType();
+    static IntType int_type = new IntType();
+    static IntType bool_tyoe = new IntType(1);
+    // malloc function
+    static Function func_malloc = new Function("__built_in_malloc", new IRFuncType(null, char_ptr, int_type));
+    // built-in function
+    static Function func_print = new Function("print", new IRFuncType(null, void_type, char_ptr)),
+            func_println = new Function("println", new IRFuncType(null, void_type, char_ptr)),
+            func_printInt = new Function("printInt", new IRFuncType(null, void_type, int_type)),
+            func_printlnInt = new Function("printlnInt", new IRFuncType(null, void_type, int_type)),
+            func_getString = new Function("getString", new IRFuncType(null, char_ptr)),
+            func_getInt = new Function("getInt", new IRFuncType(null, int_type)),
+            func_toString = new Function("toString", new IRFuncType(null, char_ptr, int_type));
+    // string operator
+    static Function str_eq = new Function("__build_in_str_eq", new IRFuncType(null, bool_tyoe, char_ptr, char_ptr)),
+            str_neq = new Function("__build_in_str_neq", new IRFuncType(null, bool_tyoe, char_ptr, char_ptr)),
+            str_slt = new Function("__build_in_str_slt", new IRFuncType(null, bool_tyoe, char_ptr, char_ptr)),
+            str_sle = new Function("__build_in_str_sle", new IRFuncType(null, bool_tyoe, char_ptr, char_ptr)),
+            str_sgt = new Function("__build_in_str_sgt", new IRFuncType(null, bool_tyoe, char_ptr, char_ptr)),
+            str_sge = new Function("__build_in_str_sge", new IRFuncType(null, bool_tyoe, char_ptr, char_ptr)),
+            str_add = new Function("__build_in_str_add", new IRFuncType(null, char_ptr, char_ptr, char_ptr));
+    // string built-in method
+    static Function str_length = new Function("__built_in_length", new IRFuncType(null, int_type, char_ptr)),
+            str_substring = new Function("__built_in_substring", new IRFuncType(null, char_ptr, char_ptr, int_type, int_type)),
+            str_parseInt = new Function("__built_in_parseInt", new IRFuncType(null, int_type, char_ptr)),
+            str_ord = new Function("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
+
+
+
+
 
     public IRBuilder(RootNode root) {
         // debug("start_IR_build");
@@ -52,7 +81,6 @@ public class IRBuilder implements ASTVisitor {
             basetype = new VoidType();
         }
         else {
-            debug(type.built_in_type.toString());
             throw new IRError(new Position(0, 0), "translate_vartype_base");
         }
         return basetype;
@@ -102,8 +130,6 @@ public class IRBuilder implements ASTVisitor {
         cur_func = init_func;
         func_table.put(cur_func.name, cur_func);
         cur_block = cur_func.entry_block;
-        cur_func.exit_block.push_back(new RetInst(null, cur_func.exit_block));
-        cur_func.add_block(cur_func.exit_block);
         // builtin_function
         // todo
         // declare classes, member_function, constructor
@@ -156,6 +182,13 @@ public class IRBuilder implements ASTVisitor {
                 cur_func = func_table.get(((FuncDefNode) i).func_registry.name);
                 i.accept(this);
                 cur_func = null;
+            }
+        });
+        init_func.exit_block.push_back(new RetInst(null, init_func.exit_block));
+        init_func.add_block(init_func.exit_block);
+        init_func.blocks.forEach(i -> {
+            if (i.next_block != null) {
+                i.push_back(new BrInst(i.next_block, i));
             }
         });
     }
@@ -237,14 +270,20 @@ public class IRBuilder implements ASTVisitor {
     }
     @Override
     public void visit(VarSingleDefNode obj) {
-        Value addr;
+        Value arg_def = new Value(translate_vartype(obj.var_type), obj.registry.name + "_arg");
+/*        Value addr;
         if (cur_func == init_func) {
             addr = new GlobalVariable(obj.registry.name, new PointerType(translate_vartype(obj.var_type)));
         } else {
             addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name + "_addr", cur_block);
             cur_block.push_back((BaseInst) addr);
-            cur_block.push_back(new StoreInst(obj.value, addr, cur_block));
-        }
+            cur_block.push_back(new StoreInst(arg_def, addr, cur_block));
+        }*/
+
+
+        AllocaInst addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry.name, cur_block);
+        cur_block.push_back((BaseInst) addr);
+        cur_block.push_back(new StoreInst(arg_def, addr, cur_block));
         addr.mem_pos = addr;
 
         if (obj.assign != null) {
@@ -270,7 +309,7 @@ public class IRBuilder implements ASTVisitor {
         for (int i = 0; i < size; ++i) {
             Value addr;
             if (cur_func == init_func) {
-                addr = new GlobalVariable(obj.registry_list.get(i).name, new PointerType(translate_vartype(obj.var_type)));
+                addr = new GlobalValue(obj.registry_list.get(i).name, new PointerType(translate_vartype(obj.var_type)));
                 addr.mem_pos = addr;
             } else {
                 addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry_list.get(i).name, cur_block);
@@ -279,7 +318,15 @@ public class IRBuilder implements ASTVisitor {
             }
             if (obj.assign_list.get(i) != null) {
                 obj.assign_list.get(i).accept(this);
-                cur_block.push_back(new StoreInst(obj.assign_list.get(i).result, addr, cur_block));
+                if (obj.assign_list.get(i).expr_type.match_type(BaseType.BuiltinType.STRING)) {
+                    ArrayList<Value> indexes = new ArrayList<>();
+                    indexes.add(new IntConst(0)); indexes.add(new IntConst(0));
+                    GetElementPtrInst ptr = new GetElementPtrInst(obj.assign_list.get(i).result, indexes, new PointerType(new IntType(8)), cur_block);
+                    cur_block.push_back(ptr);
+                    cur_block.push_back(new StoreInst(ptr, addr.mem_pos, cur_block));
+                } else {
+                    cur_block.push_back(new StoreInst(obj.assign_list.get(i).result, addr, cur_block));
+                }
             } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
                 cur_block.push_back(new StoreInst(new NullConst(), addr, cur_block));
             } else if (cur_func == init_func) {
@@ -309,21 +356,49 @@ public class IRBuilder implements ASTVisitor {
         obj.right_expr.accept(this);
         obj.result = obj.right_expr.result;
         obj.result.mem_pos = obj.left_expr.result.mem_pos;
-        cur_block.push_back(new StoreInst(obj.right_expr.result, obj.left_expr.result.mem_pos, cur_block));
+        if (obj.right_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
+            ArrayList<Value> indexes = new ArrayList<>();
+            indexes.add(new IntConst(0)); indexes.add(new IntConst(0));
+            GetElementPtrInst ptr = new GetElementPtrInst(obj.right_expr.result, indexes, new PointerType(new IntType(8)), cur_block);
+            cur_block.push_back(ptr);
+            cur_block.push_back(new StoreInst(ptr, obj.left_expr.result.mem_pos, cur_block));
+        } else {
+            cur_block.push_back(new StoreInst(obj.right_expr.result, obj.left_expr.result.mem_pos, cur_block));
+        }
     }
     @Override
     public void visit(BinaryExprNode obj) {
-        // todo: 短路求值
         obj.left_expr.accept(this);
         obj.right_expr.accept(this);
-        BinaryInst inst;
-        if (obj.op.is_check_equal()) {
-            inst = new BinaryInst(new BoolType(), "", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
-        } else {
-            inst = new BinaryInst(new IntType(), "", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
+        if (obj.left_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
+            FuncCallInst inst;
+            ArrayList<Value> args = new ArrayList<>();
+            args.add(obj.left_expr.result);
+            args.add(obj.right_expr.result);
+            switch (obj.op) {
+                case EQUAL -> inst = new FuncCallInst(str_eq, cur_block, args);
+                case NOTEQUAL -> inst = new FuncCallInst(str_neq, cur_block, args);
+                case ADD -> inst = new FuncCallInst(str_add, cur_block, args);
+                case LESS -> inst = new FuncCallInst(str_slt, cur_block, args);
+                case GREATER -> inst = new FuncCallInst(str_sgt, cur_block, args);
+                case LEQ -> inst = new FuncCallInst(str_sle, cur_block, args);
+                case GEQ -> inst = new FuncCallInst(str_sge, cur_block, args);
+                default -> throw new IRError(new Position(0, 0), "BinaryExprNode");
+            }
+            cur_block.push_back(inst);
+            obj.result = inst;
         }
-        cur_block.push_back(inst);
-        obj.result = inst;
+        else {
+            // todo: 短路求值
+            BinaryInst inst;
+            if (obj.op.is_check_equal()) {
+                inst = new BinaryInst(new BoolType(), "", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
+            } else {
+                inst = new BinaryInst(new IntType(), "", obj.op, obj.left_expr.result, obj.right_expr.result, cur_block);
+            }
+            cur_block.push_back(inst);
+            obj.result = inst;
+        }
     }
     @Override
     public void visit(ConstExprNode obj) {} // did not be used
@@ -339,15 +414,40 @@ public class IRBuilder implements ASTVisitor {
             i.accept(this);
             args.add(i.result);
         });
-        cur_block.push_back(new FuncCallInst((Function) obj.func_name.result, cur_block, args));
+        FuncCallInst inst = new FuncCallInst((Function) obj.func_name.result, cur_block, args);
+        obj.result = inst;
+        cur_block.push_back(inst);
     }
     @Override
     public void visit(MemberVisitExprNode obj) {
         obj.class_expr.accept(this);
         obj.callee = obj.class_expr.result;
         StructType type = (StructType) ((PointerType)obj.callee.get_type()).get_pointed_type();
+        if (obj.class_expr instanceof AtomExprNode) {
+            if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.THIS)) { // this
+                scop = scopes.peek().in_class();
+                if (scope == null) {
+                    throw new SemanticError(obj.pos, "I can't find the class");
+                }
+            } else if (((AtomExprNode)obj.class_expr).maybe_var == false
+                    && !(obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING))) { // identifier
+                throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "is not a class");
+            }
+        }
         if (obj.is_func) {
-            obj.result = func_table.get(rename_member_func(obj.member_name, type.get_name()));
+            if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
+                if (obj.member_name.equals("length")) {
+                    obj.result = str_length;
+                } else if (obj.member_name.equals("substring")){
+                    obj.result = str_substring;
+                } else if (obj.member_name.equals("parseInt")) {
+                    obj.result = str_parseInt;
+                } else if (obj.member_name.equals("ord")) {
+                    obj.result = str_ord;
+                } else throw new IRError(new Position(0, 0), "MemberVisitNode");
+            } else {
+                obj.result = func_table.get(rename_member_func(obj.member_name, type.get_name()));
+            }
         } else if (obj.is_var) {
             ArrayList<Value> args = new ArrayList<>();
             int index = type.get_var_index(obj.member_name);
@@ -401,7 +501,7 @@ public class IRBuilder implements ASTVisitor {
             cur_block.push_back(tot_size);
             ArrayList<Value> size_arg = new ArrayList<>();
             size_arg.add(tot_size);
-            FuncCallInst malloc_inst = new FuncCallInst(malloc, cur_block, size_arg);
+            FuncCallInst malloc_inst = new FuncCallInst(func_malloc, cur_block, size_arg);
             cur_block.push_back(malloc_inst);
             BitCastInst cast_inst = new BitCastInst(malloc_inst, new PointerType(new IntType()), cur_block);
             cur_block.push_back(cast_inst);
@@ -419,7 +519,7 @@ public class IRBuilder implements ASTVisitor {
             cur_block.push_back(tot_size);
             ArrayList<Value> size_arg = new ArrayList<>();
             size_arg.add(tot_size);
-            FuncCallInst malloc_inst = new FuncCallInst(malloc, cur_block, size_arg);
+            FuncCallInst malloc_inst = new FuncCallInst(func_malloc, cur_block, size_arg);
             cur_block.push_back(malloc_inst);
             BitCastInst cast_inst = new BitCastInst(malloc_inst, new PointerType(new IntType()), cur_block);
             cur_block.push_back(cast_inst);
@@ -478,13 +578,23 @@ public class IRBuilder implements ASTVisitor {
     }
     @Override
     public void visit(AtomExprNode obj) {
-        //debug("???");
         if (obj.ctx.IntConst() != null) {
             obj.result = new IntConst(Integer.parseInt(obj.ctx.IntConst().toString()));
         } else if (obj.ctx.True() != null || obj.ctx.False() != null) {
             obj.result = new BoolConst(obj.ctx.True() == null ? false : true);
         } else if (obj.ctx.StringConst() != null) {
-            obj.result = new StringConst(obj.ctx.StringConst().toString());
+            String str = obj.ctx.StringConst().toString();
+            str = str.substring(1, str.length() - 1);
+            GlobalValue value;
+            if (const_string_table.containsKey(str)) {
+                value = const_string_table.get(str);
+            } else {
+                value = new GlobalValue("str_const_" + str, new PointerType(new ArrayType(new IntType(8), str.length() + 1)));
+                value.const_string_data = str + "\\00";
+                value.mem_pos = value;
+                const_string_table.put(str, value);
+            }
+            obj.result = value;
         } else if (obj.ctx.Null() != null) {
             obj.result = new NullConst();
         } else if (obj.ctx.This() != null) {
@@ -497,7 +607,23 @@ public class IRBuilder implements ASTVisitor {
                 obj.result = load_inst;
                 obj.result.mem_pos = mem_pos;
             } else {
-                obj.result = func_table.get(obj.identifier);
+                if (obj.identifier.equals("print")) {
+                    obj.result = func_print;
+                } else if (obj.identifier.equals("println")) {
+                    obj.result = func_println;
+                } else if (obj.identifier.equals("printInt")) {
+                    obj.result = func_printInt;
+                } else if (obj.identifier.equals("printlnInt")) {
+                    obj.result = func_printlnInt;
+                } else if (obj.identifier.equals("getString")) {
+                    obj.result = func_getString;
+                } else if (obj.identifier.equals("getInt")) {
+                    obj.result = func_getInt;
+                } else if (obj.identifier.equals("toString")) {
+                    obj.result = func_toString;
+                } else {
+                    obj.result = func_table.get(obj.identifier);
+                }
             }
         }
     }

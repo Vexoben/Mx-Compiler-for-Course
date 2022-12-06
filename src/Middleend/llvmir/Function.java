@@ -63,7 +63,7 @@ public class Function extends User {
         String ans = "(";
         for (int i = 0; i < args_name.size(); ++i) {
             if (i > 0) ans += ", ";
-            ans += get_args_types().get(i).toString() + " "  + args_name.get(i);
+            ans += get_args_types().get(i).toString() + " "  + args_name.get(i) + "_arg";
         }
         ans += ")";
         return ans;
@@ -73,8 +73,8 @@ public class Function extends User {
         if (inst instanceof StoreInst ||
                 (inst instanceof FuncCallInst && ((FuncCallInst)inst).get_func().get_ret_type().match(new VoidType())) ||
                 (inst instanceof BrInst) || (inst instanceof RetInst)) {
-            return "  " + inst.toString() + "\n";
-        } else return "  " + inst.get_name() + " = " + inst.toString() + "\n";
+            return "  " + inst.output() + "\n";
+        } else return "  " + inst.get_name() + " = " + inst.output() + "\n";
     }
 
     String print_block(BasicBlock block) {

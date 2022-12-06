@@ -22,7 +22,7 @@ public class CmpInst extends BaseInst{
     }
 
     @Override
-    public String toString() { return ""; }
+    public String output() { return ""; }
 
 
 }

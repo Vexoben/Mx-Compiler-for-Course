@@ -13,6 +13,15 @@ public class IRFuncType extends DerivedType{
         arg_types = _args;
     }
 
+    public IRFuncType(IRBaseType _belong, IRBaseType _ret, DerivedType... args) {
+        belong = _belong;
+        ret_type = _ret;
+        arg_types = new ArrayList<>();
+        for (DerivedType arg: args) {
+            arg_types.add(arg);
+        }
+    }
+
     public IRBaseType get_ret_type() {
         return ret_type;
     }

@@ -12,9 +12,9 @@ import java.util.HashMap;
 public class StructType extends DerivedType{
 
     String name;
-    ArrayList<VarRegistry> vars;
-    ArrayList<DerivedType> types;
-    HashMap<String, Integer> var_index;
+    ArrayList<VarRegistry> vars = new ArrayList<>();
+    ArrayList<DerivedType> types = new ArrayList<>();
+    HashMap<String, Integer> var_index = new HashMap<>();
 
     public StructType(String _name) {
         name = _name;

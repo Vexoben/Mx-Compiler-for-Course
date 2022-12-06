@@ -13,7 +13,7 @@ public class BitCastInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         return "bitcast " + get_operand(0).get_type().toString() + " " + get_operand(0).get_name() + " to " + type.toString();
     }
 

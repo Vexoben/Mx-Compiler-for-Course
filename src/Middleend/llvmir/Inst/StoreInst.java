@@ -14,7 +14,7 @@ public class StoreInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         return "store " + get_operand(0).get_tyme() + ", " + get_operand(1).get_tyme();
     }
 

@@ -21,7 +21,7 @@ public class AllocaInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         return "alloca " + pointed_type.toString();
     }
 

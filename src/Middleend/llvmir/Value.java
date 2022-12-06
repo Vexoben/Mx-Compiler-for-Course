@@ -2,6 +2,8 @@ package Middleend.llvmir;
 
 import Middleend.llvmir.Constant.BaseConst;
 import Middleend.llvmir.Type.IRBaseType;
+import Middleend.llvmir.Type.PointerType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,18 +59,19 @@ public class Value {
     static HashMap<String, Integer> name_table = new HashMap<>();
 
     private String rename(String _name) {
+        if (_name.equals("")) _name = "r";
         if (this instanceof Function) _name = "@" + _name;
         else if (this instanceof BaseConst) return _name;
-        else if (this instanceof GlobalVariable) _name = "@" + _name;
+        else if (this instanceof GlobalValue) _name = "@" + _name;
         else _name = "%" + _name;
         if (!name_table.containsKey(_name)) {
-            if (_name.equals("%")) {
-                name_table.put(_name, 0);
-                return _name + "0";
-            } else {
+//            if (_name.equals("%")) {
+//                name_table.put(_name, 0);
+//                return _name + "0";
+//            } else {
                 name_table.put(_name, 1);
                 return _name;
-            }
+//            }
         } else {
             int cnt = name_table.get(_name);
             name_table.replace(_name, cnt + 1);
@@ -78,7 +81,7 @@ public class Value {
 
     // to printer
     public String global_variable_declare() {
-        String ans = name + " = dso_local global " + type.toString() + " zeroinitializer\n";
+        String ans = name + " = dso_local global " + ((PointerType) get_type()).get_pointed_type().toString() + " zeroinitializer\n";
         return ans;
     }
 }

@@ -27,15 +27,14 @@ public class GetElementPtrInst extends BaseInst{
     }
 
     @Override
-    public String toString() {
+    public String output() {
         Value pointer = get_operand(0);
-        String ans = "getelementptr inbounds + (" + ((PointerType) pointer.get_type()).get_pointed_type().toString() + ", ";
+        String ans = "getelementptr inbounds " + ((PointerType) pointer.get_type()).get_pointed_type().toString() + ", ";
         ans += ((PointerType) pointer.get_type()).toString() + " " + pointer.get_name();
         for (int i = 1; i < get_operands_size(); ++i) {
             ans += ", ";
             ans += get_operand(i).get_tyme();
         }
-        ans += ")";
         return ans;
     }
 

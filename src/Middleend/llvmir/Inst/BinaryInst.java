@@ -18,7 +18,7 @@ public class BinaryInst extends BaseInst{   // binary && icmp
     }
 
     @Override
-    public String toString() {
+    public String output() {
         return operator.toString() + " i32 " + get_operand(0).get_name() + ", " + get_operand(1).get_name();
     }
 }

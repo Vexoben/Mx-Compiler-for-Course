@@ -12,5 +12,5 @@ public abstract class BaseInst extends User {
         belong = _belong;
     }
 
-    public abstract String toString();
+    public abstract String output();
 }

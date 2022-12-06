@@ -1,9 +1,13 @@
-int f(int a) {
-   return 0;
-}
+// int a[10][10];
 
-int a;
+class foo {
+   int a;
+   int b;
+};
+
+foo tmp;
 
 int main() {
-   // f(1);
+   tmp.a = 1;
+   printInt(tmp.a);
 }

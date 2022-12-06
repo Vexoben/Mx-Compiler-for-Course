@@ -1,6 +1,7 @@
 package Middleend.llvmir;
 
 import Frontend.ast.RootNode;
+import Middleend.llvmir.Type.PointerType;
 import Middleend.llvmir.Type.StructType;
 
 import java.io.IOException;
@@ -24,9 +25,22 @@ public class IRPrinter extends IRBuilder{
         }
     }
 
+    void global_string_declare() throws IOException {
+        for (String str : const_string_table.keySet()) {
+            GlobalValue v = const_string_table.get(str);
+            printf(v.get_name() + " = private unnamed_addr constant " + ((PointerType) v.get_type()).get_pointed_type().toString() + " c\"" + v.const_string_data + "\"\n");
+        }
+        if (const_string_table.values().size() > 0) {
+            printf("\n");
+        }
+    }
+
     void struct_declare() throws IOException {
         for (StructType i : class_table.values()) {
             printf(i.declare());
+        }
+        if (class_table.values().size() > 0) {
+            printf("\n");
         }
     }
 
@@ -34,11 +48,15 @@ public class IRPrinter extends IRBuilder{
         for (Value i : cur_scope.var_table.values()) {
             printf(i.global_variable_declare());
         }
+        if (cur_scope.var_table.values().size() > 0) {
+            printf("\n");
+        }
     }
 
     void func_declare() throws IOException {
         for (Function i: func_table.values()) {
             printf(i.declare());
+            printf("\n");
         }
     }
 
@@ -46,8 +64,9 @@ public class IRPrinter extends IRBuilder{
         printf("; ModuleID = 'test.mx'\n" +
                 "source_filename = \"test.mx\"\n" +
                 "target datalayout = \"e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128\"\n" +
-                "target triple = \"x86_64-pc-linux-gnu\"\n");
+                "target triple = \"x86_64-pc-linux-gnu\"\n\n");
 
+        global_string_declare();
         struct_declare();
         global_variable_declare();
         func_declare();
