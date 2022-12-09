@@ -63,7 +63,7 @@ public class Function extends User {
         String ans = "(";
         for (int i = 0; i < args_name.size(); ++i) {
             if (i > 0) ans += ", ";
-            ans += get_args_types().get(i).toString() + " "  + args_name.get(i) + "_arg";
+            ans += get_args_types().get(i).toString() + " "  + args_name.get(i);
         }
         ans += ")";
         return ans;

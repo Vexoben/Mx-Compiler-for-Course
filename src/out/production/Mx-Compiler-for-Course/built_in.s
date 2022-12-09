@@ -59,30 +59,32 @@ __built_in_substring:                   # @__built_in_substring
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$32, %rsp
-	movq	%rdi, -24(%rbp)
-	movl	%esi, -4(%rbp)
-	movl	%edx, -8(%rbp)
-	movl	-8(%rbp), %eax
-	subl	-4(%rbp), %eax
+	movq	%rdi, -8(%rbp)
+	movl	%esi, -12(%rbp)
+	movl	%edx, -16(%rbp)
+	movl	-16(%rbp), %eax
+	subl	-12(%rbp), %eax
 	addl	$1, %eax
-	movslq	%eax, %rdi
-	shlq	$0, %rdi
+	movslq	%eax, %rcx
+	shlq	$0, %rcx
+	movq	%rcx, %rdi
 	callq	malloc
-	movq	%rax, -16(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-24(%rbp), %rsi
-	movslq	-4(%rbp), %rax
-	addq	%rax, %rsi
-	movl	-8(%rbp), %eax
-	subl	-4(%rbp), %eax
-	movslq	%eax, %rdx
+	movq	%rax, -24(%rbp)
+	movq	-24(%rbp), %rdi
+	movq	-8(%rbp), %rax
+	movslq	-12(%rbp), %rcx
+	addq	%rcx, %rax
+	movl	-16(%rbp), %edx
+	subl	-12(%rbp), %edx
+	movslq	%edx, %rdx
+	movq	%rax, %rsi
 	callq	memcpy
-	movq	-16(%rbp), %rax
-	movl	-8(%rbp), %ecx
-	subl	-4(%rbp), %ecx
-	movslq	%ecx, %rcx
+	movq	-24(%rbp), %rax
+	movl	-16(%rbp), %r8d
+	subl	-12(%rbp), %r8d
+	movslq	%r8d, %rcx
 	movb	$0, (%rax,%rcx)
-	movq	-16(%rbp), %rax
+	movq	-24(%rbp), %rax
 	addq	$32, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -103,13 +105,15 @@ __built_in_parseInt:                    # @__built_in_parseInt
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	-16(%rbp), %rdi
+	movq	%rdi, -8(%rbp)
+	movq	-8(%rbp), %rdi
 	movabsq	$.L.str, %rsi
-	leaq	-4(%rbp), %rdx
+	leaq	-12(%rbp), %rdx
 	movb	$0, %al
 	callq	__isoc99_sscanf
-	movl	-4(%rbp), %eax
+	movl	-12(%rbp), %ecx
+	movl	%eax, -16(%rbp)         # 4-byte Spill
+	movl	%ecx, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -129,10 +133,10 @@ __built_in_ord:                         # @__built_in_ord
 	.cfi_offset %rbp, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
-	movq	%rdi, -16(%rbp)
-	movl	%esi, -4(%rbp)
-	movq	-16(%rbp), %rax
-	movslq	-4(%rbp), %rcx
+	movq	%rdi, -8(%rbp)
+	movl	%esi, -12(%rbp)
+	movq	-8(%rbp), %rax
+	movslq	-12(%rbp), %rcx
 	movsbl	(%rax,%rcx), %eax
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -153,37 +157,41 @@ __build_in_str_add:                     # @__build_in_str_add
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$32, %rsp
-	movq	%rdi, -32(%rbp)
-	movq	%rsi, -24(%rbp)
-	movq	-32(%rbp), %rdi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
 	callq	strlen
-	movl	%eax, -4(%rbp)
-	movq	-24(%rbp), %rdi
+                                        # kill: def $eax killed $eax killed $rax
+	movl	%eax, -20(%rbp)
+	movq	-16(%rbp), %rdi
 	callq	strlen
-	movl	%eax, -8(%rbp)
-	movl	-4(%rbp), %eax
-	addl	-8(%rbp), %eax
+                                        # kill: def $eax killed $eax killed $rax
+	movl	%eax, -24(%rbp)
+	movl	-20(%rbp), %eax
+	addl	-24(%rbp), %eax
 	addl	$1, %eax
-	movslq	%eax, %rdi
-	shlq	$0, %rdi
+	movslq	%eax, %rcx
+	shlq	$0, %rcx
+	movq	%rcx, %rdi
 	callq	malloc
-	movq	%rax, -16(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-32(%rbp), %rsi
-	movslq	-4(%rbp), %rdx
+	movq	%rax, -32(%rbp)
+	movq	-32(%rbp), %rdi
+	movq	-8(%rbp), %rsi
+	movslq	-20(%rbp), %rdx
 	callq	memcpy
-	movq	-16(%rbp), %rdi
-	movslq	-4(%rbp), %rax
-	addq	%rax, %rdi
-	movq	-24(%rbp), %rsi
-	movslq	-8(%rbp), %rdx
+	movq	-32(%rbp), %rax
+	movslq	-20(%rbp), %rcx
+	addq	%rcx, %rax
+	movq	-16(%rbp), %rsi
+	movslq	-24(%rbp), %rdx
+	movq	%rax, %rdi
 	callq	memcpy
-	movq	-16(%rbp), %rax
-	movl	-4(%rbp), %ecx
-	addl	-8(%rbp), %ecx
-	movslq	%ecx, %rcx
+	movq	-32(%rbp), %rax
+	movl	-20(%rbp), %r8d
+	addl	-24(%rbp), %r8d
+	movslq	%r8d, %rcx
 	movb	$0, (%rax,%rcx)
-	movq	-16(%rbp), %rax
+	movq	-32(%rbp), %rax
 	addq	$32, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -204,15 +212,15 @@ __build_in_str_eq:                      # @__build_in_str_eq
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	%rsi, -8(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-8(%rbp), %rsi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
 	callq	strcmp
 	cmpl	$0, %eax
-	sete	%al
-	andb	$1, %al
-	movzbl	%al, %eax
+	sete	%cl
+	andb	$1, %cl
+	movzbl	%cl, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -233,15 +241,15 @@ __build_in_str_neq:                     # @__build_in_str_neq
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	%rsi, -8(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-8(%rbp), %rsi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
 	callq	strcmp
 	cmpl	$0, %eax
-	setne	%al
-	andb	$1, %al
-	movzbl	%al, %eax
+	setne	%cl
+	andb	$1, %cl
+	movzbl	%cl, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -262,15 +270,15 @@ __build_in_str_slt:                     # @__build_in_str_slt
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	%rsi, -8(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-8(%rbp), %rsi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
 	callq	strcmp
 	cmpl	$0, %eax
-	setl	%al
-	andb	$1, %al
-	movzbl	%al, %eax
+	setl	%cl
+	andb	$1, %cl
+	movzbl	%cl, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -291,15 +299,15 @@ __build_in_str_sle:                     # @__build_in_str_sle
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	%rsi, -8(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-8(%rbp), %rsi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
 	callq	strcmp
 	cmpl	$0, %eax
-	setle	%al
-	andb	$1, %al
-	movzbl	%al, %eax
+	setle	%cl
+	andb	$1, %cl
+	movzbl	%cl, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -320,15 +328,15 @@ __build_in_str_sgt:                     # @__build_in_str_sgt
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	%rsi, -8(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-8(%rbp), %rsi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
 	callq	strcmp
 	cmpl	$0, %eax
-	setg	%al
-	andb	$1, %al
-	movzbl	%al, %eax
+	setg	%cl
+	andb	$1, %cl
+	movzbl	%cl, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -349,15 +357,15 @@ __build_in_str_sge:                     # @__build_in_str_sge
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
 	subq	$16, %rsp
-	movq	%rdi, -16(%rbp)
-	movq	%rsi, -8(%rbp)
-	movq	-16(%rbp), %rdi
-	movq	-8(%rbp), %rsi
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
 	callq	strcmp
 	cmpl	$0, %eax
-	sete	%al
-	andb	$1, %al
-	movzbl	%al, %eax
+	sete	%cl
+	andb	$1, %cl
+	movzbl	%cl, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -485,7 +493,9 @@ getString:                              # @getString
 	movabsq	$.L.str.1, %rdi
 	movb	$0, %al
 	callq	__isoc99_scanf
-	movq	-8(%rbp), %rax
+	movq	-8(%rbp), %rcx
+	movl	%eax, -12(%rbp)         # 4-byte Spill
+	movq	%rcx, %rax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -510,7 +520,9 @@ getInt:                                 # @getInt
 	leaq	-4(%rbp), %rsi
 	movb	$0, %al
 	callq	__isoc99_scanf
-	movl	-4(%rbp), %eax
+	movl	-4(%rbp), %ecx
+	movl	%eax, -8(%rbp)          # 4-byte Spill
+	movl	%ecx, %eax
 	addq	$16, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
@@ -530,7 +542,7 @@ toString:                               # @toString
 	.cfi_offset %rbp, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
-	subq	$16, %rsp
+	subq	$32, %rsp
 	movl	%edi, -4(%rbp)
 	movl	$256, %edi              # imm = 0x100
 	callq	malloc
@@ -540,63 +552,15 @@ toString:                               # @toString
 	movabsq	$.L.str, %rsi
 	movb	$0, %al
 	callq	sprintf
-	movq	-16(%rbp), %rax
-	addq	$16, %rsp
+	movq	-16(%rbp), %rcx
+	movl	%eax, -20(%rbp)         # 4-byte Spill
+	movq	%rcx, %rax
+	addq	$32, %rsp
 	popq	%rbp
 	.cfi_def_cfa %rsp, 8
 	retq
 .Lfunc_end18:
 	.size	toString, .Lfunc_end18-toString
-	.cfi_endproc
-                                        # -- End function
-	.globl	main                    # -- Begin function main
-	.p2align	4, 0x90
-	.type	main,@function
-main:                                   # @main
-	.cfi_startproc
-# %bb.0:                                # %mainentry
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset %rbp, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register %rbp
-	callq	__init_function__
-# %bb.1:                                # %first_block__main
-	movabsq	$.Lstr_const_aa, %rax
-	movq	%rsp, %rcx
-	addq	$-16, %rcx
-	movq	%rcx, %rsp
-	movq	%rax, (%rcx)
-	movq	(%rcx), %rdi
-	callq	print
-# %bb.2:                                # %mainexit
-	xorl	%eax, %eax
-	movq	%rbp, %rsp
-	popq	%rbp
-	.cfi_def_cfa %rsp, 8
-	retq
-.Lfunc_end19:
-	.size	main, .Lfunc_end19-main
-	.cfi_endproc
-                                        # -- End function
-	.globl	__init_function__       # -- Begin function __init_function__
-	.p2align	4, 0x90
-	.type	__init_function__,@function
-__init_function__:                      # @__init_function__
-	.cfi_startproc
-# %bb.0:                                # %__init_function__entry
-	pushq	%rbp
-	.cfi_def_cfa_offset 16
-	.cfi_offset %rbp, -16
-	movq	%rsp, %rbp
-	.cfi_def_cfa_register %rbp
-	jmp	.LBB20_1
-.LBB20_1:                               # %__init_function__exit
-	popq	%rbp
-	.cfi_def_cfa %rsp, 8
-	retq
-.Lfunc_end20:
-	.size	__init_function__, .Lfunc_end20-__init_function__
 	.cfi_endproc
                                         # -- End function
 	.type	.L.str,@object          # @.str
@@ -620,10 +584,13 @@ __init_function__:                      # @__init_function__
 	.asciz	"%d\n"
 	.size	.L.str.3, 4
 
-	.type	.Lstr_const_aa,@object  # @str_const_aa
-.Lstr_const_aa:
-	.asciz	"aa"
-	.size	.Lstr_const_aa, 3
-
 	.ident	"clang version 10.0.0-4ubuntu1 "
 	.section	".note.GNU-stack","",@progbits
+	.addrsig
+	.addrsig_sym malloc
+	.addrsig_sym strlen
+	.addrsig_sym __isoc99_sscanf
+	.addrsig_sym strcmp
+	.addrsig_sym printf
+	.addrsig_sym __isoc99_scanf
+	.addrsig_sym sprintf

@@ -79,7 +79,7 @@ public class StructType extends DerivedType{
         for (int i = 0; i < types.size(); ++i) {
             ans += ' ' + types.get(i).toString() + (i + 1 == types.size() ? ' ' : ',');
         }
-        return ans + '\n';
+        return ans + "}\n";
     }
 
     DerivedType translate_vartype(VarType type) {

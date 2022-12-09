@@ -2,8 +2,8 @@ package Middleend.llvmir;
 
 import Frontend.Tools.Error.IRError;
 import Frontend.Tools.Position;
+import Frontend.Tools.Registry.FuncRegistry;
 import Frontend.Tools.Registry.VarRegistry;
-import Frontend.Tools.Scope.ClassScope;
 import Frontend.Tools.Type.BaseType;
 import Frontend.Tools.Type.FuncType;
 import Frontend.Tools.Type.VarType;
@@ -15,7 +15,9 @@ import Frontend.ast.stmt.*;
 import Middleend.llvmir.Constant.*;
 import Middleend.llvmir.Inst.*;
 import Middleend.llvmir.Type.*;
+import org.antlr.v4.runtime.misc.Pair;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -28,7 +30,7 @@ public class IRBuilder implements ASTVisitor {
     HashMap<String, StructType> class_table = new HashMap<>();
     HashMap<String, Function> func_table = new HashMap<>();
     HashMap<String, GlobalValue> const_string_table = new HashMap<>();
-    boolean is_constructor = false, is_member = false;
+    boolean is_constructor = false, is_member_function = false, is_member_variable = false;
     String cur_class_name = null;
     Function init_func = new Function("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
 
@@ -61,12 +63,7 @@ public class IRBuilder implements ASTVisitor {
             str_parseInt = new Function("__built_in_parseInt", new IRFuncType(null, int_type, char_ptr)),
             str_ord = new Function("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
 
-
-
-
-
     public IRBuilder(RootNode root) {
-        // debug("start_IR_build");
         root.accept(this);
     }
 
@@ -97,13 +94,23 @@ public class IRBuilder implements ASTVisitor {
     Function translate_functype(String name, FuncType type, DerivedType _belong) {
         ArrayList<DerivedType> args = new ArrayList<>();
         if (_belong != null) {
-            args.add(_belong);
+            args.add(new PointerType(_belong));
         }
+        String func_name = name;
         type.func_args_type.forEach(i -> args.add(translate_vartype(i)));
-        IRFuncType functype = new IRFuncType(_belong, translate_vartype(type.ret_type), args);
-        Function func = new Function(name, functype);
+        IRBaseType ret_type = translate_vartype(type.ret_type);
+        if (ret_type instanceof StructType) {
+            ret_type = new PointerType((DerivedType) ret_type);
+        }
+        IRFuncType functype = new IRFuncType(_belong, ret_type, args);
+        Function func;
         if (_belong != null) {
-            func.add_args_name("class_this");
+            func = new Function(func_name, functype);
+            Value value = new Value(new PointerType(_belong), func.get_origin_name() + "_this");
+            func.add_operand(value);
+            func.add_args_name(value.get_name());
+        } else {
+            func = new Function(func_name, functype);
         }
         return func;
     }
@@ -112,8 +119,10 @@ public class IRBuilder implements ASTVisitor {
         ArrayList<DerivedType> args = new ArrayList<>();
         args.add(new PointerType(class_table.get(name)));
         IRFuncType ret = new IRFuncType(_belong, new VoidType(), args);
-        Function func = new Function(name, ret);
-        func.add_args_name("class_this");
+        Function func = new Function(rename_constructor(name), ret);
+        Value value = new Value(new PointerType(_belong), func.get_origin_name() + "_this");
+        func.add_operand(value);
+        func.add_args_name(value.get_name());
         return func;
     }
 
@@ -130,8 +139,6 @@ public class IRBuilder implements ASTVisitor {
         cur_func = init_func;
         func_table.put(cur_func.name, cur_func);
         cur_block = cur_func.entry_block;
-        // builtin_function
-        // todo
         // declare classes, member_function, constructor
         obj.child_list.forEach(i -> {
             if (i instanceof ClassDefNode) {
@@ -141,18 +148,21 @@ public class IRBuilder implements ASTVisitor {
         });
         obj.child_list.forEach(i -> {
             if (i instanceof ClassDefNode) {
-                StructType type = class_table.get(((ClassDefNode) i).class_registry.name);
+                cur_class_name = ((ClassDefNode) i).class_registry.name;
+                StructType type = class_table.get(cur_class_name);
                 for (VarRegistry j: ((ClassDefNode) i).class_scope.var_map.values()) {
                     type.add_var(j);
                 }
-                ArrayList<FuncType> func_list = ((ClassDefNode) i).class_registry.class_type.func_list;
-                func_list.forEach(j -> {
-                    String func_name = rename_member_func(j.typename, ((ClassDefNode) i).class_registry.name);
-                    func_table.put(func_name, translate_functype(func_name, j, type));
-                });
+                for (FuncRegistry j: (((ClassDefNode) i).class_scope.func_map.values())) {
+                    debug("line152: " + j.name);
+                    String func_name = rename_member_func(j.name, ((ClassDefNode) i).class_registry.name);
+                    debug("line156: " + func_name);
+                    func_table.put(func_name, translate_functype(func_name, j.func_type, type));
+                }
+
                 if (((ClassDefNode) i).constructor != null) {
                     String func_name = rename_constructor(((ClassDefNode) i).class_registry.name);
-                    func_table.put(func_name, constructor_functype(func_name, type));
+                    func_table.put(func_name, constructor_functype(type.get_name(), type));
                 }
             }
         });
@@ -165,12 +175,14 @@ public class IRBuilder implements ASTVisitor {
             }
         });
 
-        // declare global-variables
+        // visit global-variables
         obj.child_list.forEach(i -> {
             if (i instanceof VarDefNode) {
                 i.accept(this);
             }
         });
+        
+        debug("------------");
 
         obj.child_list.forEach(i -> {
             if (i instanceof ClassDefNode) {
@@ -179,9 +191,7 @@ public class IRBuilder implements ASTVisitor {
                 cur_class_name = null;
             }
             if (i instanceof FuncDefNode) {
-                cur_func = func_table.get(((FuncDefNode) i).func_registry.name);
                 i.accept(this);
-                cur_func = null;
             }
         });
         init_func.exit_block.push_back(new RetInst(null, init_func.exit_block));
@@ -209,20 +219,16 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(FuncDefNode obj) {
         cur_scope = new IRScope(cur_scope);
-        cur_func.entry_block.insert(new BasicBlock("first_block__" + obj.func_registry.name, cur_func));
-        cur_block = cur_func.entry_block.next_block;
         if (is_constructor) {
             cur_func = func_table.get(rename_constructor(cur_class_name));
         }
-        else if (is_member) {
+        else if (is_member_function) {
+            debug("line219: " + obj.func_registry.name);
             cur_func = func_table.get(rename_member_func(obj.func_registry.name, cur_class_name));
         }
         else cur_func = func_table.get(obj.func_registry.name);
-
-        // "this" to be 0-th operand if in class
-        if (is_constructor || is_member) {
-            cur_func.add_operand(new Value(new PointerType(class_table.get(cur_class_name)), cur_func.get_name() + "_this"));
-        }
+        cur_func.entry_block.insert(new BasicBlock("first_block__" + cur_func.get_origin_name(), cur_func));
+        cur_block = cur_func.entry_block.next_block;
         // parameters
         obj.arg_list.forEach(i -> {
             i.accept(this);
@@ -236,11 +242,10 @@ public class IRBuilder implements ASTVisitor {
         } else if (cur_func.get_ret_type().match(new VoidType())) {
             cur_func.exit_block.push_back(new RetInst(null, cur_func.exit_block));
         }
-
         obj.block_node.accept(this);
         cur_func.add_block(cur_func.exit_block);
         cur_func.get_blocks().forEach(i -> {
-            if (i.next_block != null && i.next_block.get_inst().size() > 0) {
+            if (i.next_block != null && (i.next_block.get_inst().size() > 0 || i.next_block != cur_func.exit_block)) {
                 i.push_back(new BrInst(i.next_block, i));
             }
         });
@@ -250,27 +255,29 @@ public class IRBuilder implements ASTVisitor {
     }
     @Override
     public void visit(ClassDefNode obj) {
-        cur_scope = new IRScope(cur_scope);
+        cur_scope = new IRScope(cur_scope, true);
+        is_member_variable = true;
         obj.var_list.forEach(i -> i.accept(this));
+        is_member_variable = false;
         is_constructor = true;
         cur_func = func_table.get(rename_constructor(cur_class_name));
         obj.constructor.accept(this);
         cur_func = null;
         is_constructor = false;
         obj.func_list.forEach(i -> {
-            is_member = true;
+            is_member_function = true;
             cur_func = func_table.get(rename_member_func(i.func_registry.name, cur_class_name));
             cur_scope = new IRScope(cur_scope);
             i.accept(this);
             cur_scope = cur_scope.parent;
             cur_func = null;
-            is_member = false;
+            is_member_function = false;
         });
         cur_scope = cur_scope.parent;
     }
     @Override
     public void visit(VarSingleDefNode obj) {
-        Value arg_def = new Value(translate_vartype(obj.var_type), obj.registry.name + "_arg");
+        Value arg_def = new Value(translate_vartype(obj.var_type), cur_func.ori_name + "_" + obj.registry.name);
 /*        Value addr;
         if (cur_func == init_func) {
             addr = new GlobalVariable(obj.registry.name, new PointerType(translate_vartype(obj.var_type)));
@@ -300,24 +307,38 @@ public class IRBuilder implements ASTVisitor {
             }
         }
         cur_scope.add_var(addr.get_origin_name(), addr.get_mem_pos());
-        obj.value = addr;
+        obj.value = arg_def;
     }
 
     @Override
     public void visit(VarAnyNumberDefNode obj) {
         int size = obj.registry_list.size();
+        if (is_member_variable) {
+            cur_func = func_table.get(rename_constructor(cur_class_name));
+            cur_block = cur_func.entry_block;
+        }
         for (int i = 0; i < size; ++i) {
             Value addr;
-            if (cur_func == init_func) {
+            if (is_member_variable) { // class member
+                ArrayList<Value> args = new ArrayList<>();
+                args.add(new IntConst(0)); args.add(new IntConst(i));
+                addr = new GetElementPtrInst(cur_func.get_operand(0), args, new PointerType(translate_vartype(obj.var_type)), cur_block);
+                addr.mem_pos = addr;
+                addr.ori_name = obj.registry_list.get(i).name;
+            }
+            else if (cur_func == init_func) { // global variable
                 addr = new GlobalValue(obj.registry_list.get(i).name, new PointerType(translate_vartype(obj.var_type)));
                 addr.mem_pos = addr;
-            } else {
+            } else  {// local variable
                 addr = new AllocaInst(translate_vartype(obj.var_type), obj.registry_list.get(i).name, cur_block);
                 addr.mem_pos = addr;
                 cur_block.push_back((BaseInst) addr);
             }
             if (obj.assign_list.get(i) != null) {
                 obj.assign_list.get(i).accept(this);
+                if (is_member_variable) {
+                    cur_block.push_back((BaseInst) addr);
+                }
                 if (obj.assign_list.get(i).expr_type.match_type(BaseType.BuiltinType.STRING)) {
                     ArrayList<Value> indexes = new ArrayList<>();
                     indexes.add(new IntConst(0)); indexes.add(new IntConst(0));
@@ -328,8 +349,19 @@ public class IRBuilder implements ASTVisitor {
                     cur_block.push_back(new StoreInst(obj.assign_list.get(i).result, addr, cur_block));
                 }
             } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
+                if (obj.var_type.is_class()) {
+                    Function constructor = func_table.get(rename_constructor(obj.var_type.typename));
+                    ArrayList<Value> args = new ArrayList<>();
+                    args.add(addr);
+                    FuncCallInst inst = new FuncCallInst(constructor, cur_block, args);
+                    cur_block.push_back(inst);
+                }
+/*                if (is_member_variable) {
+                    cur_block.push_back((BaseInst) addr);
+                }
                 cur_block.push_back(new StoreInst(new NullConst(), addr, cur_block));
-            } else if (cur_func == init_func) {
+
+            */} else if (cur_func == init_func) {
                 if (((PointerType) addr.get_type()).get_pointed_type().match(new IntType())) {
                     cur_block.push_back(new StoreInst(new IntConst(0), addr, cur_block));
                 }
@@ -423,9 +455,9 @@ public class IRBuilder implements ASTVisitor {
         obj.class_expr.accept(this);
         obj.callee = obj.class_expr.result;
         StructType type = (StructType) ((PointerType)obj.callee.get_type()).get_pointed_type();
-        if (obj.class_expr instanceof AtomExprNode) {
+        /*if (obj.class_expr instanceof AtomExprNode) {
             if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.THIS)) { // this
-                scop = scopes.peek().in_class();
+                scope = scopes.peek().in_class();
                 if (scope == null) {
                     throw new SemanticError(obj.pos, "I can't find the class");
                 }
@@ -433,7 +465,7 @@ public class IRBuilder implements ASTVisitor {
                     && !(obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING))) { // identifier
                 throw new SemanticError(obj.pos, ((AtomExprNode)obj.class_expr).identifier + "is not a class");
             }
-        }
+        }*/
         if (obj.is_func) {
             if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
                 if (obj.member_name.equals("length")) {
@@ -451,8 +483,18 @@ public class IRBuilder implements ASTVisitor {
         } else if (obj.is_var) {
             ArrayList<Value> args = new ArrayList<>();
             int index = type.get_var_index(obj.member_name);
-            args.add(new IntConst(index));
-            obj.result = new GetElementPtrInst(obj.callee, args, new PointerType(type.get_type(index)), cur_block);
+            args.add(new IntConst(0)); args.add(new IntConst(index));
+            GetElementPtrInst inst = new GetElementPtrInst(obj.callee, args, new PointerType(type.get_type(index)), cur_block);
+            cur_block.push_back(inst);
+            if (obj.expr_type.match_type(BaseType.BuiltinType.INT) || obj.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+                LoadInst load_inst = new LoadInst(inst, "load_inst", cur_block);
+                cur_block.push_back(load_inst);
+                obj.result = load_inst;
+                obj.result.mem_pos = inst;
+            } else {
+                obj.result = inst;
+                obj.result.mem_pos = inst;
+            }
         } else {
             throw new IRError(obj.pos, "MemberVisitExpr");
         }
@@ -601,11 +643,31 @@ public class IRBuilder implements ASTVisitor {
             obj.result = cur_func.get_operand(0);
         } else {
             if (obj.is_var) {
-                Value mem_pos = cur_scope.get_var(obj.identifier);
-                LoadInst load_inst = new LoadInst(mem_pos, "load_inst", cur_block);
-                cur_block.push_back(load_inst);
-                obj.result = load_inst;
-                obj.result.mem_pos = mem_pos;
+                Pair<Value, Boolean> mem_pos = cur_scope.get_var(obj.identifier);
+                BaseInst load_inst;
+                if (mem_pos.b == false) {
+                    if (obj.expr_type.match_type(BaseType.BuiltinType.INT) || obj.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
+                        load_inst = new LoadInst(mem_pos.a, "load_inst", cur_block);
+                        cur_block.push_back(load_inst);
+                        obj.result = load_inst;
+                        obj.result.mem_pos = mem_pos.a;
+                    } else {
+                        obj.result = mem_pos.a;
+                        obj.result.mem_pos = mem_pos.a;
+                    }
+                } else {
+                    StructType type = class_table.get(cur_class_name);
+                    int index = type.get_var_index(obj.identifier);
+                    ArrayList<Value> args = new ArrayList<Value>();
+                    args.add(new IntConst(0)); args.add(new IntConst(index));
+                    GetElementPtrInst inst = new GetElementPtrInst(cur_func.get_operand(0), args, new PointerType(type.get_type(index)), cur_block);
+                    debug(inst.get_name());
+                    load_inst = new LoadInst(inst, "load_inst", cur_block);
+                    cur_block.push_back(inst);
+                    cur_block.push_back(load_inst);
+                    obj.result = load_inst;
+                    obj.result.mem_pos = inst;
+                }
             } else {
                 if (obj.identifier.equals("print")) {
                     obj.result = func_print;

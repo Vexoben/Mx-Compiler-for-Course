@@ -3,23 +3,35 @@ source_filename = "test.mx"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-linux-gnu"
 
-@str_const_aa = private unnamed_addr constant [3 x i8] c"aa\00"
+%struct.foo = type { i32, i32 }
 
-declare void @print(i8* %load_inst)
+define dso_local void @__constructor__foo(%struct.foo* class_this_arg) #0 {
+__constructor__fooentry:
+  %get_element_ptr_inst = getelementptr inbounds %struct.foo, %struct.foo* %@__constructor__foo_this, 0, 0
+  store 1, i32* %get_element_ptr_inst
+  br label %first_block__@__constructor__foo
+first_block__@__constructor__foo:
+  %get_element_ptr_inst3 = getelementptr inbounds %struct.foo, %struct.foo* %@__constructor__foo_this, 0, 1
+  %load_inst = load i32, i32* %get_element_ptr_inst3
+  store 1, i32* %get_element_ptr_inst2
+  %get_element_ptr_inst4 = getelementptr inbounds %struct.foo, %struct.foo* %@__constructor__foo_this, 0, 0
+  %load_inst2 = load i32, i32* %get_element_ptr_inst4
+  call void @printlnInt(i32 %load_inst2)
+  %get_element_ptr_inst5 = getelementptr inbounds %struct.foo, %struct.foo* %@__constructor__foo_this, 0, 1
+  %load_inst3 = load i32, i32* %get_element_ptr_inst5
+  call void @printlnInt(i32 %load_inst3)
+  br label %__constructor__fooexit
+__constructor__fooexit:
+  ret void
+}
 
 define dso_local i32 @main() #0 {
 mainentry:
   call void @__init_function__()
-  br label %first_block__main
-first_block__main:
-  %a = alloca i8*
-  %get_element_ptr_inst = getelementptr inbounds [3 x i8], [3 x i8]* @str_const_aa, i32 0, i32 0
-  store i8* %get_element_ptr_inst, i8** %a
-  %load_inst = load i8*, i8** %a
-  call void @print(i8* %load_inst)
+first_block__@main:
   br label %mainexit
 mainexit:
-  ret i32 0
+  ret 0
 }
 
 define dso_local void @__init_function__() #0 {

@@ -434,7 +434,7 @@ public class SemanticChecker implements ASTVisitor {
             if (reg2 == null) obj.maybe_func = false;
             else {
                 if (debug_mode) System.out.println("maybe function");
-                System.out.println(reg2.func_type.ret_type.toString());
+                if (debug_mode) System.out.println(reg2.func_type.ret_type.toString());
                 obj.maybe_func = true;
                 obj.func_type = reg2.func_type;
             }

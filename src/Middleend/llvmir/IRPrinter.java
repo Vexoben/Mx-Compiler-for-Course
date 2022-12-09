@@ -61,10 +61,36 @@ public class IRPrinter extends IRBuilder{
     }
 
     public void IR_print() throws IOException {
-        printf("; ModuleID = 'test.mx'\n" +
-                "source_filename = \"test.mx\"\n" +
-                "target datalayout = \"e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128\"\n" +
-                "target triple = \"x86_64-pc-linux-gnu\"\n\n");
+        printf("""
+                ; ModuleID = 'test.mx'
+                source_filename = "test.mx"
+                target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+                target triple = "x86_64-pc-linux-gnu"
+
+                """);
+
+        printf("""
+                declare i8* @__built_in_malloc(i32)
+                declare void @print(i8*)
+                declare void @println(i8*)
+                declare void @printInt(i32)
+                declare void @printlnInt(i32)
+                declare i8* @getString()
+                declare i32 @getInt()
+                declare i8* @toString(i32)
+                declare i32 @__built_in_length(i8*)
+                declare i8* @__built_in_substring(i8*, i32, i32)
+                declare i32 @__built_in_parseInt(i8*)
+                declare i32 @__built_in_ord(i8*, i32)
+                declare i8* @__build_in_str_add(i8*, i8*)
+                declare i8* @__build_in_str_eq(i8*, i8*)
+                declare i8* @__build_in_str_neq(i8*, i8*)
+                declare i8* @__build_in_str_sle(i8*, i8*)
+                declare i8* @__build_in_str_slt(i8*, i8*)
+                declare i8* @__build_in_str_sge(i8*, i8*)
+                declare i8* @__build_in_str_sgt(i8*, i8*)
+                
+                """);
 
         global_string_declare();
         struct_declare();
@@ -73,10 +99,12 @@ public class IRPrinter extends IRBuilder{
 
         printf("attributes #0 = { noinline nounwind optnone uwtable \"correctly-rounded-divide-sqrt-fp-math\"=\"false\" \"disable-tail-calls\"=\"false\" \"frame-pointer\"=\"all\" \"less-precise-fpmad\"=\"false\" \"min-legal-vector-width\"=\"0\" \"no-infs-fp-math\"=\"false\" \"no-jump-tables\"=\"false\" \"no-nans-fp-math\"=\"false\" \"no-signed-zeros-fp-math\"=\"false\" \"no-trapping-math\"=\"false\" \"stack-protector-buffer-size\"=\"8\" \"target-cpu\"=\"x86-64\" \"target-features\"=\"+cx8,+fxsr,+mmx,+sse,+sse2,+x87\" \"unsafe-fp-math\"=\"false\" \"use-soft-float\"=\"false\" }\n");
 
-        printf("!llvm.module.flags = !{!0}\n" +
-                "!llvm.ident = !{!1}\n" +
-                "\n" +
-                "!0 = !{i32 1, !\"wchar_size\", i32 4}\n" +
-                "!1 = !{!\"clang version 10.0.0-4ubuntu1 \"}\n");
+        printf("""
+                !llvm.module.flags = !{!0}
+                !llvm.ident = !{!1}
+
+                !0 = !{i32 1, !"wchar_size", i32 4}
+                !1 = !{!"clang version 10.0.0-4ubuntu1 "}
+                """);
     }
 }

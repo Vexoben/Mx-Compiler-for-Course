@@ -4,7 +4,7 @@ import Frontend.Tools.Error.SemanticError;
 import Frontend.Tools.Registry.*;
 import java.util.HashMap;
 public class ClassScope extends BaseScope {
-    HashMap<String, FuncRegistry> func_map;
+    public HashMap<String, FuncRegistry> func_map;
     public String class_name;
 
     public ClassScope() {

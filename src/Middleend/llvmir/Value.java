@@ -1,6 +1,7 @@
 package Middleend.llvmir;
 
 import Middleend.llvmir.Constant.BaseConst;
+import Middleend.llvmir.Constant.NullConst;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.PointerType;
 
@@ -44,6 +45,12 @@ public class Value {
     }
 
     public String get_tyme() {
+//        if (this instanceof BaseConst) {
+//            return toString();
+//        }
+        if (this instanceof NullConst) {
+            return "null";
+        }
         return get_type().toString() + " " + get_name();
     }
 
