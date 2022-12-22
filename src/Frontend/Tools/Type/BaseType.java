@@ -30,4 +30,10 @@ public abstract class BaseType {
     public boolean is_class() {
         return built_in_type == BuiltinType.CLASS;
     }
+
+    public boolean is_string() {
+        return built_in_type == BuiltinType.STRING;
+    }
+
+    public abstract boolean is_fund();
 }

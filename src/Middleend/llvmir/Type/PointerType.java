@@ -1,5 +1,7 @@
 package Middleend.llvmir.Type;
 
+import java.awt.*;
+
 public class PointerType extends DerivedType{
 
     static int POINTER_SIZE = 8;
@@ -13,6 +15,19 @@ public class PointerType extends DerivedType{
             level = ((PointerType) _pointed_type).level + 1;
         } else {
             level = 1;
+        }
+    }
+
+    public PointerType(DerivedType _pointed_type, int _level) {
+        pointed_type = _pointed_type;
+        if (_pointed_type instanceof PointerType) {
+            level = ((PointerType) _pointed_type).level + 1;
+        } else {
+            level = 1;
+        }
+        for (int i = 1; i < _level; ++i) {
+            pointed_type = new PointerType(pointed_type);
+            level++;
         }
     }
 

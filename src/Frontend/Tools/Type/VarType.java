@@ -55,4 +55,9 @@ public class VarType extends BaseType {
             return false;
         }
     }
+
+    @Override
+    public boolean is_fund() {
+        return !is_array() && !is_string() && !is_class();
+    }
 }

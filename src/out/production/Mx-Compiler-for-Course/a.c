@@ -1,35 +1,46 @@
-// int a[10][10];
-
 class foo {
-   // int a = 1;
-   int b = 1;
-
-   foo() {
-      b = 1;
-      // printlnInt(a);
-      printlnInt(b);
+   int a;
+   void f() {
+      a = 2;
    }
-
-   foo f(int x) {
-      this.b = b + x;
+   void g() {
+      a = 2;
+      this.a = 4;
+   }
+   foo get_this() {
       return this;
+   }
+   foo() {
+      a = 9;
    }
 };
 
-int f(int a) {
-   return 0;
+foo g(foo a) {
+   a.a = a.a + 1;   
+   return a;
 }
 
-int a;
+foo h() {
+   foo s;
+   s.g();
+   foo h;
+   h = s;
+   foo t = h.get_this();
+   return g(t);
+}
 
 int main() {
-   foo tmp;
-   a = 1;
-   a = 1 + a;
-   foo g = tmp.f(a);
-   printlnInt(g.b);
-   printlnInt(a);
-   // int*c = null;
-   // tmp.a = 1;
-   // printInt(tmp.a);
+   // foo tmp, t;
+   // tmp.a = 10;
+   // g(tmp);
+   // t = tmp;
+   // printlnInt(t.a);
+   // t.f();
+   // printlnInt(t.a);
+   printlnInt(h().a);
+   // h();
+   // printlnInt(tmp.a);
+   // foo a;
+   // a.f();
+   return 0;
 }

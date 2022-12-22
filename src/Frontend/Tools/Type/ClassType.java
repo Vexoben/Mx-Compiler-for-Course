@@ -55,4 +55,9 @@ public class ClassType extends BaseType {
     public boolean is_array() {
         return false;
     }
+
+    @Override
+    public boolean is_fund() {
+        return false;
+    }
 }

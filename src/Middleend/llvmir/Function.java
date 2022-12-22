@@ -20,6 +20,9 @@ public class Function extends User {
 
     public BasicBlock entry_block, exit_block;
 
+    public boolean is_member_function, is_constructor;
+    public AllocaInst this_alloca;
+
     public Function(String _name, IRFuncType _type) {
         super(_type, _name);
         entry_block = new BasicBlock(_name + "entry", this);
@@ -87,6 +90,7 @@ public class Function extends User {
     }
 
     public String declare() {
+        System.out.println(name);
         String ans = "";
         ans += "define dso_local " + get_ret_type().toString() + " " + name + print_args() + " #0 {\n";
         for (BasicBlock block : blocks) {

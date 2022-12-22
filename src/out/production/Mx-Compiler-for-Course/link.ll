@@ -5,30 +5,34 @@ target triple = "x86_64-pc-linux-gnu"
 
 %struct.foo = type { i32 }
 
-@a = dso_local global i32 0
 @.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
 @.str.1 = private unnamed_addr constant [3 x i8] c"%s\00", align 1
 @.str.2 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
 @.str.3 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define dso_local void @__in_class__foo_f(%struct.foo* %__in_class__foo_f_this, i32 %__in_class__foo_f_x) #0 {
+define dso_local %struct.foo** @__in_class__foo_get_this(%struct.foo* %__in_class__foo_get_this_this) #0 {
+__in_class__foo_get_thisentry:
+  %this_alloca2 = alloca %struct.foo*
+  store %struct.foo* %__in_class__foo_get_this_this, %struct.foo** %this_alloca2
+  br label %first_block____in_class__foo_get_this
+
+first_block____in_class__foo_get_this:            ; preds = %__in_class__foo_get_thisentry
+  ret %struct.foo** %this_alloca2
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local void @__in_class__foo_f(%struct.foo* %__in_class__foo_f_this) #0 {
 __in_class__foo_fentry:
+  %this_alloca = alloca %struct.foo*
+  store %struct.foo* %__in_class__foo_f_this, %struct.foo** %this_alloca
   br label %first_block____in_class__foo_f
 
 first_block____in_class__foo_f:                   ; preds = %__in_class__foo_fentry
-  %x = alloca i32
-  store i32 %__in_class__foo_f_x, i32* %x
-  %get_element_ptr_inst4 = getelementptr inbounds %struct.foo, %struct.foo* %__in_class__foo_f_this, i32 0, i32 0
-  %load_inst3 = load i32, i32* %get_element_ptr_inst4
-  %get_element_ptr_inst5 = getelementptr inbounds %struct.foo, %struct.foo* %__in_class__foo_f_this, i32 0, i32 0
-  %load_inst4 = load i32, i32* %get_element_ptr_inst5
-  %load_inst5 = load i32, i32* %x
-  %r = add i32 %load_inst4, %load_inst5
-  store i32 %r, i32* %get_element_ptr_inst4
-  %get_element_ptr_inst6 = getelementptr inbounds %struct.foo, %struct.foo* %__in_class__foo_f_this, i32 0, i32 0
-  %load_inst6 = load i32, i32* %get_element_ptr_inst6
-  call void @printlnInt(i32 %load_inst6)
+  %load_inst4 = load %struct.foo*, %struct.foo** %this_alloca
+  %get_element_ptr_inst3 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst4, i32 0, i32 0
+  %load_inst5 = load i32, i32* %get_element_ptr_inst3
+  store i32 2, i32* %get_element_ptr_inst3
   br label %__in_class__foo_fexit
 
 __in_class__foo_fexit:                            ; preds = %first_block____in_class__foo_f
@@ -38,17 +42,16 @@ __in_class__foo_fexit:                            ; preds = %first_block____in_c
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local void @__constructor__foo(%struct.foo* %__constructor__foo_this) #0 {
 __constructor__fooentry:
-  %get_element_ptr_inst = getelementptr inbounds %struct.foo, %struct.foo* %__constructor__foo_this, i32 0, i32 0
-  store i32 1, i32* %get_element_ptr_inst
+  %this_alloca4 = alloca %struct.foo*
+  store %struct.foo* %__constructor__foo_this, %struct.foo** %this_alloca4
+  %load_inst = load %struct.foo*, %struct.foo** %this_alloca4
   br label %first_block____constructor__foo
 
 first_block____constructor__foo:                  ; preds = %__constructor__fooentry
-  %get_element_ptr_inst2 = getelementptr inbounds %struct.foo, %struct.foo* %__constructor__foo_this, i32 0, i32 0
-  %load_inst = load i32, i32* %get_element_ptr_inst2
-  store i32 1, i32* %get_element_ptr_inst2
-  %get_element_ptr_inst3 = getelementptr inbounds %struct.foo, %struct.foo* %__constructor__foo_this, i32 0, i32 0
-  %load_inst2 = load i32, i32* %get_element_ptr_inst3
-  call void @printlnInt(i32 %load_inst2)
+  %load_inst2 = load %struct.foo*, %struct.foo** %this_alloca4
+  %get_element_ptr_inst2 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst2, i32 0, i32 0
+  %load_inst3 = load i32, i32* %get_element_ptr_inst2
+  store i32 9, i32* %get_element_ptr_inst2
   br label %__constructor__fooexit
 
 __constructor__fooexit:                           ; preds = %first_block____constructor__foo
@@ -56,14 +59,51 @@ __constructor__fooexit:                           ; preds = %first_block____cons
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define dso_local i32 @f(i32 %f_a) #0 {
-fentry:
-  br label %first_block__f
+define dso_local %struct.foo** @h() #0 {
+hentry:
+  %s = alloca %struct.foo*
+  %allo = alloca %struct.foo
+  store %struct.foo* %allo, %struct.foo** %s
+  call void @__constructor__foo(%struct.foo* %allo)
+  %h = alloca %struct.foo*
+  %allo2 = alloca %struct.foo
+  store %struct.foo* %allo2, %struct.foo** %h
+  call void @__constructor__foo(%struct.foo* %allo2)
+  %t = alloca %struct.foo*
+  br label %first_block__h
 
-first_block__f:                                   ; preds = %fentry
-  %a = alloca i32
-  store i32 %f_a, i32* %a
-  ret i32 0
+first_block__h:                                   ; preds = %hentry
+  %load_inst10 = load %struct.foo*, %struct.foo** %s
+  call void @__in_class__foo_g(%struct.foo* %load_inst10)
+  %load_inst11 = load %struct.foo*, %struct.foo** %s
+  store %struct.foo* %load_inst11, %struct.foo** %h
+  %load_inst12 = load %struct.foo*, %struct.foo** %h
+  %function_call_inst4 = call %struct.foo** @__in_class__foo_get_this(%struct.foo* %load_inst12)
+  %load_inst13 = load %struct.foo*, %struct.foo** %function_call_inst4
+  store %struct.foo* %load_inst13, %struct.foo** %t
+  ret %struct.foo** %t
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define dso_local void @__in_class__foo_g(%struct.foo* %__in_class__foo_g_this) #0 {
+__in_class__foo_gentry:
+  %this_alloca3 = alloca %struct.foo*
+  store %struct.foo* %__in_class__foo_g_this, %struct.foo** %this_alloca3
+  br label %first_block____in_class__foo_g
+
+first_block____in_class__foo_g:                   ; preds = %__in_class__foo_gentry
+  %load_inst6 = load %struct.foo*, %struct.foo** %this_alloca3
+  %get_element_ptr_inst4 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst6, i32 0, i32 0
+  %load_inst7 = load i32, i32* %get_element_ptr_inst4
+  store i32 2, i32* %get_element_ptr_inst4
+  %load_inst8 = load %struct.foo*, %struct.foo** %this_alloca3
+  %get_element_ptr_inst5 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst8, i32 0, i32 0
+  %load_inst9 = load i32, i32* %get_element_ptr_inst5
+  store i32 4, i32* %get_element_ptr_inst5
+  br label %__in_class__foo_gexit
+
+__in_class__foo_gexit:                            ; preds = %first_block____in_class__foo_g
+  ret void
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
@@ -73,28 +113,23 @@ mainentry:
   br label %first_block__main
 
 first_block__main:                                ; preds = %mainentry
-  %tmp = alloca %struct.foo
-  call void @__constructor__foo(%struct.foo* %tmp)
-  %load_inst7 = load i32, i32* @a
-  store i32 1, i32* @a
-  %load_inst8 = load i32, i32* @a
-  %load_inst9 = load i32, i32* @a
-  %r2 = add i32 1, %load_inst9
-  store i32 %r2, i32* @a
-  %load_inst10 = load i32, i32* @a
-  call void @__in_class__foo_f(%struct.foo* %tmp, i32 %load_inst10)
-  %load_inst11 = load i32, i32* @a
-  call void @printlnInt(i32 %load_inst11)
+  %function_call_inst6 = call %struct.foo** @h()
+  %load_inst14 = load %struct.foo*, %struct.foo** %function_call_inst6
+  %get_element_ptr_inst6 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst14, i32 0, i32 0
+  %load_inst15 = load i32, i32* %get_element_ptr_inst6
+  call void @printlnInt(i32 %load_inst15)
+  ret i32 0
+
+0:                                                ; No predecessors!
   br label %mainexit
 
-mainexit:                                         ; preds = %first_block__main
+mainexit:                                         ; preds = %0
   ret i32 0
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local void @__init_function__() #0 {
 __init_function__entry:
-  store i32 0, i32* @a
   br label %__init_function__exit
 
 __init_function__exit:                            ; preds = %__init_function__entry
