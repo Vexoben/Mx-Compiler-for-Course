@@ -15,7 +15,12 @@ public class PhiInst extends BaseInst{
 
     @Override
     public String output() { // unused
-        return null;
+        String ret = "phi " + get_type().toString() + " ";
+        for (int i = 0; i < get_operands_size(); i += 2) {
+            if (i > 0) ret = ret + ", ";
+            ret = ret + "[" + get_operand(i).get_name() + ", " + get_operand(i + 1).get_name() + "]";
+        }
+        return ret;
     }
 
 }

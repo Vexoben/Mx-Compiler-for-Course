@@ -20,7 +20,7 @@ public class Compiler {
     static boolean is_online_judge = false;
 
     public static void main(String[] args) throws Exception {
-        String inputfile = "a.c";
+        String inputfile = "test.mx";
         String outputfile = "test.ll";
         OutputStream output = new FileOutputStream(outputfile);
         try {

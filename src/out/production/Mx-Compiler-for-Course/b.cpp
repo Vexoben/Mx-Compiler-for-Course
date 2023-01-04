@@ -2,25 +2,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class foo{
-public:
-   int a, b, c;
+int b[100][100][100];
 
-   foo(foo tmp) {
-      this = tmp;
-   }
-};
-
-int g(foo a) {
-   a.a = a.a + 1;
-   // for (int i = 1; i <= 10; i += i) {
-      // a.a += i;
-   // }
-   return a.a;
-}
-
-int main() {
-   foo f1, f2;
-   f1 = f2;
-   g(f1);
+int main(int n) {
+   int **a = new int*[n];
+   b[1][2][3] = 10;
 }

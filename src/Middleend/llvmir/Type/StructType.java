@@ -21,19 +21,19 @@ public class StructType extends DerivedType{
         types = new ArrayList<>();
     }
 
-    public StructType(String _name, ArrayList<VarRegistry> _vars) {
+    public StructType(String _name, ArrayList<VarRegistry> _vars, HashMap<String, StructType> class_table) {
         name = _name;
         vars = _vars;
         vars.forEach(i -> {
             var_index.put(i.name, vars.size());
-            types.add(translate_vartype(i.var_type));
+            types.add(translate_vartype(i.var_type, class_table));
         });
     }
 
-    public void add_var(VarRegistry var) {
+    public void add_var(VarRegistry var, HashMap<String, StructType> class_table) {
         var_index.put(var.name, vars.size());
         vars.add(var);
-        types.add(translate_vartype(var.var_type));
+        types.add(translate_vartype(var.var_type, class_table));
     }
 
     public String get_name() {
@@ -82,12 +82,15 @@ public class StructType extends DerivedType{
         return ans + "}\n";
     }
 
-    DerivedType translate_vartype(VarType type) {
+    DerivedType translate_vartype(VarType type, HashMap<String, StructType> class_table) {
         DerivedType basetype = null;
-        if (type.match_type(BaseType.BuiltinType.INT)) basetype = new IntType();
-        else if (type.match_type(BaseType.BuiltinType.BOOL)) basetype = new BoolType();
-        else if (type.match_type(BaseType.BuiltinType.STRING)) basetype = new PointerType(new IntType(8));
-        else throw new IRError(new Position(0, 0), "struct_type_translate_vartype");
+        if (type.built_in_type == BaseType.BuiltinType.INT) basetype = new IntType();
+        else if (type.built_in_type == BaseType.BuiltinType.BOOL) basetype = new BoolType();
+        else if (type.built_in_type == BaseType.BuiltinType.STRING) basetype = new PointerType(new IntType(8));
+        else if (type.built_in_type == BaseType.BuiltinType.CLASS) {
+            basetype = new PointerType(class_table.get(type.typename));
+//            basetype = class_table.get(type.typename);
+        } else throw new IRError(new Position(0, 0), "struct_type.java;translate_vartype");
         DerivedType realtype = basetype;
         for (int k = 0; k < type.dimension; ++k) {
             realtype = new PointerType(realtype);

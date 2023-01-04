@@ -112,8 +112,6 @@ public class SemanticChecker implements ASTVisitor {
         obj.array.accept(this);
         if (obj.index != null) {
             obj.index.accept(this);
-            printf(obj.index.expr_type);
-            printf(((VarType)obj.index.expr_type).dimension);
             if (!obj.index.expr_type.match_type(BaseType.BuiltinType.INT)) {
                 throw new SemanticError(obj.pos, "You offered me a wrong index");
             }
@@ -140,9 +138,6 @@ public class SemanticChecker implements ASTVisitor {
             if (((AtomExprNode)obj.left_expr).identifier == null || ((AtomExprNode) obj.left_expr).maybe_var == false) {
                 throw new SemanticError(obj.pos, "I don't like this expression to be a left value");
             } else {
-                printf("!!!");
-                printf(obj.right_expr);
-                printf(obj.right_expr.expr_type);
                 if (!obj.left_expr.expr_type.match_type(obj.right_expr.expr_type)) {
                     throw new SemanticError(obj.pos, "Type doesn't match!");
                 }
@@ -258,7 +253,6 @@ public class SemanticChecker implements ASTVisitor {
         if (debug_mode) printf("Access MemberVisitExprNode");
         obj.class_expr.accept(this);
         BaseScope scope = null;
-        printf(obj.class_expr.expr_type.typename);
         // array visit member
         if (obj.class_expr.expr_type.is_array()) {
             if (obj.member_name.equals("size")) {

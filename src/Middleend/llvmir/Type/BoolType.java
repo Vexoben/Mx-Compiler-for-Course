@@ -18,6 +18,6 @@ public class BoolType extends DerivedType{
 
     @Override
     public String toString() {
-        return "i8";
+        return "i1";
     }
 }

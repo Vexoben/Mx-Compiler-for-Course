@@ -2,6 +2,7 @@ package Middleend.llvmir;
 
 import Middleend.llvmir.Constant.BaseConst;
 import Middleend.llvmir.Constant.NullConst;
+import Middleend.llvmir.Constant.StringConst;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.PointerType;
 
@@ -68,9 +69,9 @@ public class Value {
     private String rename(String _name) {
         if (_name.equals("")) _name = "r";
         if (this instanceof Function) _name = "@" + _name;
-        else if (this instanceof BaseConst) return _name;
+        else if (this instanceof BaseConst && !(this instanceof StringConst)) return _name;
         else if (this instanceof GlobalValue) _name = "@" + _name;
-        else _name = "%" + _name;
+        else if (!(this instanceof Label))_name = "%" + _name;
         if (!name_table.containsKey(_name)) {
 //            if (_name.equals("%")) {
 //                name_table.put(_name, 0);

@@ -5,7 +5,7 @@
 
 // malloc
 char* __built_in_malloc(int length) {
-   return malloc(length);
+   return (char*) malloc(length);
 }
 
 // string built in function
@@ -13,11 +13,21 @@ int __built_in_length(char* str) {
    return strlen(str);
 }
 
-char* __built_in_substring(char * str, int left, int right) {
-   char *ret = malloc(sizeof(char) * (right - left + 1));
-   memcpy(ret, str + left, right - left);
-   ret[right - left] = 0;
-   return ret;
+// char** __built_in_substring(char *str, int left, int right) {
+//    char **tmp;
+//    char *ret = malloc(sizeof(char) * (right - left + 1));
+//    memcpy(ret, str + left, right - left);
+//    ret[right - left] = 0;
+//    *tmp = ret;
+//    return tmp;
+// }
+
+char** __built_in_substring(char *str, int left, int right) {
+   char **tmp = (char**) malloc(sizeof(char*));
+   *tmp = (char*) malloc(sizeof(char) * (right - left + 1));
+   memcpy(*tmp, str + left, right - left);
+   (*tmp)[right - left] = 0;
+   return tmp;
 }
 
 int __built_in_parseInt(char *str) {
@@ -31,13 +41,14 @@ int __built_in_ord(char *str, int pos) {
 }
 
 // string operator
-char* __build_in_str_add(char *s1, char *s2) {
+char** __build_in_str_add(char *s1, char *s2) {
    int n = strlen(s1), m = strlen(s2);
-   char *ret = malloc(sizeof(char) * (n + m + 1));
-   memcpy(ret, s1, n);
-   memcpy(ret + n, s2, m);
-   ret[n + m] = 0;
-   return ret;
+   char **tmp = (char**) malloc(sizeof(char*));
+   *tmp = (char*) malloc(sizeof(char) * (n + m + 1));
+   memcpy(*tmp, s1, n);
+   memcpy(*tmp + n, s2, m);
+   (*tmp)[n + m] = 0;
+   return tmp;
 }
 
 bool __build_in_str_eq(char *s1, char *s2) {
@@ -82,10 +93,11 @@ void printlnInt(int n) {
    printf("%d\n", n);
 }
 
-char* getString() {
-   char *ret = malloc(256);
-   scanf("%s", ret);
-   return ret;
+char** getString() {
+   char **tmp = (char**) malloc(sizeof(char*));
+   *tmp = (char*) malloc(256);
+   scanf("%s", *tmp);
+   return tmp;
 }
 
 int getInt() {
@@ -94,8 +106,9 @@ int getInt() {
    return ret;
 }
 
-char* toString(int x) {
-   char *ret = malloc(256);
-   sprintf(ret, "%d", x);
+char** toString(int x) {
+   char **ret = (char**) malloc(sizeof(char*));
+   *ret = (char*) malloc(256);
+   sprintf(*ret, "%d", x);
    return ret;
 }

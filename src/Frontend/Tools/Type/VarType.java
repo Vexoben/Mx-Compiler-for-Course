@@ -18,7 +18,7 @@ public class VarType extends BaseType {
     }
 
     @Override
-    public BaseType copy() {
+    public VarType copy() {
         VarType ret = new VarType(built_in_type);
         ret.dimension = dimension;
         ret.typename = typename;

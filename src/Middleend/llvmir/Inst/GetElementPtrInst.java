@@ -23,8 +23,17 @@ public class GetElementPtrInst extends BaseInst{
     public GetElementPtrInst(Value pointer, ArrayList<Value> indexes, DerivedType type, BasicBlock _belong) {
         super(type, "get_element_ptr_inst", _belong);
         add_operand(pointer);
+        ((PointerType) pointer.get_type()).get_pointed_type();
         indexes.forEach(i -> add_operand(i));
     }
+
+    public GetElementPtrInst(Value pointer, ArrayList<Value> indexes, DerivedType type, String _name, BasicBlock _belong) {
+        super(type, _name, _belong);
+        add_operand(pointer);
+        ((PointerType) pointer.get_type()).get_pointed_type();
+        indexes.forEach(i -> add_operand(i));
+    }
+
 
     @Override
     public String output() {

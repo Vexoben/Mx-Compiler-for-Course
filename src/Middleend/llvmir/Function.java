@@ -90,7 +90,6 @@ public class Function extends User {
     }
 
     public String declare() {
-        System.out.println(name);
         String ans = "";
         ans += "define dso_local " + get_ret_type().toString() + " " + name + print_args() + " #0 {\n";
         for (BasicBlock block : blocks) {

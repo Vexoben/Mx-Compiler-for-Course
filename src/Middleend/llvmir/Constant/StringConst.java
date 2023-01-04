@@ -7,8 +7,8 @@ import Middleend.llvmir.Type.PointerType;
 public class StringConst extends BaseConst{
     String data;
 
-    public StringConst(String _data) {
-        super(new PointerType(new ArrayType(new IntType(8), _data.length() + 1)), _data);
+    public StringConst(String _data, int length) {
+        super(new PointerType(new ArrayType(new IntType(8), length)), "const_str");
         data = _data;
     }
 

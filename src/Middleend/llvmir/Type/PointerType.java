@@ -35,6 +35,14 @@ public class PointerType extends DerivedType{
         return pointed_type;
     }
 
+    public DerivedType get_pointed_type(int n) {
+        DerivedType ret = this;
+        for (int i = 0; i < n; ++i) {
+            ret = ((PointerType)ret).get_pointed_type();
+        }
+        return ret;
+    }
+
     @Override
     public int size() {
         return POINTER_SIZE;

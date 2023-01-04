@@ -15,6 +15,7 @@ for judge in judge_list:
     code_file = judge.replace("\n", "").replace("./", "../testcases/codegen/")
     print(code_file)
     print("cp {code_file} test.mx".format(code_file=code_file))
+    
     input_file = "input.txt"
     output_file = "output.txt"
     std_file = "std.txt"
@@ -48,8 +49,13 @@ for judge in judge_list:
 
     print("\033[34m Loading finish. Start to run LLVM IR.")
     
-    os.system("cd ../src && javac Compiler.java &&  cp {code_file} test.mx && java Compiler<test.mx>test.ll &&cd ../debug".format(code_file=code_file))
-    
+    os.system("cd ../src")
+    os.system("javac -d ../src/out -cp \".:antlr-4.10.1-complete.jar\" @sources.txt")
+    os.system("cp ../testcases/codegen/e8.mx test.mx")
+    # os.system("cp {code_file} test.mx")
+    break
+    os.system("java ./out/Compiler<test.mx>test.ll")
+    os.system("cd ../debug".format(code_file=code_file))
     os.system("cp ../src/test.ll test.ll && ./test-llvm-ir.sh<{input_file}>{output_file}".format(input_file=input_file,output_file=output_file))
 
 

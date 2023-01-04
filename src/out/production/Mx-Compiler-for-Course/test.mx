@@ -1,5 +1,15 @@
-int a;
+class foo {
+  void a() {
+    arr = new int[10];
+    arr[1] = 1;
+  }
+
+  int []arr;
+};
+
+foo a;
 
 int main() {
-
+  a.a();
+  //printlnInt(a.arr[1]);
 }
