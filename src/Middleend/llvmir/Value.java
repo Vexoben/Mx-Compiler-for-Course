@@ -45,10 +45,7 @@ public class Value {
         return name;
     }
 
-    public String get_tyme() {
-//        if (this instanceof BaseConst) {
-//            return toString();
-//        }
+    public String get_tyme() { // type & name
         if (this instanceof NullConst) {
             return "null";
         }
@@ -74,13 +71,8 @@ public class Value {
         else if (this instanceof GlobalValue) _name = "@" + _name;
         else if (!(this instanceof Label))_name = "%" + _name;
         if (!name_table.containsKey(_name)) {
-//            if (_name.equals("%")) {
-//                name_table.put(_name, 0);
-//                return _name + "0";
-//            } else {
-                name_table.put(_name, 1);
-                return _name;
-//            }
+            name_table.put(_name, 1);
+            return _name;
         } else {
             int cnt = name_table.get(_name);
             name_table.replace(_name, cnt + 1);

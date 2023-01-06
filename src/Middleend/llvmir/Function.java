@@ -1,15 +1,10 @@
 package Middleend.llvmir;
 
-import Frontend.Tools.Registry.FuncRegistry;
-import Frontend.Tools.Registry.VarRegistry;
-import Frontend.Tools.Type.BaseType;
-import Frontend.Tools.Type.FuncType;
-import Frontend.Tools.Type.VarType;
-import Middleend.llvmir.BasicBlock;
 import Middleend.llvmir.Inst.*;
-import Middleend.llvmir.Type.*;
-import Middleend.llvmir.User;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.Type.DerivedType;
+import Middleend.llvmir.Type.IRBaseType;
+import Middleend.llvmir.Type.IRFuncType;
+import Middleend.llvmir.Type.VoidType;
 
 import java.util.ArrayList;
 
@@ -55,13 +50,7 @@ public class Function extends User {
         return args_name;
     }
 
-    /* public void add_para(Value value) {
-        para.add(value);
-    } */
-
-
     // to printer
-
     String print_args() {
         String ans = "(";
         for (int i = 0; i < args_name.size(); ++i) {

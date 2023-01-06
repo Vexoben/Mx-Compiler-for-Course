@@ -13,7 +13,7 @@ public class AllocaInst extends BaseInst{
 
     public AllocaInst(DerivedType _type, String _name, BasicBlock _belong) {
         super(new PointerType(_type), _name, _belong);
-        pointed_type = (DerivedType) _type;
+        pointed_type = _type;
         type_size = _type.size();
     }
 
