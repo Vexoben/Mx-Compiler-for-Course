@@ -1,6 +1,7 @@
 package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Value;
 
@@ -21,6 +22,11 @@ public class PhiInst extends BaseInst{
             ret = ret + "[" + get_operand(i).get_name() + ", " + get_operand(i + 1).get_name() + "]";
         }
         return ret;
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

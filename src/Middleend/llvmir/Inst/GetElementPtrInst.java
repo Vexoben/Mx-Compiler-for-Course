@@ -1,6 +1,7 @@
 package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.ArrayType;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.IRBaseType;
@@ -45,6 +46,11 @@ public class GetElementPtrInst extends BaseInst{
             ans += get_operand(i).get_tyme();
         }
         return ans;
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

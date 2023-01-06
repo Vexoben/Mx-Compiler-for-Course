@@ -2,6 +2,7 @@ package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
 import Middleend.llvmir.Function;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRFuncType;
 import Middleend.llvmir.Value;
 
@@ -34,5 +35,10 @@ public class FuncCallInst extends BaseInst{
 
     public Function get_func() {
         return func;
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 }

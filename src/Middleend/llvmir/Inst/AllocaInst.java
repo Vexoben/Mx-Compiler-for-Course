@@ -1,6 +1,7 @@
 package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.PointerType;
@@ -25,4 +26,8 @@ public class AllocaInst extends BaseInst{
         return "alloca " + pointed_type.toString();
     }
 
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
+    }
 }

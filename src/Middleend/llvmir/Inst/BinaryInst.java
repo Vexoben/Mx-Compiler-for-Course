@@ -2,6 +2,7 @@ package Middleend.llvmir.Inst;
 
 import Frontend.ast.expr.BinaryExprNode;
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Value;
 
@@ -20,5 +21,10 @@ public class BinaryInst extends BaseInst{   // binary && icmp
     @Override
     public String output() {
         return operator.toString() + " " + get_operand(0).get_tyme() + ", " + get_operand(1).get_name();
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 }

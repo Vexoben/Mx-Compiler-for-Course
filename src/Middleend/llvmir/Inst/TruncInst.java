@@ -6,6 +6,7 @@ package Middleend.llvmir.Inst;
 // %X = trunc i32 257 to i8
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Value;
 
@@ -20,4 +21,10 @@ public class TruncInst extends BaseInst{
     public String output() {   // unused
         return  null;
     }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
+    }
+
 }

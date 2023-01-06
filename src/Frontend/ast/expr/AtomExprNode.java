@@ -17,8 +17,10 @@ public class AtomExprNode extends ExprNode {
 
     // search in scope, we get maybe_var and may_func
     // in SemanticChecker, the first ASTNode use this node will decide is_var and is_func
-    // set is_true in default; when set is_func to true, set is_var to false
+    // set is_var as true in default; when set is_func to true, set is_var to false
     public boolean is_var = true, is_func = false;
+
+    public boolean is_member_var; // only use in IRbuilder
 
     public void output_type(MxStarParser.AtomContext ctx) {
         if (ctx.IntConst() != null) System.out.println("IntConst");

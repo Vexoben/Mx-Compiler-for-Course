@@ -2,6 +2,7 @@ package Middleend.llvmir.Inst;
 
 import Frontend.ast.expr.BinaryExprNode;
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.BoolType;
 import Middleend.llvmir.Value;
@@ -24,5 +25,9 @@ public class CmpInst extends BaseInst{
     @Override
     public String output() { return ""; }
 
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

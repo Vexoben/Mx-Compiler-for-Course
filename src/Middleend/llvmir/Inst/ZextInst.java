@@ -5,6 +5,7 @@ package Middleend.llvmir.Inst;
 // %X = zext i32 257 to i64
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Value;
 
@@ -18,5 +19,10 @@ public class ZextInst extends BaseInst{
     @Override
     public String output() {   // unused
         return null;
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 }

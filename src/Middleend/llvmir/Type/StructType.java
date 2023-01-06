@@ -88,7 +88,7 @@ public class StructType extends DerivedType{
         else if (type.built_in_type == BaseType.BuiltinType.BOOL) basetype = new BoolType();
         else if (type.built_in_type == BaseType.BuiltinType.STRING) basetype = new PointerType(new IntType(8));
         else if (type.built_in_type == BaseType.BuiltinType.CLASS) {
-            basetype = new PointerType(class_table.get(type.typename));
+            basetype = new PointerType(class_table.get(type.typename), 1);
 //            basetype = class_table.get(type.typename);
         } else throw new IRError(new Position(0, 0), "struct_type.java;translate_vartype");
         DerivedType realtype = basetype;

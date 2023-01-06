@@ -38,6 +38,7 @@
 ./Frontend/parser/MxStarVisitor.java
 ./Frontend/SemanticChecker.java
 ./Frontend/SemanticChecker_debug.java
+./Frontend/Tools/Error/AsmError.java
 ./Frontend/Tools/Error/BaseError.java
 ./Frontend/Tools/Error/IRError.java
 ./Frontend/Tools/Error/SemanticError.java
@@ -83,6 +84,7 @@
 ./Middleend/llvmir/IRBuilder.java
 ./Middleend/llvmir/IRPrinter.java
 ./Middleend/llvmir/IRScope.java
+./Middleend/llvmir/IRVisitor.java
 ./Middleend/llvmir/Label.java
 ./Middleend/llvmir/Type/ArrayType.java
 ./Middleend/llvmir/Type/BoolType.java
@@ -95,4 +97,3 @@
 ./Middleend/llvmir/Type/VoidType.java
 ./Middleend/llvmir/User.java
 ./Middleend/llvmir/Value.java
-./Middleend/Middleend.java

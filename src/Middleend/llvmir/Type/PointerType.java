@@ -8,6 +8,7 @@ public class PointerType extends DerivedType{
 
     DerivedType pointed_type;
     int level;
+    public boolean is_null = false;
 
     public PointerType(DerivedType _pointed_type) {
         pointed_type = _pointed_type;

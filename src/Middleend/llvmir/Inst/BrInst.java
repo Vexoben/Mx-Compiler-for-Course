@@ -1,6 +1,7 @@
 package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.VoidType;
 import Middleend.llvmir.Value;
 
@@ -29,6 +30,11 @@ public class BrInst extends BaseInst{
         } else {
             return "br i1 " + get_operand(0).get_name() + ", label " + get_operand(1).get_name() + ", label " + get_operand(2).get_name();
         }
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

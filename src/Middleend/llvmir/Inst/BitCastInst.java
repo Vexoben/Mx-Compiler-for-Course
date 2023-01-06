@@ -1,6 +1,7 @@
 package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Value;
 
@@ -20,6 +21,11 @@ public class BitCastInst extends BaseInst{
     @Override
     public String output() {
         return "bitcast " + get_operand(0).get_type().toString() + " " + get_operand(0).get_name() + " to " + type.toString();
+    }
+
+    @Override
+    public void accept(IRVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

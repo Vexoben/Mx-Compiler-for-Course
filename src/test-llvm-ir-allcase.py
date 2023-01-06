@@ -79,4 +79,6 @@ for judge in judge_list:
         
 print(fail_collect)
 
+os.system("rm {*,*/*,*/*/*,*/*/*/*}.class")
+
 # os.system("cd ../src && rm ./*.class && rm ./*/*.class && rm ./*/*/*.class && rm ./*/*/*/*.class && rm ./*/*/*/*/*.class && cd ../debug")

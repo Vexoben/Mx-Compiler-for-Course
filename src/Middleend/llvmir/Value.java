@@ -67,6 +67,7 @@ public class Value {
     static HashMap<String, Integer> name_table = new HashMap<>();
 
     private String rename(String _name) {
+        if (_name.equals("null")) return "null";
         if (_name.equals("")) _name = "r";
         if (this instanceof Function) _name = "@" + _name;
         else if (this instanceof BaseConst && !(this instanceof StringConst)) return _name;
