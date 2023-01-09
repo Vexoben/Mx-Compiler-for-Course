@@ -3,7 +3,7 @@ package Middleend.llvmir;
 import Middleend.llvmir.Inst.*;
 
 public interface IRVisitor {
-    void visit(Function func);
+    void visit(IRFunction func);
 
     void visit(BasicBlock block);
 

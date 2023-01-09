@@ -23,43 +23,44 @@ import java.util.Stack;
 
 public class IRBuilder implements ASTVisitor {
     BasicBlock cur_block = null;
-    Function cur_func = null;
+    IRFunction cur_func = null;
     IRScope cur_scope = new IRScope(null);
     Stack<BasicBlock> continue_jump_to = new Stack<>(), break_jump_to = new Stack<>();
-    HashMap<String, StructType> class_table = new HashMap<>();
-    HashMap<String, Function> func_table = new HashMap<>();
-    HashMap<String, GlobalValue> const_string_table = new HashMap<>();
+    public HashMap<String, StructType> class_table = new HashMap<>();
+    public HashMap<String, IRFunction> func_table = new HashMap<>();
+    public HashMap<String, GlobalValue> const_string_table = new HashMap<>();
+    public ArrayList<GlobalValue> global_vars = new ArrayList<>();
     boolean is_constructor = false, is_member_function = false, is_member_variable = false;
     String cur_class_name = null;
-    Function init_func = new Function("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
+    IRFunction init_func = new IRFunction("__init_function__", new IRFuncType(null, new VoidType(), new ArrayList<>()));
 
     static PointerType char_ptr = new PointerType(new IntType(8));
     static VoidType void_type = new VoidType();
     static IntType int_type = new IntType();
     static IntType bool_type = new IntType(1);
     // malloc function
-    static Function func_malloc = new Function("__built_in_malloc", new IRFuncType(null, char_ptr, int_type));
+    static IRFunction func_malloc = new IRFunction("__built_in_malloc", new IRFuncType(null, char_ptr, int_type));
     // built-in function
-    static Function func_print = new Function("print", new IRFuncType(null, void_type, char_ptr)),
-            func_println = new Function("println", new IRFuncType(null, void_type, char_ptr)),
-            func_printInt = new Function("printInt", new IRFuncType(null, void_type, int_type)),
-            func_printlnInt = new Function("printlnInt", new IRFuncType(null, void_type, int_type)),
-            func_getString = new Function("getString", new IRFuncType(null, new PointerType(char_ptr))),
-            func_getInt = new Function("getInt", new IRFuncType(null, int_type)),
-            func_toString = new Function("toString", new IRFuncType(null, new PointerType(char_ptr), int_type));
+    static IRFunction func_print = new IRFunction("print", new IRFuncType(null, void_type, char_ptr)),
+            func_println = new IRFunction("println", new IRFuncType(null, void_type, char_ptr)),
+            func_printInt = new IRFunction("printInt", new IRFuncType(null, void_type, int_type)),
+            func_printlnInt = new IRFunction("printlnInt", new IRFuncType(null, void_type, int_type)),
+            func_getString = new IRFunction("getString", new IRFuncType(null, new PointerType(char_ptr))),
+            func_getInt = new IRFunction("getInt", new IRFuncType(null, int_type)),
+            func_toString = new IRFunction("toString", new IRFuncType(null, new PointerType(char_ptr), int_type));
     // string operator
-    static Function str_eq = new Function("__build_in_str_eq", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_neq = new Function("__build_in_str_neq", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_slt = new Function("__build_in_str_slt", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_sle = new Function("__build_in_str_sle", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_sgt = new Function("__build_in_str_sgt", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_sge = new Function("__build_in_str_sge", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_add = new Function("__build_in_str_add", new IRFuncType(null, new PointerType(char_ptr), char_ptr, char_ptr));
+    static IRFunction str_eq = new IRFunction("__build_in_str_eq", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
+            str_neq = new IRFunction("__build_in_str_neq", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
+            str_slt = new IRFunction("__build_in_str_slt", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
+            str_sle = new IRFunction("__build_in_str_sle", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
+            str_sgt = new IRFunction("__build_in_str_sgt", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
+            str_sge = new IRFunction("__build_in_str_sge", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
+            str_add = new IRFunction("__build_in_str_add", new IRFuncType(null, new PointerType(char_ptr), char_ptr, char_ptr));
     // string built-in method
-    static Function str_length = new Function("__built_in_length", new IRFuncType(null, int_type, char_ptr)),
-            str_substring = new Function("__built_in_substring", new IRFuncType(null, new PointerType(char_ptr), char_ptr, int_type, int_type)),
-            str_parseInt = new Function("__built_in_parseInt", new IRFuncType(null, int_type, char_ptr)),
-            str_ord = new Function("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
+    static IRFunction str_length = new IRFunction("__built_in_length", new IRFuncType(null, int_type, char_ptr)),
+            str_substring = new IRFunction("__built_in_substring", new IRFuncType(null, new PointerType(char_ptr), char_ptr, int_type, int_type)),
+            str_parseInt = new IRFunction("__built_in_parseInt", new IRFuncType(null, int_type, char_ptr)),
+            str_ord = new IRFunction("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
 
     static ArrayList<Value> zero_index = new ArrayList<>();
 
@@ -89,7 +90,7 @@ public class IRBuilder implements ASTVisitor {
                 }
                 for (FuncRegistry j: (((ClassDefNode) i).class_scope.func_map.values())) {
                     String func_name = rename_member_func(j.name, ((ClassDefNode) i).class_registry.name);
-                    Function func = translate_functype(func_name, j.func_type, type);
+                    IRFunction func = translate_functype(func_name, j.func_type, type);
                     func.is_member_function = true;
                     func_table.put(func_name, func);
                 }
@@ -253,6 +254,7 @@ public class IRBuilder implements ASTVisitor {
             else if (cur_func == init_func) { // global variable
                 DerivedType type = new PointerType(translate_vartype(obj.var_type), 1);
                 addr = new GlobalValue(obj.registry_list.get(i).name, type);
+                global_vars.add((GlobalValue) addr);
                 addr.mem_pos = addr;
             } else  {// local variable
                 DerivedType allo_type = translate_vartype(obj.var_type);
@@ -455,7 +457,7 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(FuncCallExprNode obj) {
         obj.func_name.accept(this);
-        if (!(obj.func_name.result instanceof Function)) { // array.size()
+        if (!(obj.func_name.result instanceof IRFunction)) { // array.size()
             obj.result = obj.func_name.result;
             return;
         }
@@ -465,7 +467,7 @@ public class IRBuilder implements ASTVisitor {
             cur_block.push_back(load);
             args.add(load);
         }
-        else if (is_member_function && ((Function) obj.func_name.result).is_member_function) {
+        else if (is_member_function && ((IRFunction) obj.func_name.result).is_member_function) {
             LoadInst load = new LoadInst(cur_func.this_alloca, "load_inst", cur_block);
             cur_block.push_back(load);
             args.add(load);
@@ -488,7 +490,7 @@ public class IRBuilder implements ASTVisitor {
                 args.add(i.result);
             }
         });
-        FuncCallInst inst = new FuncCallInst((Function) obj.func_name.result, cur_block, args);
+        FuncCallInst inst = new FuncCallInst((IRFunction) obj.func_name.result, cur_block, args);
         obj.result = inst;
         cur_block.push_back(inst);
     }
@@ -981,7 +983,7 @@ public class IRBuilder implements ASTVisitor {
         return realtype;
     }
 
-    Function translate_functype(String name, FuncType type, DerivedType _belong) {
+    IRFunction translate_functype(String name, FuncType type, DerivedType _belong) {
         ArrayList<DerivedType> args = new ArrayList<>();
         if (_belong != null) {
             args.add(new PointerType(_belong));
@@ -997,9 +999,9 @@ public class IRBuilder implements ASTVisitor {
             ret_type = new PointerType(ret_type);
         }
         IRFuncType functype = new IRFuncType(_belong, ret_type, args);
-        Function func;
+        IRFunction func;
         if (_belong != null) {
-            func = new Function(func_name, functype);
+            func = new IRFunction(func_name, functype);
             Value value = new Value(new PointerType(_belong), func.get_origin_name() + "_this");
             func.add_operand(value);
             func.add_args_name(value.get_name());
@@ -1008,16 +1010,16 @@ public class IRBuilder implements ASTVisitor {
             func.entry_block.push_back(new StoreInst(value, allo, func.entry_block));
             func.this_alloca = allo;
         } else {
-            func = new Function(func_name, functype);
+            func = new IRFunction(func_name, functype);
         }
         return func;
     }
 
-    Function constructor_functype(String name, DerivedType _belong) {
+    IRFunction constructor_functype(String name, DerivedType _belong) {
         ArrayList<DerivedType> args = new ArrayList<>();
         args.add(new PointerType(class_table.get(name), 1));
         IRFuncType ret = new IRFuncType(_belong, new VoidType(), args);
-        Function func = new Function(rename_constructor(name), ret);
+        IRFunction func = new IRFunction(rename_constructor(name), ret);
         Value value = new Value(new PointerType(_belong, 1), func.get_origin_name() + "_this");
         func.add_operand(value);
         func.add_args_name(value.get_name());

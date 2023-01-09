@@ -13,6 +13,11 @@ public class AsmCall extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return "call " + func.name;
     }

@@ -11,6 +11,11 @@ public class AsmLui extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return "lui " + rd.toString() + ", " + immediate.toString();
     }

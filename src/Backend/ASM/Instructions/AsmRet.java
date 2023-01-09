@@ -9,6 +9,11 @@ public class AsmRet extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return "ret";
     }

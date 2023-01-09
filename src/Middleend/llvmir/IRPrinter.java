@@ -54,7 +54,7 @@ public class IRPrinter extends IRBuilder{
     }
 
     void func_declare() throws IOException {
-        for (Function i: func_table.values()) {
+        for (IRFunction i: func_table.values()) {
             printf(i.declare());
             printf("\n");
         }

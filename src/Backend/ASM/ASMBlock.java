@@ -12,8 +12,12 @@ public class ASMBlock {
         label = _label;
     }
 
-    public void add_inst(AsmBaseInst inst) {
+    public void push_back(AsmBaseInst inst) {
         instructions.add(inst);
+    }
+
+    public void push_front(AsmBaseInst inst) {
+        instructions.add(0, inst);
     }
 
     @Override

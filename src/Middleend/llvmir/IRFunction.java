@@ -8,7 +8,7 @@ import Middleend.llvmir.Type.VoidType;
 
 import java.util.ArrayList;
 
-public class Function extends User {
+public class IRFunction extends User {
 
     ArrayList<BasicBlock> blocks = new ArrayList<>();
     ArrayList<String> args_name = new ArrayList<>();
@@ -18,7 +18,8 @@ public class Function extends User {
     public boolean is_member_function, is_constructor;
     public AllocaInst this_alloca;
 
-    public Function(String _name, IRFuncType _type) {
+
+    public IRFunction(String _name, IRFuncType _type) {
         super(_type, _name);
         entry_block = new BasicBlock(_name + "entry", this);
         exit_block = new BasicBlock(_name + "exit", this);

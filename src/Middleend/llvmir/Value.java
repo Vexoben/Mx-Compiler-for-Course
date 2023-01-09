@@ -1,5 +1,7 @@
 package Middleend.llvmir;
 
+import Backend.ASM.Operands.Register;
+import Backend.ASM.Operands.VirtualReg;
 import Middleend.llvmir.Constant.BaseConst;
 import Middleend.llvmir.Constant.NullConst;
 import Middleend.llvmir.Constant.StringConst;
@@ -16,6 +18,9 @@ public class Value {
     protected boolean has_name = false;
     protected String ori_name, name;
     protected Value mem_pos;
+
+    // for asm
+    public Register reg_asm;
 
     public Value(IRBaseType _type) {
         type = _type;
@@ -66,7 +71,7 @@ public class Value {
     private String rename(String _name) {
         if (_name.equals("null")) return "null";
         if (_name.equals("")) _name = "r";
-        if (this instanceof Function) _name = "@" + _name;
+        if (this instanceof IRFunction) _name = "@" + _name;
         else if (this instanceof BaseConst && !(this instanceof StringConst)) return _name;
         else if (this instanceof GlobalValue) _name = "@" + _name;
         else if (!(this instanceof Label))_name = "%" + _name;

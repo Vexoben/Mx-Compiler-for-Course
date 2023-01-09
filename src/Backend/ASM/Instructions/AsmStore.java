@@ -15,6 +15,11 @@ public class AsmStore extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         String ret;
         if (size == 1) ret = "sb";

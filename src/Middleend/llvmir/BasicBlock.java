@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public class BasicBlock extends Value {
     ArrayList<BaseInst> instructions = new ArrayList<>();
-    Function parent_function;
+    public IRFunction parent_function;
     BasicBlock next_block;
     Label label;
 
-    public BasicBlock(String _name, Function _parent_function) {
+    public BasicBlock(String _name, IRFunction _parent_function) {
         super(null, _name);
         label = new Label(_name);
         parent_function = _parent_function;
@@ -28,7 +28,7 @@ public class BasicBlock extends Value {
         return instructions;
     }
 
-    public Function get_parent_function() {
+    public IRFunction get_parent_function() {
         return parent_function;
     }
 
@@ -52,5 +52,4 @@ public class BasicBlock extends Value {
         link(next);
         next.link(tmp);
     }
-
 }

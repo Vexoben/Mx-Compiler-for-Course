@@ -11,6 +11,11 @@ public class AsmLi extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return "li " + rd.toString() + ", " + immediate.toString();
     }

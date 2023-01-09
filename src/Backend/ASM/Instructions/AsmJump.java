@@ -12,6 +12,11 @@ public class AsmJump extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return "j " + dest.toString();
     }

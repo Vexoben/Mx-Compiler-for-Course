@@ -23,14 +23,18 @@ declare i1 @__build_in_str_slt(i8*, i8*)
 declare i1 @__build_in_str_sge(i8*, i8*)
 declare i1 @__build_in_str_sgt(i8*, i8*)
 
-@const_str = private unnamed_addr constant [4 x i8] c"yep\00"
+%struct.foo = type { i32 }
 
-%struct.foo = type {}
+@a = dso_local global i32 zeroinitializer
+@b = dso_local global i32 zeroinitializer
+@c = dso_local global i32 zeroinitializer
+@tmp = dso_local global %struct.foo* zeroinitializer
 
 define dso_local void @__constructor__foo(%struct.foo* %__constructor__foo_this) #0 {
 __constructor__fooentry:
   %this_alloca = alloca %struct.foo*
   store %struct.foo* %__constructor__foo_this, %struct.foo** %this_alloca
+  %load_inst2 = load %struct.foo*, %struct.foo** %this_alloca
   br label %first_block____constructor__foo
 first_block____constructor__foo:
   %occupy_empty_block = alloca i32
@@ -39,64 +43,54 @@ __constructor__fooexit:
   ret void
 }
 
+define dso_local i32 @f() #0 {
+fentry:
+  %occupy_empty_block2 = alloca i32
+  br label %first_block__f
+first_block__f:
+  %load_inst3 = load %struct.foo*, %struct.foo** @tmp
+  %get_element_ptr_inst2 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst3, i32 0, i32 0
+  br label %fexit
+fexit:
+  %occupy_empty_block3 = alloca i32
+  %allo = alloca i32
+  %load_inst4 = load i32, i32* %allo
+  ret i32 %load_inst4
+}
+
 define dso_local i32 @main() #0 {
 mainentry:
   call void @__init_function__()
-  %arr = alloca %struct.foo**
+  %a = alloca i32
+  %b = alloca i32
+  %c = alloca i32
+  %d = alloca i32
+  %e = alloca i32
+  %f = alloca i32
+  %g = alloca i32
   br label %first_block__main
 first_block__main:
-  %new_result = alloca %struct.foo**
-  %array_size = mul i32 8, 10
-  %alloca_size = add i32 4, %array_size
-  %function_call_inst2 = call i8* @__built_in_malloc(i32 %alloca_size)
-  %bit_cast_inst = bitcast i8* %function_call_inst2 to i32*
-  store i32 10, i32* %bit_cast_inst
-  %get_element_ptr_inst = getelementptr inbounds i32, i32* %bit_cast_inst, i32 1
-  %arr_head = bitcast i32* %get_element_ptr_inst to %struct.foo**
-  %arr_tail = getelementptr inbounds %struct.foo*, %struct.foo** %arr_head, i32 10
-  %arr_cur_ptr = alloca %struct.foo**
-  store %struct.foo** %arr_head, %struct.foo*** %arr_cur_ptr
-  br label %while_condition
-while_condition:
-  %arr_cur = load %struct.foo**, %struct.foo*** %arr_cur_ptr
-  %reach_end = icmp eq %struct.foo** %arr_cur, %arr_tail
-  br i1 %reach_end, label %while_exit, label %while_repeat
-while_repeat:
-  store %struct.foo* null, %struct.foo** %arr_cur
-  %get_element_ptr_inst2 = getelementptr inbounds %struct.foo*, %struct.foo** %arr_cur, i32 1
-  store %struct.foo** %get_element_ptr_inst2, %struct.foo*** %arr_cur_ptr
-  br label %while_condition
-while_exit:
-  store %struct.foo** %arr_head, %struct.foo*** %new_result
-  %load_inst = load %struct.foo**, %struct.foo*** %new_result
-  store %struct.foo** %load_inst, %struct.foo*** %arr
-  %load_inst2 = load %struct.foo**, %struct.foo*** %arr
-  %get_element_ptr_inst3 = getelementptr inbounds %struct.foo*, %struct.foo** %load_inst2, i32 1
-  store %struct.foo* null, %struct.foo** %get_element_ptr_inst3
-  %load_inst3 = load %struct.foo**, %struct.foo*** %arr
-  %get_element_ptr_inst4 = getelementptr inbounds %struct.foo*, %struct.foo** %load_inst3, i32 1
-  %load_inst4 = load %struct.foo*, %struct.foo** %get_element_ptr_inst4
-  %r = icmp eq %struct.foo* %load_inst4, null
-  br i1 %r, label %if_true, label %if_false
-if_true:
-  %get_element_ptr_inst5 = getelementptr inbounds [4 x i8], [4 x i8]* @const_str, i32 0, i32 0
-  call void @println(i8* %get_element_ptr_inst5)
-  br label %if_exit
-if_false:
-  %occupy_empty_block2 = alloca i32
-  br label %if_exit
-if_exit:
-  ret i32 0
+  %occupy_empty_block4 = alloca i32
   br label %mainexit
 mainexit:
   ret i32 0
-  %allo = alloca i32
-  %load_inst5 = load i32, i32* %allo
+  %allo2 = alloca i32
+  %load_inst5 = load i32, i32* %allo2
   ret i32 %load_inst5
 }
 
 define dso_local void @__init_function__() #0 {
 __init_function__entry:
+  store i32 0, i32* @a
+  store i32 0, i32* @b
+  store i32 0, i32* @c
+  %function_call_inst = call i8* @__built_in_malloc(i32 4)
+  %bit_cast_inst = bitcast i8* %function_call_inst to %struct.foo*
+  call void @__constructor__foo(%struct.foo* %bit_cast_inst)
+  %alloca_inst = alloca %struct.foo*
+  store %struct.foo* %bit_cast_inst, %struct.foo** %alloca_inst
+  %load_inst = load %struct.foo*, %struct.foo** %alloca_inst
+  store %struct.foo* %load_inst, %struct.foo** @tmp
   br label %__init_function__exit
 __init_function__exit:
   ret void

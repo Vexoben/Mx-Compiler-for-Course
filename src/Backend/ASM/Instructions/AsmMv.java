@@ -10,6 +10,11 @@ public class AsmMv extends AsmBaseInst{
     }
 
     @Override
+    public void accept(InstVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public String toString() {
         return "mv " + rd.toString() + ", " + rs1.toString();
     }
