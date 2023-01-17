@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ASMBlock {
     public String label;
-    public ArrayList<AsmBaseInst> instructions;
+    public ArrayList<AsmBaseInst> instructions = new ArrayList<>();
 
     public ASMBlock(String _label) {
         label = _label;

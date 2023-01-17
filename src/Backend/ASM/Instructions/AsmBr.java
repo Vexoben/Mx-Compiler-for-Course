@@ -16,15 +16,15 @@ public class AsmBr extends AsmBaseInst{
     }
 
     String trans_op() {
-        switch (op) {
-            case EQUAL: return "beq";
-            case NOTEQUAL: return "bne";
-            case LESS: return "blt";
-            case GEQ: return "bge";
-            case LEQ: return "ble";
-            case GREATER: return "bgt";
-            default: throw new AsmError("AsmBr.java: trans_op");
-        }
+        return switch (op) {
+            case EQUAL -> "beq";
+            case NOTEQUAL -> "bne";
+            case LESS -> "blt";
+            case GEQ -> "bge";
+            case LEQ -> "ble";
+            case GREATER -> "bgt";
+            default -> throw new AsmError("AsmBr.java: trans_op");
+        };
     }
 
     @Override

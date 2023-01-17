@@ -18,6 +18,7 @@ public class IRFunction extends User {
     public boolean is_member_function, is_constructor;
     public AllocaInst this_alloca;
 
+    public boolean is_built_in;
 
     public IRFunction(String _name, IRFuncType _type) {
         super(_type, _name);

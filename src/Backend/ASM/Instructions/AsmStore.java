@@ -9,7 +9,7 @@ public class AsmStore extends AsmBaseInst{
 
     public int size;
 
-    public AsmStore(Register rd, Register rs1, Immediate offset, int _size, ASMBlock parent) {
+    public AsmStore(Register rs1, Register rd, Immediate offset, int _size, ASMBlock parent) {
         super(rd, rs1, null, offset, parent);
         size = _size;
     }
@@ -26,8 +26,7 @@ public class AsmStore extends AsmBaseInst{
         else if (size == 2) ret = "sh";
         else if (size == 4) ret = "sw";
         else throw new AsmError("AsmLoad.java: load size = " + size);
-        ret = ret + " " + rd.toString() + ", " + immediate.toString() + "(" + rs1.toString() + ")";
+        ret = ret + " " + rs1.toString() + ", " + ((Register) rd).offset.toString() + "(" + rd.toString() + ")";
         return ret;
-
     }
 }

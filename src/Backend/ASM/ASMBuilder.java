@@ -19,8 +19,8 @@ public class ASMBuilder implements IRVisitor {
     public ASMFunction cur_func;
     public ASMBlock cur_block;
 
-    HashMap<BasicBlock, ASMBlock> block_map;
-    HashMap<IRFunction, ASMFunction> func_map;
+    HashMap<BasicBlock, ASMBlock> block_map = new HashMap<>();
+    HashMap<IRFunction, ASMFunction> func_map = new HashMap<>();
 
     public ASMBuilder(IRPrinter _ir) {
         asm = new ASMModule();
@@ -32,12 +32,20 @@ public class ASMBuilder implements IRVisitor {
             asm.global_vars.add(new GlobalReg(value.get_name()));
         }
         for (IRFunction func: ir.func_table.values()) {
+            cur_func = create_asm_func(func);
+            for (BasicBlock block: func.get_blocks()) {
+                create_asm_block(block);
+            }
+            cur_func = null;
+        }
+        for (IRFunction func: ir.func_table.values()) {
             visit(func);
         }
     }
 
     ASMFunction create_asm_func(IRFunction ir_func) {
-        ASMFunction asm_func = new ASMFunction(ir_func.get_name());
+        ASMFunction asm_func = new ASMFunction(ir_func.get_name().substring(1));
+        asm_func.is_built_in = ir_func.is_built_in;
         func_map.put(ir_func, asm_func);
         asm.functions.add(asm_func);
         return asm_func;
@@ -80,10 +88,10 @@ public class ASMBuilder implements IRVisitor {
                 return ret;
             }
         } else {
-            Register ret;
-            if (value.reg_asm != null) ret = null;
+            VirtualReg ret;
+            if (value.reg_asm != null) ret = (VirtualReg) value.reg_asm;
             else {
-                ret = new Register(value.get_origin_name());
+                ret = new VirtualReg(value.get_origin_name());
                 value.reg_asm = ret;
             }
             return ret;
@@ -94,6 +102,7 @@ public class ASMBuilder implements IRVisitor {
     public void visit(IRFunction ir_func) {
         ASMFunction asm_func = get_asm_func(ir_func);
         cur_func = asm_func;
+        cur_block = get_asm_block(ir_func.entry_block);
 
         VirtualReg _ra = new VirtualReg("virtual_ra");
         asm_func.callee_saved_virtual.add(_ra);
@@ -149,12 +158,8 @@ public class ASMBuilder implements IRVisitor {
         Register rs2 = get_register(inst.get_operand(1));
         if (inst.operator.is_compare()) {
             switch (inst.operator) {
-                case LESS -> {
-                    new AsmBinary("slt", rd, rs1, rs2, cur_block);
-                }
-                case GREATER -> {
-                    new AsmBinary("slt", rd, rs2, rs1, cur_block);
-                }
+                case LESS -> new AsmBinary("slt", rd, rs1, rs2, cur_block);
+                case GREATER -> new AsmBinary("slt", rd, rs2, rs1, cur_block);
                 case LEQ -> {
                     VirtualReg tmp = new VirtualReg("tmp");
                     new AsmBinary("slt", tmp, rs2, rs1, cur_block);
@@ -311,9 +316,9 @@ public class ASMBuilder implements IRVisitor {
             new AsmMv(ASMModule.get_reg_a(0), get_register(inst.get_operand(0)), cur_block);
         }
         for (int i = 0; i < ASMModule.get_callee_saved_reg().size(); ++i) { // 0 is ra
-            new AsmMv(ASMModule.get_callee_saved_reg().get(i), cur_func.arguments.get(i + 1), cur_block);
+            new AsmMv(ASMModule.get_callee_saved_reg().get(i), cur_func.callee_saved_virtual.get(i + 1), cur_block);
         }
-        new AsmMv(ASMModule.get_reg("ra"), cur_func.arguments.get(0), cur_block);
+        new AsmMv(ASMModule.get_reg("ra"), cur_func.callee_saved_virtual.get(0), cur_block);
         new AsmRet(cur_block);
     }
 

@@ -28,7 +28,7 @@ public class ASMModule {
             phy_id_map.put(i, reg);
             phy_name_map.put(reg_name[i], reg);
         }
-        callee_saved_reg.add(get_reg("sp"));
+        // callee_saved_reg.add(get_reg("sp"));
         for (int i = 0; i < 12; ++i) {
             callee_saved_reg.add(get_reg("s" + i));
         }
@@ -38,7 +38,7 @@ public class ASMModule {
     }
 
     public static PhysicalReg get_reg(int id) {
-        return phy_id_map.get(reg_name[id]);
+        return phy_name_map.get(reg_name[id]);
     }
 
     public static PhysicalReg get_reg(String name) {

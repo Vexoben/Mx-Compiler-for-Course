@@ -57,19 +57,20 @@ __built_in_length:                      # @__built_in_length
 __built_in_substring:                   # @__built_in_substring
 	.cfi_startproc
 # %bb.0:
-	addi	sp, sp, -32
-	.cfi_def_cfa_offset 32
-	sw	ra, 28(sp)
-	sw	s0, 24(sp)
+	addi	sp, sp, -48
+	.cfi_def_cfa_offset 48
+	sw	ra, 44(sp)
+	sw	s0, 40(sp)
 	.cfi_offset ra, -4
 	.cfi_offset s0, -8
-	addi	s0, sp, 32
+	addi	s0, sp, 48
 	.cfi_def_cfa s0, 0
 	sw	a0, -16(s0)
 	sw	a1, -20(s0)
 	sw	a2, -24(s0)
 	addi	a0, zero, 8
 	mv	a1, zero
+	sw	a1, -36(s0)
 	call	malloc
 	sw	a0, -32(s0)
 	lw	a0, -24(s0)
@@ -88,17 +89,20 @@ __built_in_substring:                   # @__built_in_substring
 	lw	a3, -24(s0)
 	sub	a2, a3, a2
 	call	memcpy
-	lw	a0, -32(s0)
-	lw	a0, 0(a0)
-	lw	a1, -24(s0)
-	lw	a2, -20(s0)
-	sub	a1, a1, a2
-	add	a0, a0, a1
-	sb	zero, 0(a0)
-	lw	a0, -32(s0)
-	lw	s0, 24(sp)
-	lw	ra, 28(sp)
-	addi	sp, sp, 32
+	lw	a1, -32(s0)
+	lw	a1, 0(a1)
+	lw	a2, -24(s0)
+	lw	a3, -20(s0)
+	sub	a2, a2, a3
+	add	a1, a1, a2
+	lw	a2, -36(s0)
+	sb	a2, 0(a1)
+	lw	a1, -32(s0)
+	sw	a0, -40(s0)
+	mv	a0, a1
+	lw	s0, 40(sp)
+	lw	ra, 44(sp)
+	addi	sp, sp, 48
 	ret
 .Lfunc_end2:
 	.size	__built_in_substring, .Lfunc_end2-__built_in_substring
@@ -124,7 +128,9 @@ __built_in_parseInt:                    # @__built_in_parseInt
 	addi	a1, a1, %lo(.L.str)
 	addi	a2, s0, -20
 	call	__isoc99_sscanf
-	lw	a0, -20(s0)
+	lw	a1, -20(s0)
+	sw	a0, -24(s0)
+	mv	a0, a1
 	lw	s0, 24(sp)
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
@@ -167,13 +173,13 @@ __built_in_ord:                         # @__built_in_ord
 __build_in_str_add:                     # @__build_in_str_add
 	.cfi_startproc
 # %bb.0:
-	addi	sp, sp, -48
-	.cfi_def_cfa_offset 48
-	sw	ra, 44(sp)
-	sw	s0, 40(sp)
+	addi	sp, sp, -64
+	.cfi_def_cfa_offset 64
+	sw	ra, 60(sp)
+	sw	s0, 56(sp)
 	.cfi_offset ra, -4
 	.cfi_offset s0, -8
-	addi	s0, sp, 48
+	addi	s0, sp, 64
 	.cfi_def_cfa s0, 0
 	sw	a0, -16(s0)
 	sw	a1, -24(s0)
@@ -181,10 +187,14 @@ __build_in_str_add:                     # @__build_in_str_add
 	call	strlen
 	sw	a0, -28(s0)
 	lw	a0, -24(s0)
+	sw	a1, -44(s0)
 	call	strlen
 	sw	a0, -32(s0)
 	addi	a0, zero, 8
-	mv	a1, zero
+	mv	a2, zero
+	sw	a1, -48(s0)
+	mv	a1, a2
+	sw	a2, -52(s0)
 	call	malloc
 	sw	a0, -40(s0)
 	lw	a0, -28(s0)
@@ -200,24 +210,31 @@ __build_in_str_add:                     # @__build_in_str_add
 	lw	a1, -16(s0)
 	lw	a2, -28(s0)
 	call	memcpy
-	lw	a0, -40(s0)
-	lw	a0, 0(a0)
-	lw	a1, -28(s0)
-	add	a0, a0, a1
-	lw	a1, -24(s0)
-	lw	a2, -32(s0)
-	call	memcpy
-	lw	a0, -40(s0)
-	lw	a0, 0(a0)
-	lw	a1, -28(s0)
-	lw	a2, -32(s0)
+	lw	a1, -40(s0)
+	lw	a1, 0(a1)
+	lw	a2, -28(s0)
 	add	a1, a1, a2
-	add	a0, a0, a1
-	sb	zero, 0(a0)
-	lw	a0, -40(s0)
-	lw	s0, 40(sp)
-	lw	ra, 44(sp)
-	addi	sp, sp, 48
+	lw	a2, -24(s0)
+	lw	a3, -32(s0)
+	sw	a0, -56(s0)
+	mv	a0, a1
+	mv	a1, a2
+	mv	a2, a3
+	call	memcpy
+	lw	a1, -40(s0)
+	lw	a1, 0(a1)
+	lw	a2, -28(s0)
+	lw	a3, -32(s0)
+	add	a2, a2, a3
+	add	a1, a1, a2
+	lw	a2, -52(s0)
+	sb	a2, 0(a1)
+	lw	a1, -40(s0)
+	sw	a0, -60(s0)
+	mv	a0, a1
+	lw	s0, 56(sp)
+	lw	ra, 60(sp)
+	addi	sp, sp, 64
 	ret
 .Lfunc_end5:
 	.size	__build_in_str_add, .Lfunc_end5-__build_in_str_add
@@ -354,7 +371,8 @@ __build_in_str_sgt:                     # @__build_in_str_sgt
 	lw	a0, -16(s0)
 	lw	a1, -24(s0)
 	call	strcmp
-	sgtz	a0, a0
+	mv	a1, zero
+	slt	a0, a1, a0
 	lw	s0, 24(sp)
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
@@ -505,20 +523,21 @@ printlnInt:                             # @printlnInt
 getString:                              # @getString
 	.cfi_startproc
 # %bb.0:
-	addi	sp, sp, -16
-	.cfi_def_cfa_offset 16
-	sw	ra, 12(sp)
-	sw	s0, 8(sp)
+	addi	sp, sp, -32
+	.cfi_def_cfa_offset 32
+	sw	ra, 28(sp)
+	sw	s0, 24(sp)
 	.cfi_offset ra, -4
 	.cfi_offset s0, -8
-	addi	s0, sp, 16
+	addi	s0, sp, 32
 	.cfi_def_cfa s0, 0
 	addi	a0, zero, 8
 	mv	a1, zero
+	sw	a1, -20(s0)
 	call	malloc
 	sw	a0, -16(s0)
 	addi	a0, zero, 256
-	mv	a1, zero
+	lw	a1, -20(s0)
 	call	malloc
 	lw	a1, -16(s0)
 	sw	a0, 0(a1)
@@ -527,10 +546,12 @@ getString:                              # @getString
 	lui	a0, %hi(.L.str.1)
 	addi	a0, a0, %lo(.L.str.1)
 	call	__isoc99_scanf
-	lw	a0, -16(s0)
-	lw	s0, 8(sp)
-	lw	ra, 12(sp)
-	addi	sp, sp, 16
+	lw	a1, -16(s0)
+	sw	a0, -24(s0)
+	mv	a0, a1
+	lw	s0, 24(sp)
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	ret
 .Lfunc_end16:
 	.size	getString, .Lfunc_end16-getString
@@ -554,7 +575,9 @@ getInt:                                 # @getInt
 	addi	a0, a0, %lo(.L.str)
 	addi	a1, s0, -12
 	call	__isoc99_scanf
-	lw	a0, -12(s0)
+	lw	a1, -12(s0)
+	sw	a0, -16(s0)
+	mv	a0, a1
 	lw	s0, 8(sp)
 	lw	ra, 12(sp)
 	addi	sp, sp, 16
@@ -569,21 +592,22 @@ getInt:                                 # @getInt
 toString:                               # @toString
 	.cfi_startproc
 # %bb.0:
-	addi	sp, sp, -16
-	.cfi_def_cfa_offset 16
-	sw	ra, 12(sp)
-	sw	s0, 8(sp)
+	addi	sp, sp, -32
+	.cfi_def_cfa_offset 32
+	sw	ra, 28(sp)
+	sw	s0, 24(sp)
 	.cfi_offset ra, -4
 	.cfi_offset s0, -8
-	addi	s0, sp, 16
+	addi	s0, sp, 32
 	.cfi_def_cfa s0, 0
 	sw	a0, -12(s0)
 	addi	a0, zero, 8
 	mv	a1, zero
+	sw	a1, -20(s0)
 	call	malloc
 	sw	a0, -16(s0)
 	addi	a0, zero, 256
-	mv	a1, zero
+	lw	a1, -20(s0)
 	call	malloc
 	lw	a1, -16(s0)
 	sw	a0, 0(a1)
@@ -593,10 +617,12 @@ toString:                               # @toString
 	lui	a1, %hi(.L.str)
 	addi	a1, a1, %lo(.L.str)
 	call	sprintf
-	lw	a0, -16(s0)
-	lw	s0, 8(sp)
-	lw	ra, 12(sp)
-	addi	sp, sp, 16
+	lw	a1, -16(s0)
+	sw	a0, -24(s0)
+	mv	a0, a1
+	lw	s0, 24(sp)
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	ret
 .Lfunc_end18:
 	.size	toString, .Lfunc_end18-toString

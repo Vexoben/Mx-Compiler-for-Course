@@ -8,5 +8,8 @@ public class Immediate extends BaseOperand{
         data = _data;
     }
 
-
+    @Override
+    public String toString() {
+        return String.valueOf(data);
+    }
 }

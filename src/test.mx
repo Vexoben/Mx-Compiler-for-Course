@@ -1,16 +1,4 @@
-int a, b, c;
-
-class foo{
-	int a, b, c, d, e, f;
-};
-
-foo tmp = new foo;
-
-int f() {
-	tmp.a;
-}
-
 int main() {
-	int a, b;
-	c = a + b;
+   int a;
+   a = 1;
 }

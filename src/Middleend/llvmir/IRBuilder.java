@@ -64,6 +64,28 @@ public class IRBuilder implements ASTVisitor {
 
     static ArrayList<Value> zero_index = new ArrayList<>();
 
+    static {
+        func_malloc.is_built_in = true;
+        func_print.is_built_in = true;
+        func_println.is_built_in = true;
+        func_printInt.is_built_in = true;
+        func_printlnInt.is_built_in = true;
+        func_getString.is_built_in = true;
+        func_getInt.is_built_in = true;
+        func_toString.is_built_in = true;
+        str_eq.is_built_in = true;
+        str_neq.is_built_in = true;
+        str_slt.is_built_in = true;
+        str_sle.is_built_in = true;
+        str_sgt.is_built_in = true;
+        str_sge.is_built_in = true;
+        str_add.is_built_in = true;
+        str_length.is_built_in = true;
+        str_substring.is_built_in = true;
+        str_parseInt.is_built_in = true;
+        str_ord.is_built_in = true;
+    }
+
     public IRBuilder(RootNode root) {
         zero_index.add(new IntConst(0));
         root.accept(this);
@@ -265,6 +287,7 @@ public class IRBuilder implements ASTVisitor {
             if (obj.assign_list.get(i) != null) {
                 obj.assign_list.get(i).accept(this);
                 if (is_member_variable) {
+                    assert addr instanceof BaseInst;
                     cur_func.entry_block.push_back((BaseInst) addr);
                 }
                 if (obj.assign_list.get(i) instanceof AtomExprNode && ((AtomExprNode) obj.assign_list.get(i)).ctx.Null() != null) {
@@ -273,7 +296,7 @@ public class IRBuilder implements ASTVisitor {
                 }
                 else if (!obj.assign_list.get(i).expr_type.is_fund()) {
                     if (obj.assign_list.get(i).expr_type.is_string() && !obj.assign_list.get(i).expr_type.is_array()) {
-                        Value ptr;
+                        BaseInst ptr;
                         if (obj.assign_list.get(i).result instanceof StringConst) {
                             ArrayList<Value> indexes = new ArrayList<>();
                             indexes.add(new IntConst(0)); indexes.add(new IntConst(0));
@@ -281,7 +304,7 @@ public class IRBuilder implements ASTVisitor {
                         } else {
                             ptr = new LoadInst(obj.assign_list.get(i).result, "load_inst", cur_block);
                         }
-                        cur_block.push_back((BaseInst) ptr);
+                        cur_block.push_back(ptr);
                         cur_block.push_back(new StoreInst(ptr, addr.mem_pos, cur_block));
                     } else if (obj.assign_list.get(i) instanceof FuncCallExprNode && obj.assign_list.get(i).expr_type.is_array()) {
                         cur_block.push_back(new StoreInst((BaseInst) obj.assign_list.get(i).result, addr, cur_block));
@@ -500,15 +523,13 @@ public class IRBuilder implements ASTVisitor {
         obj.callee = obj.class_expr.result;
         if (obj.is_func) {
             if (obj.class_expr.expr_type.match_type(BaseType.BuiltinType.STRING)) {
-                if (obj.member_name.equals("length")) {
-                    obj.result = str_length;
-                } else if (obj.member_name.equals("substring")){
-                    obj.result = str_substring;
-                } else if (obj.member_name.equals("parseInt")) {
-                    obj.result = str_parseInt;
-                } else if (obj.member_name.equals("ord")) {
-                    obj.result = str_ord;
-                } else throw new IRError(new Position(0, 0), "MemberVisitNode");
+                switch (obj.member_name) {
+                    case "length" -> obj.result = str_length;
+                    case "substring" -> obj.result = str_substring;
+                    case "parseInt" -> obj.result = str_parseInt;
+                    case "ord" -> obj.result = str_ord;
+                    default -> throw new IRError(new Position(0, 0), "MemberVisitNode");
+                }
             } else if (obj.class_expr.expr_type.is_array()) { // array.size()
                 LoadInst load = new LoadInst(obj.class_expr.result, "load_inst", cur_block);
                 cur_block.push_back(load);
@@ -548,7 +569,7 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(NewExprNode obj) {
         if (obj.expr_type.is_array()) {   // array
-            ArrayList indexes = new ArrayList<>();
+            ArrayList<Value> indexes = new ArrayList<>();
             for (int i = 0; i < obj.index.size(); ++i) {
                 if (obj.index.get(i) != null) {
                     obj.index.get(i).accept(this);
@@ -575,7 +596,7 @@ public class IRBuilder implements ASTVisitor {
             cur_block.push_back(mem);
             BitCastInst allo = new BitCastInst(mem, new PointerType(type), cur_block);
             cur_block.push_back(allo);
-            ArrayList args = new ArrayList<>();
+            ArrayList<Value> args = new ArrayList<>();
             args.add(allo);
             cur_block.push_back(new FuncCallInst(func_table.get(rename_constructor(obj.expr_type.typename)), cur_block, args));
             AllocaInst ret = new AllocaInst(new PointerType(type), "alloca_inst", cur_block);
@@ -691,24 +712,22 @@ public class IRBuilder implements ASTVisitor {
         obj.origin_expr.accept(this);
         BaseInst inst;
         switch (obj.op) {
-            case Positive:
-                obj.result = obj.origin_expr.result;
-                break;
-            case Negative:
+            case Positive -> obj.result = obj.origin_expr.result;
+            case Negative -> {
                 inst = new BinaryInst(new IntType(), "sub_inst", BinaryExprNode.BinaryOperator.SUB, new IntConst(0), get_data(obj.origin_expr.result), cur_block);
                 cur_block.push_back(inst);
                 obj.result = inst;
-                break;
-            case Not:
+            }
+            case Not -> {
                 inst = new BinaryInst(new BoolType(), "xor_inst", BinaryExprNode.BinaryOperator.XOR, new BoolConst(true), get_data(obj.origin_expr.result), cur_block);
                 cur_block.push_back(inst);
                 obj.result = inst;
-                break;
-            case ReverseBit:
+            }
+            case ReverseBit -> {
                 inst = new BinaryInst(new IntType(), "xor_inst", BinaryExprNode.BinaryOperator.XOR, new IntConst(-1), get_data(obj.origin_expr.result), cur_block);
                 cur_block.push_back(inst);
                 obj.result = inst;
-                break;
+            }
         }
     }
     @Override
@@ -716,7 +735,7 @@ public class IRBuilder implements ASTVisitor {
         if (obj.ctx.IntConst() != null) {
             obj.result = new IntConst(Integer.parseInt(obj.ctx.IntConst().toString()));
         } else if (obj.ctx.True() != null || obj.ctx.False() != null) {
-            obj.result = new BoolConst(obj.ctx.True() == null ? false : true);
+            obj.result = new BoolConst(obj.ctx.True() != null);
         } else if (obj.ctx.StringConst() != null) {
             String str = obj.ctx.StringConst().toString();
             str = str.substring(1, str.length() - 1);
@@ -749,16 +768,15 @@ public class IRBuilder implements ASTVisitor {
             if (obj.is_var) {
                 Pair<Value, Boolean> mem_pos = cur_scope.get_var(obj.identifier);
                 BaseInst load_inst;
-                if (mem_pos.b == false) { // not class member
+                if (!mem_pos.b) { // not class member
                    if (obj.expr_type.match_type(BaseType.BuiltinType.INT) || obj.expr_type.match_type(BaseType.BuiltinType.BOOL)) {
                         load_inst = new LoadInst(mem_pos.a, "load_inst", cur_block);
                         cur_block.push_back(load_inst);
                         obj.result = load_inst;
-                        obj.result.mem_pos = mem_pos.a;
-                 } else {
+                   } else {
                       obj.result = mem_pos.a;
-                      obj.result.mem_pos = mem_pos.a;
                    }
+                    obj.result.mem_pos = mem_pos.a;
                 } else {
                     obj.is_member_var = true;
                     StructType type = class_table.get(cur_class_name);
@@ -773,27 +791,36 @@ public class IRBuilder implements ASTVisitor {
                     obj.result.mem_pos = inst;
                 }
             } else {
-                if (obj.identifier.equals("print")) {
-                    obj.result = func_print;
-                } else if (obj.identifier.equals("println")) {
-                    obj.result = func_println;
-                } else if (obj.identifier.equals("printInt")) {
-                    obj.result = func_printInt;
-                } else if (obj.identifier.equals("printlnInt")) {
-                    obj.result = func_printlnInt;
-                } else if (obj.identifier.equals("getString")) {
-                    obj.result = func_getString;
-                } else if (obj.identifier.equals("getInt")) {
-                    obj.result = func_getInt;
-                } else if (obj.identifier.equals("toString")) {
-                    obj.result = func_toString;
-                } else {
-                    if (is_member_function) {
-                        obj.result = func_table.get(rename_member_func(obj.identifier, cur_class_name));
-                        if (obj.result == null) obj.result = func_table.get(obj.identifier);
-                    } else {
-                        obj.result = func_table.get(obj.identifier);
-                    }
+                switch (obj.identifier) {
+                    case "print":
+                        obj.result = func_print;
+                        break;
+                    case "println":
+                        obj.result = func_println;
+                        break;
+                    case "printInt":
+                        obj.result = func_printInt;
+                        break;
+                    case "printlnInt":
+                        obj.result = func_printlnInt;
+                        break;
+                    case "getString":
+                        obj.result = func_getString;
+                        break;
+                    case "getInt":
+                        obj.result = func_getInt;
+                        break;
+                    case "toString":
+                        obj.result = func_toString;
+                        break;
+                    default:
+                        if (is_member_function) {
+                            obj.result = func_table.get(rename_member_func(obj.identifier, cur_class_name));
+                            if (obj.result == null) obj.result = func_table.get(obj.identifier);
+                        } else {
+                            obj.result = func_table.get(obj.identifier);
+                        }
+                        break;
                 }
             }
         }
@@ -856,7 +883,6 @@ public class IRBuilder implements ASTVisitor {
         if (obj.condition != null) {
             cur_block = condition_block;
             obj.condition.accept(this);
-            obj.condition.result.toString();
             cur_block.push_back(new BrInst(get_data(obj.condition.result), repeat_block, exit_block, cur_block));
         } else {
             cur_block.push_back(new BrInst(repeat_block, cur_block));
@@ -929,12 +955,9 @@ public class IRBuilder implements ASTVisitor {
                     } else {
                         if (cur_func.get_ret_type() instanceof PointerType) {
                             DerivedType type = ((PointerType) cur_func.get_ret_type()).get_pointed_type();
-                            boolean flag = false;
-                            if ((type instanceof PointerType) && (((PointerType) type).get_pointed_type()) instanceof StructType) {
-                                flag = true;
-                            }
+                            boolean flag = (type instanceof PointerType) && (((PointerType) type).get_pointed_type()) instanceof StructType;
                             if (obj.return_value instanceof FuncCallExprNode) flag = true;
-                            if (flag == false) {
+                            if (!flag) {
                                 LoadInst load = new LoadInst(obj.return_value.result, "load_inst", cur_block);
                                 cur_block.push_back(load);
                                 cur_block.push_back(new RetInst(load, cur_block));
@@ -988,7 +1011,6 @@ public class IRBuilder implements ASTVisitor {
         if (_belong != null) {
             args.add(new PointerType(_belong));
         }
-        String func_name = name;
         type.func_args_type.forEach(i -> {
             DerivedType tp = translate_vartype(i);
             args.add(tp);
@@ -1001,7 +1023,7 @@ public class IRBuilder implements ASTVisitor {
         IRFuncType functype = new IRFuncType(_belong, ret_type, args);
         IRFunction func;
         if (_belong != null) {
-            func = new IRFunction(func_name, functype);
+            func = new IRFunction(name, functype);
             Value value = new Value(new PointerType(_belong), func.get_origin_name() + "_this");
             func.add_operand(value);
             func.add_args_name(value.get_name());
@@ -1010,7 +1032,7 @@ public class IRBuilder implements ASTVisitor {
             func.entry_block.push_back(new StoreInst(value, allo, func.entry_block));
             func.this_alloca = allo;
         } else {
-            func = new IRFunction(func_name, functype);
+            func = new IRFunction(name, functype);
         }
         return func;
     }

@@ -1,3 +1,6 @@
+import Backend.ASM.ASMBuilder;
+import Backend.ASM.ASMPrinter;
+import Backend.ASM.RegAllocator;
 import Frontend.ASTBuilder;
 import Frontend.SemanticChecker;
 import Frontend.ast.RootNode;
@@ -21,8 +24,12 @@ public class Compiler {
 
     public static void main(String[] args) throws Exception {
         String inputfile = "test.mx";
-        String outputfile = "test.ll";
-        OutputStream output = new FileOutputStream(outputfile);
+        String out_ll = "test.ll";
+        OutputStream out_ll_stream = new FileOutputStream(out_ll);
+        String out_asm = "test.s";
+        OutputStream out_asm_stream = new FileOutputStream(out_asm);
+        String out_asm_without_allocate = "test_without_allocate.s";
+        OutputStream out_asm_without_allocate_stream = new FileOutputStream(out_asm_without_allocate);
         try {
             // System.out.println("-----------------Start!--------------------");
             MxStarLexer lexer;
@@ -40,13 +47,21 @@ public class Compiler {
             parser.addErrorListener(new MxStarErrorListener());
             ParseTree parse_tree_root = parser.mxstarcode();
             ASTBuilder astbuilder = new ASTBuilder();
-            // System.out.println("-----------------AST building------------------");
+            // System.out.println("-----------------AST Building------------------");
             RootNode astroot = (RootNode) astbuilder.visit(parse_tree_root);
             SemanticChecker semantic_checker = new SemanticChecker();
             // System.out.println("-----------------Semantic Checking-------------------");
             semantic_checker.visit(astroot);
-            IRPrinter ir_printer = new IRPrinter(astroot, output, is_online_judge);
+            // System.out.println("-----------------IR Building-------------------");
+            IRPrinter ir_printer = new IRPrinter(astroot, out_ll_stream, is_online_judge);
             ir_printer.IR_print();
+            // System.out.println("-----------------ASM Building-------------------");
+            ASMBuilder asm_builder = new ASMBuilder(ir_printer);
+            ASMPrinter asm_printer1 = new ASMPrinter(asm_builder.asm, out_asm_without_allocate_stream, is_online_judge);
+            asm_printer1.ASM_print();
+            RegAllocator reg_allocator = new RegAllocator(asm_builder.asm);
+            ASMPrinter asm_printer = new ASMPrinter(reg_allocator.asm, out_asm_stream, is_online_judge);
+            asm_printer.ASM_print();
         }
         catch (BaseError error){
             System.out.println(error.get_msg());

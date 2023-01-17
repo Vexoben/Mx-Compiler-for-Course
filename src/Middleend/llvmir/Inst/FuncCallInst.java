@@ -16,6 +16,7 @@ public class FuncCallInst extends BaseInst{
         super(((IRFuncType)_func.get_type()).get_ret_type(), "function_call_inst", _belong);
         func = _func;
         add_operand(func);
+        func.add_user(this);
         args.forEach(i -> {
             add_operand(i);
             i.add_user(this);

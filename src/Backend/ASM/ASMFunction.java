@@ -16,6 +16,8 @@ public class ASMFunction {
 
     public int delta_sp;
 
+    public boolean is_built_in;
+
     void add_block(ASMBlock block) {
         blocks.add(block);
     }
@@ -24,8 +26,16 @@ public class ASMFunction {
         name = _name;
     }
 
+    public ASMBlock get_first_block() {
+        return blocks.get(0);
+    }
+
+    public ASMBlock get_last_block() {
+        return blocks.get(blocks.size() - 1);
+    }
+
     @Override
     public String toString() {
-        return null;
+        return name;
     }
 }
