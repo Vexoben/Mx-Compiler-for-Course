@@ -37,10 +37,7 @@ public class Compiler {
                 InputStream input = new FileInputStream(inputfile);
                 lexer = new MxStarLexer(CharStreams.fromStream(input));
             } else {
-                // lexer = new MxStarLexer(CharStreams.fromStream(System.in));
-                // for debug
-                InputStream input = new FileInputStream(inputfile);
-                lexer = new MxStarLexer(CharStreams.fromStream(input));
+                lexer = new MxStarLexer(CharStreams.fromStream(System.in));
             }
             lexer.removeErrorListeners();
             lexer.addErrorListener(new MxStarErrorListener());
