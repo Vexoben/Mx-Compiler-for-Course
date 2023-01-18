@@ -20,7 +20,7 @@ import java.io.OutputStream;
 
 public class Compiler {
 
-    static boolean is_online_judge = false;
+    static boolean is_online_judge = true;
 
     public static void main(String[] args) throws Exception {
         String inputfile = "test.mx";
@@ -37,7 +37,10 @@ public class Compiler {
                 InputStream input = new FileInputStream(inputfile);
                 lexer = new MxStarLexer(CharStreams.fromStream(input));
             } else {
-                lexer = new MxStarLexer(CharStreams.fromStream(System.in));
+                // lexer = new MxStarLexer(CharStreams.fromStream(System.in));
+                // for debug
+                InputStream input = new FileInputStream(inputfile);
+                lexer = new MxStarLexer(CharStreams.fromStream(input));
             }
             lexer.removeErrorListeners();
             lexer.addErrorListener(new MxStarErrorListener());

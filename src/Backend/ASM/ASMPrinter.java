@@ -19,11 +19,7 @@ public class ASMPrinter {
     }
 
     void printf(String str) throws IOException {
-        if (is_online_judge) {
-            System.out.print(str);
-        } else {
-            os.write(str.getBytes());
-        }
+        os.write(str.getBytes());
     }
 
     public void ASM_print() throws IOException {
@@ -35,6 +31,7 @@ public class ASMPrinter {
         if (is_online_judge) {
             BuiltInPrinter built_in_printer = new BuiltInPrinter(os);
             built_in_printer.output_built_in_function();
+            func_cnt = 19;
         }
 
         for (ASMFunction func: asm.functions) {
