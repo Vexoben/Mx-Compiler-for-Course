@@ -28,21 +28,21 @@ public class ASMPrinter {
                 	.file	"test.mx"
                 """);
 
-        if (is_online_judge) {
+/*        if (is_online_judge) {
             BuiltInPrinter built_in_printer = new BuiltInPrinter(os);
             built_in_printer.output_built_in_function();
             func_cnt = 19;
-        }
+        }*/
 
         for (ASMFunction func: asm.functions) {
             print_function(func);
         }
 
-        if (is_online_judge) {
+/*        if (is_online_judge) {
             BuiltInPrinter built_in_printer = new BuiltInPrinter(os);
             built_in_printer.output_built_in_const_string();
             str_cnt = 4;
-        }
+        }*/
 
         for (GlobalReg str: asm.const_strings) {
             print_const_string(str);

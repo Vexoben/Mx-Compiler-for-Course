@@ -6,8 +6,18 @@ import java.io.OutputStream;
 public class BuiltInPrinter {
     OutputStream os;
 
-    public BuiltInPrinter(OutputStream output) {
+    public BuiltInPrinter(OutputStream output) throws IOException {
         os = output;
+        printf("""
+                	.text
+                	.file	"built_in.c"
+                """);
+        output_built_in_function();
+        output_built_in_const_string();
+        printf("""
+                 	.ident	"clang version 10.0.0-4ubuntu1 "
+                 	.section	".note.GNU-stack","",@progbits
+                """);
     }
 
     public void printf(String str) throws IOException {

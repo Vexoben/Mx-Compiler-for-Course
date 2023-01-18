@@ -1,5 +1,6 @@
 import Backend.ASM.ASMBuilder;
 import Backend.ASM.ASMPrinter;
+import Backend.ASM.BuiltInPrinter;
 import Backend.ASM.RegAllocator;
 import Frontend.ASTBuilder;
 import Frontend.SemanticChecker;
@@ -21,7 +22,7 @@ import java.io.OutputStream;
 public class Compiler {
 
     static boolean is_online_judge = true;
-    static boolean debug_mode = false;
+    static boolean debug_mode = true;
 
     public static void main(String[] args) throws Exception {
         String inputfile = "test.mx";
@@ -31,6 +32,8 @@ public class Compiler {
         OutputStream out_asm_stream = new FileOutputStream(out_asm);
         String out_asm_without_allocate = "test_without_allocate.s";
         OutputStream out_asm_without_allocate_stream = new FileOutputStream(out_asm_without_allocate);
+        String out_built_in = "builtin.s";
+        OutputStream out_built_in_stream = new FileOutputStream(out_built_in);
         try {
             // System.out.println("-----------------Start!--------------------");
             MxStarLexer lexer;
@@ -68,6 +71,9 @@ public class Compiler {
             RegAllocator reg_allocator = new RegAllocator(asm_builder.asm);
             ASMPrinter asm_printer = new ASMPrinter(reg_allocator.asm, out_asm_stream, is_online_judge);
             asm_printer.ASM_print();
+            if (is_online_judge) {
+                new BuiltInPrinter(out_built_in_stream);
+            }
         }
         catch (BaseError error){
             System.out.println(error.get_msg());
