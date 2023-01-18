@@ -192,8 +192,8 @@ public class ASMBuilder implements IRVisitor {
                 case MOD -> op = "rem";
                 case LEFTSHIFT -> op = "sll";
                 case RIGHTSHIFT -> op = "sra";
-                case OR -> op = "or";
-                case AND -> op = "and";
+                case OR, BITOR -> op = "or";
+                case AND, BITAND -> op = "and";
                 case XOR -> op = "xor";
                 default -> throw new AsmError("ASMBuilder.java: visit BinaryInst, calc");
             }

@@ -628,12 +628,163 @@ toString:                               # @toString
 	.size	toString, .Lfunc_end18-toString
 	.cfi_endproc
                                         # -- End function
+.globl   qpow
+   .p2align   2
+   .type   qpow,@function
+qpow:
+.qpow.qpowentry:
+   addi sp, sp, -168
+   mv s1, ra
+   sw s1, 0(sp)
+   mv s1, s0
+   sw s1, 4(sp)
+   mv s1, a0
+   sw s1, 8(sp)
+   mv s1, a1
+   sw s1, 12(sp)
+   mv s1, a2
+   sw s1, 16(sp)
+   j .qpow.first_block__qpow
+.qpow.first_block__qpow:
+   lw s0, 8(sp)
+   sw s0, 20(sp)
+   lw s0, 12(sp)
+   sw s0, 24(sp)
+   lw s0, 16(sp)
+   sw s0, 28(sp)
+   li s0, 1
+   sw s0, 32(sp)
+   lw s0, 32(sp)
+   sw s0, 36(sp)
+   lw s1, 20(sp)
+   sw s1, 40(sp)
+   lw s0, 40(sp)
+   sw s0, 44(sp)
+   j .qpow.while_condition
+.qpow.while_condition:
+   lw s1, 24(sp)
+   sw s1, 48(sp)
+   li s0, 0
+   sw s0, 52(sp)
+   lw s0, 52(sp)
+   lw s1, 48(sp)
+   slt s0, s0, s1
+   sw s0, 56(sp)
+   li s0, 0
+   sw s0, 60(sp)
+   lw s0, 48(sp)
+   lw s1, 60(sp)
+   bgt s0, s1, .qpow.while_repeat
+   j .qpow.while_exit
+.qpow.while_repeat:
+   lw s1, 24(sp)
+   sw s1, 64(sp)
+   li s0, 1
+   sw s0, 68(sp)
+   lw s0, 64(sp)
+   lw s1, 68(sp)
+   and s0, s0, s1
+   sw s0, 72(sp)
+   li s0, 1
+   sw s0, 76(sp)
+   lw s0, 72(sp)
+   lw s1, 76(sp)
+   xor s0, s0, s1
+   sw s0, 80(sp)
+   lw s0, 80(sp)
+   sltiu s0, s0, 1
+   sw s0, 84(sp)
+   li s0, 1
+   sw s0, 88(sp)
+   lw s0, 72(sp)
+   lw s1, 88(sp)
+   beq s0, s1, .qpow.if_true
+   j .qpow.if_false
+.qpow.while_exit:
+   lw s1, 36(sp)
+   sw s1, 92(sp)
+   lw s0, 92(sp)
+   mv a0, s0
+   lw s0, 4(sp)
+   mv s0, s0
+   lw s0, 0(sp)
+   mv ra, s0
+   addi sp, sp, 168
+   ret
+   j .qpow.qpowexit
+.qpow.if_true:
+   lw s1, 36(sp)
+   sw s1, 96(sp)
+   lw s1, 36(sp)
+   sw s1, 100(sp)
+   lw s1, 44(sp)
+   sw s1, 104(sp)
+   lw s0, 100(sp)
+   lw s1, 104(sp)
+   mul s0, s0, s1
+   sw s0, 108(sp)
+   lw s1, 28(sp)
+   sw s1, 112(sp)
+   lw s0, 108(sp)
+   lw s1, 112(sp)
+   rem s0, s0, s1
+   sw s0, 116(sp)
+   lw s0, 116(sp)
+   sw s0, 36(sp)
+   j .qpow.if_exit
+.qpow.if_false:
+   j .qpow.if_exit
+.qpow.if_exit:
+   lw s1, 44(sp)
+   sw s1, 120(sp)
+   lw s1, 44(sp)
+   sw s1, 124(sp)
+   lw s1, 44(sp)
+   sw s1, 128(sp)
+   lw s0, 124(sp)
+   lw s1, 128(sp)
+   mul s0, s0, s1
+   sw s0, 132(sp)
+   lw s1, 28(sp)
+   sw s1, 136(sp)
+   lw s0, 132(sp)
+   lw s1, 136(sp)
+   rem s0, s0, s1
+   sw s0, 140(sp)
+   lw s0, 140(sp)
+   sw s0, 44(sp)
+   lw s1, 24(sp)
+   sw s1, 144(sp)
+   lw s1, 24(sp)
+   sw s1, 148(sp)
+   li s0, 2
+   sw s0, 152(sp)
+   lw s0, 148(sp)
+   lw s1, 152(sp)
+   div s0, s0, s1
+   sw s0, 156(sp)
+   lw s0, 156(sp)
+   sw s0, 24(sp)
+   j .qpow.while_condition
+.qpow.qpowexit:
+   lw s1, 160(sp)
+   sw s1, 164(sp)
+   lw s0, 164(sp)
+   mv a0, s0
+   lw s0, 4(sp)
+   mv s0, s0
+   lw s0, 0(sp)
+   mv ra, s0
+   addi sp, sp, 168
+   ret
+.Lfunc_end19:
+   .size   qpow, .Lfunc_end19-qpow
 .globl   main
    .p2align   2
    .type   main,@function
 main:
 .main.mainentry:
-   addi sp, sp, -704
+   addi sp, sp, -48
    mv s1, ra
    sw s1, 0(sp)
    mv s1, s0
@@ -641,823 +792,86 @@ main:
    call __init_function__
    j .main.first_block__main
 .main.first_block__main:
-   li s0, 8
+   li s0, 2
    sw s0, 8(sp)
-   li s0, 4
-   sw s0, 12(sp)
    lw s0, 8(sp)
-   lw s1, 12(sp)
-   mul s0, s0, s1
-   sw s0, 16(sp)
-   li s0, 4
-   sw s0, 20(sp)
-   lw s0, 20(sp)
-   lw s1, 16(sp)
-   add s0, s0, s1
-   sw s0, 24(sp)
-   lw s0, 24(sp)
    mv a0, s0
-   call __built_in_malloc
+   li s0, 10
+   sw s0, 12(sp)
+   lw s0, 12(sp)
+   mv a1, s0
+   li s0, 10000
+   sw s0, 16(sp)
+   lw s0, 16(sp)
+   mv a2, s0
+   call qpow
    mv s1, a0
+   sw s1, 20(sp)
+   lw s0, 20(sp)
+   mv a0, s0
+   call toString
+   mv s1, a0
+   sw s1, 24(sp)
+   lw s0, 24(sp)
+   lw s1, 0(s0)
    sw s1, 28(sp)
    lw s0, 28(sp)
-   mv s1, s0
-   sw s1, 32(sp)
-   li s0, 4
-   sw s0, 36(sp)
-   lw s0, 36(sp)
-   lw s1, 32(sp)
-   sw s0, 0(s1)
-   li s0, 1
-   sw s0, 40(sp)
-   lw s0, 40(sp)
-   lw s1, 40(sp)
-   add s0, s0, s1
-   sw s0, 44(sp)
-   lw s0, 44(sp)
-   lw s1, 44(sp)
-   add s0, s0, s1
-   sw s0, 44(sp)
-   lw s0, 44(sp)
-   lw s1, 32(sp)
-   add s0, s0, s1
-   sw s0, 48(sp)
-   lw s0, 48(sp)
-   mv s1, s0
-   sw s1, 52(sp)
-   li s0, 4
-   sw s0, 56(sp)
-   lw s0, 56(sp)
-   lw s1, 56(sp)
-   add s0, s0, s1
-   sw s0, 60(sp)
-   lw s0, 60(sp)
-   lw s1, 60(sp)
-   add s0, s0, s1
-   sw s0, 60(sp)
-   lw s0, 60(sp)
-   lw s1, 52(sp)
-   add s0, s0, s1
-   sw s0, 64(sp)
-   lw s0, 52(sp)
-   sw s0, 68(sp)
-   j .main.while_condition
-.main.while_condition:
-   lw s1, 68(sp)
-   sw s1, 72(sp)
-   lw s0, 72(sp)
-   lw s1, 64(sp)
-   xor s0, s0, s1
-   sw s0, 76(sp)
-   lw s0, 76(sp)
-   sltiu s0, s0, 1
-   sw s0, 80(sp)
-   lw s0, 72(sp)
-   lw s1, 64(sp)
-   beq s0, s1, .main.while_exit
-   j .main.while_repeat
-.main.while_repeat:
-   lw s0, 84(sp)
-   lw s1, 72(sp)
-   sw s0, 0(s1)
-   li s0, 1
-   sw s0, 88(sp)
-   lw s0, 88(sp)
-   lw s1, 88(sp)
-   add s0, s0, s1
-   sw s0, 92(sp)
-   lw s0, 92(sp)
-   lw s1, 92(sp)
-   add s0, s0, s1
-   sw s0, 92(sp)
-   lw s0, 92(sp)
-   lw s1, 72(sp)
-   add s0, s0, s1
-   sw s0, 96(sp)
-   lw s0, 96(sp)
-   sw s0, 68(sp)
-   j .main.while_condition
-.main.while_exit:
-   lw s0, 52(sp)
-   sw s0, 100(sp)
-   lw s1, 100(sp)
-   sw s1, 104(sp)
-   lw s0, 104(sp)
-   sw s0, 108(sp)
-   lw s1, 108(sp)
-   sw s1, 112(sp)
-   li s0, 0
-   sw s0, 116(sp)
-   lw s0, 116(sp)
-   lw s1, 116(sp)
-   add s0, s0, s1
-   sw s0, 120(sp)
-   lw s0, 120(sp)
-   lw s1, 120(sp)
-   add s0, s0, s1
-   sw s0, 120(sp)
-   lw s0, 120(sp)
-   lw s1, 112(sp)
-   add s0, s0, s1
-   sw s0, 124(sp)
-   la s0, a
-   sw s0, 128(sp)
-   lw s0, 128(sp)
-   lw s1, 0(s0)
-   sw s1, 132(sp)
-   lw s0, 132(sp)
-   lw s1, 124(sp)
-   sw s0, 0(s1)
-   lw s1, 108(sp)
-   sw s1, 136(sp)
-   li s0, 1
-   sw s0, 140(sp)
-   lw s0, 140(sp)
-   lw s1, 140(sp)
-   add s0, s0, s1
-   sw s0, 144(sp)
-   lw s0, 144(sp)
-   lw s1, 144(sp)
-   add s0, s0, s1
-   sw s0, 144(sp)
-   lw s0, 144(sp)
-   lw s1, 136(sp)
-   add s0, s0, s1
-   sw s0, 148(sp)
-   la s0, a
-   sw s0, 152(sp)
-   lw s0, 152(sp)
-   lw s1, 0(s0)
-   sw s1, 156(sp)
-   lw s0, 156(sp)
-   lw s1, 148(sp)
-   sw s0, 0(s1)
-   lw s1, 108(sp)
-   sw s1, 160(sp)
-   li s0, 2
-   sw s0, 164(sp)
-   lw s0, 164(sp)
-   lw s1, 164(sp)
-   add s0, s0, s1
-   sw s0, 168(sp)
-   lw s0, 168(sp)
-   lw s1, 168(sp)
-   add s0, s0, s1
-   sw s0, 168(sp)
-   lw s0, 168(sp)
-   lw s1, 160(sp)
-   add s0, s0, s1
-   sw s0, 172(sp)
-   la s0, a
-   sw s0, 176(sp)
-   lw s0, 176(sp)
-   lw s1, 0(s0)
-   sw s1, 180(sp)
-   lw s0, 180(sp)
-   lw s1, 172(sp)
-   sw s0, 0(s1)
-   lw s1, 108(sp)
-   sw s1, 184(sp)
-   li s0, 3
-   sw s0, 188(sp)
-   lw s0, 188(sp)
-   lw s1, 188(sp)
-   add s0, s0, s1
-   sw s0, 192(sp)
-   lw s0, 192(sp)
-   lw s1, 192(sp)
-   add s0, s0, s1
-   sw s0, 192(sp)
-   lw s0, 192(sp)
-   lw s1, 184(sp)
-   add s0, s0, s1
-   sw s0, 196(sp)
-   la s0, a
-   sw s0, 200(sp)
-   lw s0, 200(sp)
-   lw s1, 0(s0)
-   sw s1, 204(sp)
-   lw s0, 204(sp)
-   lw s1, 196(sp)
-   sw s0, 0(s1)
-   lw s1, 108(sp)
-   sw s1, 208(sp)
-   lw s0, 208(sp)
-   mv s1, s0
-   sw s1, 212(sp)
-   li s0, -1
-   sw s0, 216(sp)
-   lw s0, 216(sp)
-   lw s1, 216(sp)
-   add s0, s0, s1
-   sw s0, 220(sp)
-   lw s0, 220(sp)
-   lw s1, 220(sp)
-   add s0, s0, s1
-   sw s0, 220(sp)
-   lw s0, 220(sp)
-   lw s1, 212(sp)
-   add s0, s0, s1
-   sw s0, 224(sp)
-   lw s0, 224(sp)
-   lw s1, 0(s0)
-   sw s1, 228(sp)
-   lw s0, 228(sp)
-   mv a0, s0
-   call toString
-   mv s1, a0
-   sw s1, 232(sp)
-   lw s0, 232(sp)
-   lw s1, 0(s0)
-   sw s1, 236(sp)
-   lw s0, 236(sp)
    mv a0, s0
    call println
-   j .main.for_init
-.main.for_init:
-   lw s1, 240(sp)
-   sw s1, 244(sp)
    li s0, 0
-   sw s0, 248(sp)
-   lw s0, 248(sp)
-   sw s0, 240(sp)
-   j .main.for_condition
-.main.for_condition:
-   lw s1, 240(sp)
-   sw s1, 252(sp)
-   lw s1, 108(sp)
-   sw s1, 256(sp)
-   li s0, 0
-   sw s0, 260(sp)
-   lw s0, 260(sp)
-   lw s1, 260(sp)
-   add s0, s0, s1
-   sw s0, 264(sp)
-   lw s0, 264(sp)
-   lw s1, 264(sp)
-   add s0, s0, s1
-   sw s0, 264(sp)
-   lw s0, 264(sp)
-   lw s1, 256(sp)
-   add s0, s0, s1
-   sw s0, 268(sp)
-   lw s0, 268(sp)
-   lw s1, 0(s0)
-   sw s1, 272(sp)
-   lw s0, 272(sp)
-   mv s1, s0
-   sw s1, 276(sp)
-   li s0, -1
-   sw s0, 280(sp)
-   lw s0, 280(sp)
-   lw s1, 280(sp)
-   add s0, s0, s1
-   sw s0, 284(sp)
-   lw s0, 284(sp)
-   lw s1, 284(sp)
-   add s0, s0, s1
-   sw s0, 284(sp)
-   lw s0, 284(sp)
-   lw s1, 276(sp)
-   add s0, s0, s1
-   sw s0, 288(sp)
-   lw s0, 288(sp)
-   lw s1, 0(s0)
-   sw s1, 292(sp)
-   lw s0, 252(sp)
-   lw s1, 292(sp)
-   slt s0, s0, s1
-   sw s0, 296(sp)
-   lw s0, 252(sp)
-   lw s1, 292(sp)
-   blt s0, s1, .main.for_repeat
-   j .main.for_exit
-.main.for_step:
-   lw s1, 240(sp)
-   sw s1, 300(sp)
-   li s0, 1
-   sw s0, 304(sp)
-   lw s0, 304(sp)
-   lw s1, 300(sp)
-   add s0, s0, s1
-   sw s0, 308(sp)
-   lw s0, 308(sp)
-   sw s0, 240(sp)
-   j .main.for_condition
-.main.for_repeat:
-   lw s1, 108(sp)
-   sw s1, 312(sp)
-   li s0, 0
-   sw s0, 316(sp)
-   lw s0, 316(sp)
-   lw s1, 316(sp)
-   add s0, s0, s1
-   sw s0, 320(sp)
-   lw s0, 320(sp)
-   lw s1, 320(sp)
-   add s0, s0, s1
-   sw s0, 320(sp)
-   lw s0, 320(sp)
-   lw s1, 312(sp)
-   add s0, s0, s1
-   sw s0, 324(sp)
-   lw s1, 240(sp)
-   sw s1, 328(sp)
-   lw s0, 324(sp)
-   lw s1, 0(s0)
-   sw s1, 332(sp)
-   lw s0, 328(sp)
-   lw s1, 328(sp)
-   add s0, s0, s1
-   sw s0, 336(sp)
-   lw s0, 336(sp)
-   lw s1, 336(sp)
-   add s0, s0, s1
-   sw s0, 336(sp)
-   lw s0, 336(sp)
-   lw s1, 332(sp)
-   add s0, s0, s1
-   sw s0, 340(sp)
-   call getInt
-   mv s1, a0
-   sw s1, 344(sp)
-   lw s0, 344(sp)
-   lw s1, 340(sp)
-   sw s0, 0(s1)
-   j .main.for_step
-.main.for_exit:
-   j .main.for_init2
-.main.for_init2:
-   lw s1, 240(sp)
-   sw s1, 348(sp)
-   li s0, 0
-   sw s0, 352(sp)
-   lw s0, 352(sp)
-   sw s0, 240(sp)
-   j .main.for_condition2
-.main.for_condition2:
-   lw s1, 240(sp)
-   sw s1, 356(sp)
-   lw s1, 108(sp)
-   sw s1, 360(sp)
-   li s0, 1
-   sw s0, 364(sp)
-   lw s0, 364(sp)
-   lw s1, 364(sp)
-   add s0, s0, s1
-   sw s0, 368(sp)
-   lw s0, 368(sp)
-   lw s1, 368(sp)
-   add s0, s0, s1
-   sw s0, 368(sp)
-   lw s0, 368(sp)
-   lw s1, 360(sp)
-   add s0, s0, s1
-   sw s0, 372(sp)
-   lw s0, 372(sp)
-   lw s1, 0(s0)
-   sw s1, 376(sp)
-   lw s0, 376(sp)
-   mv s1, s0
-   sw s1, 380(sp)
-   li s0, -1
-   sw s0, 384(sp)
-   lw s0, 384(sp)
-   lw s1, 384(sp)
-   add s0, s0, s1
-   sw s0, 388(sp)
-   lw s0, 388(sp)
-   lw s1, 388(sp)
-   add s0, s0, s1
-   sw s0, 388(sp)
-   lw s0, 388(sp)
-   lw s1, 380(sp)
-   add s0, s0, s1
-   sw s0, 392(sp)
-   lw s0, 392(sp)
-   lw s1, 0(s0)
-   sw s1, 396(sp)
-   lw s0, 356(sp)
-   lw s1, 396(sp)
-   slt s0, s0, s1
-   sw s0, 400(sp)
-   lw s0, 356(sp)
-   lw s1, 396(sp)
-   blt s0, s1, .main.for_repeat2
-   j .main.for_exit2
-.main.for_step2:
-   lw s1, 240(sp)
-   sw s1, 404(sp)
-   li s0, 1
-   sw s0, 408(sp)
-   lw s0, 408(sp)
-   lw s1, 404(sp)
-   add s0, s0, s1
-   sw s0, 412(sp)
-   lw s0, 412(sp)
-   sw s0, 240(sp)
-   j .main.for_condition2
-.main.for_repeat2:
-   lw s1, 108(sp)
-   sw s1, 416(sp)
-   li s0, 1
-   sw s0, 420(sp)
-   lw s0, 420(sp)
-   lw s1, 420(sp)
-   add s0, s0, s1
-   sw s0, 424(sp)
-   lw s0, 424(sp)
-   lw s1, 424(sp)
-   add s0, s0, s1
-   sw s0, 424(sp)
-   lw s0, 424(sp)
-   lw s1, 416(sp)
-   add s0, s0, s1
-   sw s0, 428(sp)
-   lw s1, 240(sp)
-   sw s1, 432(sp)
-   lw s0, 428(sp)
-   lw s1, 0(s0)
-   sw s1, 436(sp)
-   lw s0, 432(sp)
-   lw s1, 432(sp)
-   add s0, s0, s1
-   sw s0, 440(sp)
-   lw s0, 440(sp)
-   lw s1, 440(sp)
-   add s0, s0, s1
-   sw s0, 440(sp)
-   lw s0, 440(sp)
-   lw s1, 436(sp)
-   add s0, s0, s1
-   sw s0, 444(sp)
-   lw s0, 444(sp)
-   lw s1, 0(s0)
-   sw s1, 448(sp)
-   lw s0, 448(sp)
-   mv a0, s0
-   call toString
-   mv s1, a0
-   sw s1, 452(sp)
-   lw s0, 452(sp)
-   lw s1, 0(s0)
-   sw s1, 456(sp)
-   lw s0, 456(sp)
-   mv a0, s0
-   call print
-   j .main.for_step2
-.main.for_exit2:
-   li s0, 0
-   sw s0, 460(sp)
-   la s0, .const_str
-   sw s0, 464(sp)
-   lw s0, 464(sp)
-   lw s1, 460(sp)
-   add s0, s0, s1
-   sw s0, 468(sp)
-   lw s0, 468(sp)
-   mv a0, s0
-   call println
-   j .main.for_init3
-.main.for_init3:
-   lw s1, 240(sp)
-   sw s1, 472(sp)
-   li s0, 0
-   sw s0, 476(sp)
-   lw s0, 476(sp)
-   sw s0, 240(sp)
-   j .main.for_condition3
-.main.for_condition3:
-   lw s1, 240(sp)
-   sw s1, 480(sp)
-   lw s1, 108(sp)
-   sw s1, 484(sp)
-   li s0, 2
-   sw s0, 488(sp)
-   lw s0, 488(sp)
-   lw s1, 488(sp)
-   add s0, s0, s1
-   sw s0, 492(sp)
-   lw s0, 492(sp)
-   lw s1, 492(sp)
-   add s0, s0, s1
-   sw s0, 492(sp)
-   lw s0, 492(sp)
-   lw s1, 484(sp)
-   add s0, s0, s1
-   sw s0, 496(sp)
-   lw s0, 496(sp)
-   lw s1, 0(s0)
-   sw s1, 500(sp)
-   lw s0, 500(sp)
-   mv s1, s0
-   sw s1, 504(sp)
-   li s0, -1
-   sw s0, 508(sp)
-   lw s0, 508(sp)
-   lw s1, 508(sp)
-   add s0, s0, s1
-   sw s0, 512(sp)
-   lw s0, 512(sp)
-   lw s1, 512(sp)
-   add s0, s0, s1
-   sw s0, 512(sp)
-   lw s0, 512(sp)
-   lw s1, 504(sp)
-   add s0, s0, s1
-   sw s0, 516(sp)
-   lw s0, 516(sp)
-   lw s1, 0(s0)
-   sw s1, 520(sp)
-   lw s0, 480(sp)
-   lw s1, 520(sp)
-   slt s0, s0, s1
-   sw s0, 524(sp)
-   lw s0, 480(sp)
-   lw s1, 520(sp)
-   blt s0, s1, .main.for_repeat3
-   j .main.for_exit3
-.main.for_step3:
-   lw s1, 240(sp)
-   sw s1, 528(sp)
-   li s0, 1
-   sw s0, 532(sp)
-   lw s0, 532(sp)
-   lw s1, 528(sp)
-   add s0, s0, s1
-   sw s0, 536(sp)
-   lw s0, 536(sp)
-   sw s0, 240(sp)
-   j .main.for_condition3
-.main.for_repeat3:
-   lw s1, 108(sp)
-   sw s1, 540(sp)
-   li s0, 2
-   sw s0, 544(sp)
-   lw s0, 544(sp)
-   lw s1, 544(sp)
-   add s0, s0, s1
-   sw s0, 548(sp)
-   lw s0, 548(sp)
-   lw s1, 548(sp)
-   add s0, s0, s1
-   sw s0, 548(sp)
-   lw s0, 548(sp)
-   lw s1, 540(sp)
-   add s0, s0, s1
-   sw s0, 552(sp)
-   lw s1, 240(sp)
-   sw s1, 556(sp)
-   lw s0, 552(sp)
-   lw s1, 0(s0)
-   sw s1, 560(sp)
-   lw s0, 556(sp)
-   lw s1, 556(sp)
-   add s0, s0, s1
-   sw s0, 564(sp)
-   lw s0, 564(sp)
-   lw s1, 564(sp)
-   add s0, s0, s1
-   sw s0, 564(sp)
-   lw s0, 564(sp)
-   lw s1, 560(sp)
-   add s0, s0, s1
-   sw s0, 568(sp)
-   li s0, 0
-   sw s0, 572(sp)
-   lw s0, 572(sp)
-   lw s1, 568(sp)
-   sw s0, 0(s1)
-   j .main.for_step3
-.main.for_exit3:
-   j .main.for_init4
-.main.for_init4:
-   lw s1, 240(sp)
-   sw s1, 576(sp)
-   li s0, 0
-   sw s0, 580(sp)
-   lw s0, 580(sp)
-   sw s0, 240(sp)
-   j .main.for_condition4
-.main.for_condition4:
-   lw s1, 240(sp)
-   sw s1, 584(sp)
-   lw s1, 108(sp)
-   sw s1, 588(sp)
-   li s0, 3
-   sw s0, 592(sp)
-   lw s0, 592(sp)
-   lw s1, 592(sp)
-   add s0, s0, s1
-   sw s0, 596(sp)
-   lw s0, 596(sp)
-   lw s1, 596(sp)
-   add s0, s0, s1
-   sw s0, 596(sp)
-   lw s0, 596(sp)
-   lw s1, 588(sp)
-   add s0, s0, s1
-   sw s0, 600(sp)
-   lw s0, 600(sp)
-   lw s1, 0(s0)
-   sw s1, 604(sp)
-   lw s0, 604(sp)
-   mv s1, s0
-   sw s1, 608(sp)
-   li s0, -1
-   sw s0, 612(sp)
-   lw s0, 612(sp)
-   lw s1, 612(sp)
-   add s0, s0, s1
-   sw s0, 616(sp)
-   lw s0, 616(sp)
-   lw s1, 616(sp)
-   add s0, s0, s1
-   sw s0, 616(sp)
-   lw s0, 616(sp)
-   lw s1, 608(sp)
-   add s0, s0, s1
-   sw s0, 620(sp)
-   lw s0, 620(sp)
-   lw s1, 0(s0)
-   sw s1, 624(sp)
-   lw s0, 584(sp)
-   lw s1, 624(sp)
-   slt s0, s0, s1
-   sw s0, 628(sp)
-   lw s0, 584(sp)
-   lw s1, 624(sp)
-   blt s0, s1, .main.for_repeat4
-   j .main.for_exit4
-.main.for_step4:
-   lw s1, 240(sp)
-   sw s1, 632(sp)
-   li s0, 1
-   sw s0, 636(sp)
-   lw s0, 636(sp)
-   lw s1, 632(sp)
-   add s0, s0, s1
-   sw s0, 640(sp)
-   lw s0, 640(sp)
-   sw s0, 240(sp)
-   j .main.for_condition4
-.main.for_repeat4:
-   lw s1, 108(sp)
-   sw s1, 644(sp)
-   li s0, 3
-   sw s0, 648(sp)
-   lw s0, 648(sp)
-   lw s1, 648(sp)
-   add s0, s0, s1
-   sw s0, 652(sp)
-   lw s0, 652(sp)
-   lw s1, 652(sp)
-   add s0, s0, s1
-   sw s0, 652(sp)
-   lw s0, 652(sp)
-   lw s1, 644(sp)
-   add s0, s0, s1
-   sw s0, 656(sp)
-   lw s1, 240(sp)
-   sw s1, 660(sp)
-   lw s0, 656(sp)
-   lw s1, 0(s0)
-   sw s1, 664(sp)
-   lw s0, 660(sp)
-   lw s1, 660(sp)
-   add s0, s0, s1
-   sw s0, 668(sp)
-   lw s0, 668(sp)
-   lw s1, 668(sp)
-   add s0, s0, s1
-   sw s0, 668(sp)
-   lw s0, 668(sp)
-   lw s1, 664(sp)
-   add s0, s0, s1
-   sw s0, 672(sp)
-   lw s0, 672(sp)
-   lw s1, 0(s0)
-   sw s1, 676(sp)
-   lw s0, 676(sp)
-   mv a0, s0
-   call toString
-   mv s1, a0
-   sw s1, 680(sp)
-   lw s0, 680(sp)
-   lw s1, 0(s0)
-   sw s1, 684(sp)
-   lw s0, 684(sp)
-   mv a0, s0
-   call print
-   j .main.for_step4
-.main.for_exit4:
-   li s0, 0
-   sw s0, 688(sp)
-   lw s0, 688(sp)
+   sw s0, 32(sp)
+   lw s0, 32(sp)
    mv a0, s0
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 704
+   addi sp, sp, 48
    ret
    j .main.mainexit
 .main.mainexit:
    li s0, 0
-   sw s0, 692(sp)
-   lw s0, 692(sp)
+   sw s0, 36(sp)
+   lw s0, 36(sp)
    mv a0, s0
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 704
+   addi sp, sp, 48
    ret
-   lw s1, 696(sp)
-   sw s1, 700(sp)
-   lw s0, 700(sp)
+   lw s1, 40(sp)
+   sw s1, 44(sp)
+   lw s0, 44(sp)
    mv a0, s0
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 704
+   addi sp, sp, 48
    ret
-.Lfunc_end19:
-   .size   main, .Lfunc_end19-main
+.Lfunc_end20:
+   .size   main, .Lfunc_end20-main
 .globl   __init_function__
    .p2align   2
    .type   __init_function__,@function
 __init_function__:
 .__init_function__.__init_function__entry:
-   addi sp, sp, -68
+   addi sp, sp, -8
    mv s1, ra
    sw s1, 0(sp)
    mv s1, s0
    sw s1, 4(sp)
-   li s0, 4
-   sw s0, 8(sp)
-   li s0, 4
-   sw s0, 12(sp)
-   lw s0, 8(sp)
-   lw s1, 12(sp)
-   mul s0, s0, s1
-   sw s0, 16(sp)
-   li s0, 4
-   sw s0, 20(sp)
-   lw s0, 20(sp)
-   lw s1, 16(sp)
-   add s0, s0, s1
-   sw s0, 24(sp)
-   lw s0, 24(sp)
-   mv a0, s0
-   call __built_in_malloc
-   mv s1, a0
-   sw s1, 28(sp)
-   lw s0, 28(sp)
-   mv s1, s0
-   sw s1, 32(sp)
-   li s0, 4
-   sw s0, 36(sp)
-   lw s0, 36(sp)
-   lw s1, 32(sp)
-   sw s0, 0(s1)
-   li s0, 1
-   sw s0, 40(sp)
-   lw s0, 40(sp)
-   lw s1, 40(sp)
-   add s0, s0, s1
-   sw s0, 44(sp)
-   lw s0, 44(sp)
-   lw s1, 44(sp)
-   add s0, s0, s1
-   sw s0, 44(sp)
-   lw s0, 44(sp)
-   lw s1, 32(sp)
-   add s0, s0, s1
-   sw s0, 48(sp)
-   lw s0, 48(sp)
-   mv s1, s0
-   sw s1, 52(sp)
-   lw s0, 52(sp)
-   sw s0, 56(sp)
-   lw s1, 56(sp)
-   sw s1, 60(sp)
-   la s0, a
-   sw s0, 64(sp)
-   lw s0, 60(sp)
-   lw s1, 64(sp)
-   sw s0, 0(s1)
    j .__init_function__.__init_function__exit
 .__init_function__.__init_function__exit:
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 68
+   addi sp, sp, 8
    ret
-.Lfunc_end20:
-   .size   __init_function__, .Lfunc_end20-__init_function__
+.Lfunc_end21:
+   .size   __init_function__, .Lfunc_end21-__init_function__
 	.type	.L.str,@object          # @.str
 	.section	.rodata.str1.1,"aMS",@progbits,1
 .L.str:
@@ -1478,15 +892,5 @@ __init_function__:
 .L.str.3:
 	.asciz	"%d\n"
 	.size	.L.str.3, 4
-   .type   .const_str,@object
-.const_str:
-   .asciz   "\00"   .size   .const_str, 4
-   .type   a,@object
-   .section   .rodata.str1.1,"aMS",@progbits,1
-   .globl   a
-   .p2align   2
-a:
-   .word   0
-   .size   .a, 4
 	.ident	"clang version 10.0.0-4ubuntu1 "
 	.section	".note.GNU-stack","",@progbits
