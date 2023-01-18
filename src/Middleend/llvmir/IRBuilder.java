@@ -317,7 +317,7 @@ public class IRBuilder implements ASTVisitor {
                 else {
                     cur_block.push_back(new StoreInst(get_data(obj.assign_list.get(i).result), addr, cur_block));
                 }
-            } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
+            } else if (!is_member_variable && (obj.var_type.is_array() || obj.var_type.is_class())) {
                 if (obj.var_type.is_class() && !obj.var_type.is_array()) {
                     LoadInst load = new LoadInst(addr, "load_inst", cur_block);
                     cur_func.entry_block.push_back(load);
@@ -450,30 +450,39 @@ public class IRBuilder implements ASTVisitor {
                 logic_right.insert(logic_exit);
                 cur_block.cut();
 
+                AllocaInst ret_mem = new AllocaInst(new BoolType(), "allo", cur_block);
+                cur_block.push_back(ret_mem);
+
                 if (obj.op.equals(BinaryExprNode.BinaryOperator.AND)) {
+                    cur_block.push_back(new StoreInst(new BoolConst(false), ret_mem, cur_block));
                     cur_block.push_back(new BrInst(get_data(obj.left_expr.result), logic_right, logic_exit, cur_block));
                 } else if (obj.op.equals(BinaryExprNode.BinaryOperator.OR)) {
+                    cur_block.push_back(new StoreInst(new BoolConst(true), ret_mem, cur_block));
                     cur_block.push_back(new BrInst(get_data(obj.left_expr.result), logic_exit, logic_right, cur_block));
                 }
 
                 cur_block = logic_right;
                 obj.right_expr.accept(this);
-
-                cur_block = logic_exit;
-                PhiInst ret;
                 Value right_result = obj.right_expr.result;
                 if (right_result instanceof GetElementPtrInst) {
                     right_result = new LoadInst(right_result, "load_inst", logic_right);
                     logic_right.push_back((BaseInst) right_result);
                 }
-                if (obj.op.equals(BinaryExprNode.BinaryOperator.AND)) {
+                cur_block.push_back(new StoreInst(right_result, ret_mem, logic_right));
+
+                cur_block = logic_exit;
+//                PhiInst ret;
+
+/*                if (obj.op.equals(BinaryExprNode.BinaryOperator.AND)) {
                     ret = new PhiInst(new BoolType(), "phi_inst", cur_block, new BoolConst(false), logic_left, right_result, logic_right);
                 } else {
                     ret = new PhiInst(new BoolType(), "phi_inst", cur_block, new BoolConst(true), logic_left, right_result, logic_right);
                 }
+                cur_block.push_back(ret);*/
+                LoadInst ret = new LoadInst(ret_mem, "load", cur_block);
                 cur_block.push_back(ret);
                 obj.result = ret;
-                obj.result.mem_pos = ret;
+                obj.result.mem_pos = ret_mem;
             } else {
                 obj.left_expr.accept(this);
                 obj.right_expr.accept(this);

@@ -11,3 +11,4 @@ rm b.cpp
 rm b.ll
 rm link.bc
 rm link.ll
+rm out -rf

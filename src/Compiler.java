@@ -21,6 +21,7 @@ import java.io.OutputStream;
 public class Compiler {
 
     static boolean is_online_judge = true;
+    static boolean debug_mode = true;
 
     public static void main(String[] args) throws Exception {
         String inputfile = "test.mx";
@@ -33,7 +34,7 @@ public class Compiler {
         try {
             // System.out.println("-----------------Start!--------------------");
             MxStarLexer lexer;
-            if (!is_online_judge) {
+            if (!is_online_judge || debug_mode) {
                 InputStream input = new FileInputStream(inputfile);
                 lexer = new MxStarLexer(CharStreams.fromStream(input));
             } else {
