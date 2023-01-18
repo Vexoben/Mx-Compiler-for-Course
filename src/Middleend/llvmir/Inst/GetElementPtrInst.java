@@ -2,7 +2,6 @@ package Middleend.llvmir.Inst;
 
 import Middleend.llvmir.BasicBlock;
 import Middleend.llvmir.IRVisitor;
-import Middleend.llvmir.Type.ArrayType;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.PointerType;
@@ -24,15 +23,20 @@ public class GetElementPtrInst extends BaseInst{
     public GetElementPtrInst(Value pointer, ArrayList<Value> indexes, DerivedType type, BasicBlock _belong) {
         super(type, "get_element_ptr_inst", _belong);
         add_operand(pointer);
-        ((PointerType) pointer.get_type()).get_pointed_type();
-        indexes.forEach(i -> add_operand(i));
+        pointer.add_user(this);
+        indexes.forEach(i -> {
+            add_operand(i);
+            i.add_user(this);
+        });
     }
 
     public GetElementPtrInst(Value pointer, ArrayList<Value> indexes, DerivedType type, String _name, BasicBlock _belong) {
         super(type, _name, _belong);
         add_operand(pointer);
-        ((PointerType) pointer.get_type()).get_pointed_type();
-        indexes.forEach(i -> add_operand(i));
+        indexes.forEach(i -> {
+            add_operand(i);
+            i.add_user(this);
+        });
     }
 
 

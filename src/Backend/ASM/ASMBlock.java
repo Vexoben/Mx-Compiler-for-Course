@@ -22,10 +22,6 @@ public class ASMBlock {
 
     @Override
     public String toString() {
-        String ret = label;
-        for (AsmBaseInst inst : instructions) {
-            ret = ret + "  " + inst.toString() + "\n";
-        }
-        return ret;
+        return label;
     }
 }

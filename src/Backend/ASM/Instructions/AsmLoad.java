@@ -11,6 +11,7 @@ public class AsmLoad extends AsmBaseInst{
 
     public AsmLoad(Register rd, Register rs1, Immediate offset, int _size, ASMBlock parent) {
         super(rd, rs1, null, offset, parent);
+        rs1.offset = offset;
         size = _size;
     }
 

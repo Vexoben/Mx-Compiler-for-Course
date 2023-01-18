@@ -26,10 +26,10 @@ public class ASMBuilder implements IRVisitor {
         asm = new ASMModule();
         ir = _ir;
         for (GlobalValue value : ir.const_string_table.values()) {
-            asm.const_strings.add(new GlobalReg(value.get_name(), value.const_string_data));
+            asm.const_strings.add(new GlobalReg("." + value.get_name().substring(1), value.const_string_data));
         }
         for (GlobalValue value : ir.global_vars) {
-            asm.global_vars.add(new GlobalReg(value.get_name()));
+            asm.global_vars.add(new GlobalReg(value.get_name().substring(1)));
         }
         for (IRFunction func: ir.func_table.values()) {
             cur_func = create_asm_func(func);
@@ -75,7 +75,7 @@ public class ASMBuilder implements IRVisitor {
         if (value instanceof BaseConst) {
             if (value instanceof StringConst) {
                 VirtualReg ret = new VirtualReg("str.addr");
-                new AsmLa(ret, value.get_origin_name(), cur_block);
+                new AsmLa(ret, "." + value.get_name().substring(1), cur_block);
                 return ret;
             } else {
                 int v;
@@ -269,13 +269,17 @@ public class ASMBuilder implements IRVisitor {
         // class/string: only one index
         // array: two indexes
         if (inst.get_operands_size() == 3) {
+            Register tmp = new VirtualReg("tmp");
+            new AsmLi(tmp, new Immediate(((IntConst)inst.get_operand(2)).data), cur_block);
+            new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
+/*
             if (is_zero_const(inst.get_operand(1)) && is_zero_const(inst.get_operand(2))) {
                 inst.reg_asm = inst.get_operand(0).reg_asm;
             } else {
                 Register tmp = new VirtualReg("tmp");
                 new AsmLi(tmp, new Immediate(((IntConst)inst.get_operand(2)).data), cur_block);
                 new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
-            }
+            }*/
         } else if (inst.get_operands_size() == 2) {
             Register tmp = new VirtualReg("tmp");
             Register index = get_register(inst.get_operand(1));
@@ -329,9 +333,9 @@ public class ASMBuilder implements IRVisitor {
         if (addr instanceof GlobalValue) {
             VirtualReg reg = new VirtualReg(addr.get_origin_name() + "_addr");
             new AsmLa(reg, addr.get_origin_name(), cur_block);
-            new AsmStore(reg, get_register(data), new Immediate(0), 4, cur_block);
+            new AsmStore(get_register(data), reg, new Immediate(0), 4, cur_block);
         } else {
-            new AsmStore(get_register(addr), get_register(data), new Immediate(0), 4, cur_block);
+            new AsmStore(get_register(data), get_register(addr), new Immediate(0), 4, cur_block);
         }
     }
 

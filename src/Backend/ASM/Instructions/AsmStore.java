@@ -11,6 +11,7 @@ public class AsmStore extends AsmBaseInst{
 
     public AsmStore(Register rs1, Register rd, Immediate offset, int _size, ASMBlock parent) {
         super(rd, rs1, null, offset, parent);
+        rd.offset = offset;
         size = _size;
     }
 

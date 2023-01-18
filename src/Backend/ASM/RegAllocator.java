@@ -36,10 +36,10 @@ public class RegAllocator implements InstVisitor {
         cur_func = func;
         ArrayList<ASMBlock> block_arr = func.blocks;
         func.blocks = new ArrayList<>();
-        sp_addi_list = new ArrayList<>();v
+        sp_addi_list = new ArrayList<>();
         block_arr.forEach(this::visit);
         func.get_first_block().push_front(new AsmBinary("addi", ASMModule.get_reg("sp"), ASMModule.get_reg("sp"), new Immediate(-func.delta_sp), null));
-        func.get_last_block().push_back(new AsmBinary("addi", ASMModule.get_reg("sp"), ASMModule.get_reg("sp"), new Immediate(func.delta_sp), null));
+        // func.get_last_block().push_back(new AsmBinary("addi", ASMModule.get_reg("sp"), ASMModule.get_reg("sp"), new Immediate(func.delta_sp), null));
         for (AsmBinary inst: sp_addi_list) ((Immediate) inst.rs2).data = func.delta_sp;
     }
 
@@ -167,7 +167,7 @@ public class RegAllocator implements InstVisitor {
     @Override
     public void visit(AsmStore inst) {
         inst.rs1 = load(inst.rs1, ASMModule.get_reg("s0"));
+        inst.rd = load(inst.rd, ASMModule.get_reg("s1"));
         cur_block.push_back(inst);
-        inst.rd = store((Register) inst.rd, ASMModule.get_reg("s1"));
     }
 }

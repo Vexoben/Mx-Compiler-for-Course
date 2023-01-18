@@ -32,9 +32,21 @@ public class ASMPrinter {
                 	.file	"test.mx"
                 """);
 
+        if (is_online_judge) {
+            BuiltInPrinter built_in_printer = new BuiltInPrinter(os);
+            built_in_printer.output_built_in_function();
+        }
+
         for (ASMFunction func: asm.functions) {
             print_function(func);
         }
+
+        if (is_online_judge) {
+            BuiltInPrinter built_in_printer = new BuiltInPrinter(os);
+            built_in_printer.output_built_in_const_string();
+            str_cnt = 4;
+        }
+
         for (GlobalReg str: asm.const_strings) {
             print_const_string(str);
         }
@@ -50,42 +62,42 @@ public class ASMPrinter {
 
     void print_function(ASMFunction func) throws IOException {
         if (func.is_built_in) return;
-        printf("\t.globl\t" + func.toString() + "\n\t.p2align\t2\n");
-        printf("\t.type\t" + func.toString() + ",@function\n");
+        printf(".globl   " + func.toString() + "\n   .p2align   2\n");
+        printf("   .type   " + func.toString() + ",@function\n");
         printf(func.toString() + ":\n");
         for (ASMBlock block : func.blocks) {
             print_block(block);
         }
         String end_name = ".Lfunc_end" + (func_cnt++);
         printf( end_name + ":\n");
-        printf("\t.size\t" + func.toString() + ", " + end_name + "-" + func.toString() + "\n");
+        printf("   .size   " + func.toString() + ", " + end_name + "-" + func.toString() + "\n");
     }
 
     void print_block(ASMBlock block) throws IOException {
         printf(block.label + ":\n");
         for (AsmBaseInst inst: block.instructions) {
-            printf("\t" + inst.toString() + "\n");
+            printf("   " + inst.toString() + "\n");
         }
     }
 
     void print_const_string(GlobalReg str) throws IOException {
-        printf("\t.type\t." + str.toString() + ",@object\n");
+        printf("   .type   " + str.toString() + ",@object\n");
         if (++str_cnt == 1) {
-            printf(".section\t.rodata.str1.1,\"aMS\",@progbits,1\n");
+            printf(".section   .rodata.str1.1,\"aMS\",@progbits,1\n");
         }
-        printf("." + str.toString() + ":\n");
-        printf("\t.asciz\t\"" + str.context + "\"");
-        printf("\t.size\t." + str.toString() + ", 4\n");
+        printf(str.toString() + ":\n");
+        printf("   .asciz   \"" + str.context + "\"");
+        printf("   .size   " + str.toString() + ", 4\n");
     }
 
     void print_global_variable(GlobalReg reg) throws IOException {
-        printf("\t.type\t" + reg.toString() + ",@object\n");
+        printf("   .type   " + reg.toString() + ",@object\n");
         if (++var_cnt == 1) {
-            printf("\t.section\t.rodata.str1.1,\"aMS\",@progbits,1\n");
+            printf("   .section   .rodata.str1.1,\"aMS\",@progbits,1\n");
         }
-        printf("\t.globl\t" + reg.toString() + "\n\t.p2align\t2\n");
+        printf("   .globl   " + reg.toString() + "\n   .p2align   2\n");
         printf(reg.toString() + ":\n");
-        printf("\t.word\t0\n");
-        printf("\t.size\t." + reg.toString() + ", 4\n");
+        printf("   .word   0\n");
+        printf("   .size   ." + reg.toString() + ", 4\n");
     }
 }

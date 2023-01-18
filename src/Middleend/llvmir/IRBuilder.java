@@ -318,6 +318,14 @@ public class IRBuilder implements ASTVisitor {
                     cur_block.push_back(new StoreInst(get_data(obj.assign_list.get(i).result), addr, cur_block));
                 }
             } else if (obj.var_type.is_array() || obj.var_type.is_class()) {
+                if (obj.var_type.is_class() && !obj.var_type.is_array()) {
+                    LoadInst load = new LoadInst(addr, "load_inst", cur_block);
+                    cur_func.entry_block.push_back(load);
+                    IRFunction constructor = func_table.get(rename_constructor(obj.var_type.typename));
+                    ArrayList<Value> args = new ArrayList<>();
+                    args.add(load);
+                    cur_func.entry_block.push_back(new FuncCallInst(constructor, cur_func.entry_block, args));
+                }
                 // nothing
             } else if (cur_func == init_func) {
                 if (((PointerType) addr.get_type()).get_pointed_type().match(new IntType())) {
