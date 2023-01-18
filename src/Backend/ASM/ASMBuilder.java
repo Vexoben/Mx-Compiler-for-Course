@@ -235,10 +235,11 @@ public class ASMBuilder implements IRVisitor {
         } else {
             ASMBlock if_block = block_map.get(inst.get_operand(1));
             ASMBlock else_block = block_map.get(inst.get_operand(2));
-            if (inst.get_operand(0) instanceof BinaryInst cmp) { // cmp inst
+
+            if (inst.get_operand(0) instanceof BinaryInst cmp && cmp.operator.is_compare()) { // cmp inst
                 new AsmBr(cmp.operator, get_register(cmp.get_operand(0)), get_register(cmp.get_operand(1)), if_block, cur_block);
             } else {
-                new AsmBr(BinaryExprNode.BinaryOperator.EQUAL, get_register(inst.get_operand(0)), ASMModule.get_reg(0), if_block, cur_block);
+                new AsmBr(BinaryExprNode.BinaryOperator.NOTEQUAL, get_register(inst.get_operand(0)), ASMModule.get_reg(0), if_block, cur_block);
             }
             new AsmJump(else_block, cur_block);
         }
