@@ -111,11 +111,31 @@ main:                                   # @main
                                         #   in Loop: Header=BB1_6 Depth=1
 	lw	a0, -12(s0)
 	lui	a1, %hi(b)
-	lw	a1, %lo(b)(a1)
-	slli	a2, a0, 2
-	add	a1, a1, a2
-	lw	a1, 0(a1)
-	sw	a0, 0(a1)
+	lw	a2, %lo(b)(a1)
+	slli	a0, a0, 2
+	add	a0, a2, a0
+	addi	a2, zero, 4
+	sw	a0, -40(s0)
+	mv	a0, a2
+	sw	a1, -44(s0)
+	call	__built_in_malloc
+	sw	a0, -48(s0)
+	call	__constructor__foo
+	mv	a0, sp
+	addi	a1, a0, -16
+	mv	sp, a1
+	lw	a1, -48(s0)
+	sw	a1, -16(a0)
+	lw	a0, -16(a0)
+	lw	a2, -40(s0)
+	sw	a0, 0(a2)
+	lw	a0, -12(s0)
+	lw	a2, -44(s0)
+	lw	a3, %lo(b)(a2)
+	slli	a4, a0, 2
+	add	a3, a3, a4
+	lw	a3, 0(a3)
+	sw	a0, 0(a3)
 	j	.LBB1_7
 .LBB1_9:                                # %for_exit
 	mv	a0, sp

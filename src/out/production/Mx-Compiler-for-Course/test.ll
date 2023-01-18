@@ -84,18 +84,28 @@ for_condition:
   %r = icmp slt i32 %load_inst5, 10
   br i1 %r, label %for_repeat, label %for_exit
 for_step:
-  %load_inst10 = load i32, i32* %i
-  %add_inst = add i32 1, %load_inst10
+  %load_inst13 = load i32, i32* %i
+  %add_inst = add i32 1, %load_inst13
   store i32 %add_inst, i32* %i
   br label %for_condition
 for_repeat:
   %load_inst6 = load i32, i32* %i
   %load_inst7 = load %struct.foo**, %struct.foo*** @b
   %get_element_ptr_inst6 = getelementptr inbounds %struct.foo*, %struct.foo** %load_inst7, i32 %load_inst6
-  %load_inst8 = load %struct.foo*, %struct.foo** %get_element_ptr_inst6
-  %get_element_ptr_inst7 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst8, i32 0, i32 0
+  %function_call_inst4 = call i8* @__built_in_malloc(i32 4)
+  %bit_cast_inst3 = bitcast i8* %function_call_inst4 to %struct.foo*
+  call void @__constructor__foo(%struct.foo* %bit_cast_inst3)
+  %alloca_inst = alloca %struct.foo*
+  store %struct.foo* %bit_cast_inst3, %struct.foo** %alloca_inst
+  %load_inst8 = load %struct.foo*, %struct.foo** %alloca_inst
+  store %struct.foo* %load_inst8, %struct.foo** %get_element_ptr_inst6
   %load_inst9 = load i32, i32* %i
-  store i32 %load_inst9, i32* %get_element_ptr_inst7
+  %load_inst10 = load %struct.foo**, %struct.foo*** @b
+  %get_element_ptr_inst7 = getelementptr inbounds %struct.foo*, %struct.foo** %load_inst10, i32 %load_inst9
+  %load_inst11 = load %struct.foo*, %struct.foo** %get_element_ptr_inst7
+  %get_element_ptr_inst8 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst11, i32 0, i32 0
+  %load_inst12 = load i32, i32* %i
+  store i32 %load_inst12, i32* %get_element_ptr_inst8
   br label %for_step
 for_exit:
   %occupy_empty_block = alloca i32
@@ -104,22 +114,22 @@ for_init2:
   store i32 0, i32* %i2
   br label %for_condition2
 for_condition2:
-  %load_inst11 = load i32, i32* %i2
-  %r2 = icmp slt i32 %load_inst11, 10
+  %load_inst14 = load i32, i32* %i2
+  %r2 = icmp slt i32 %load_inst14, 10
   br i1 %r2, label %for_repeat2, label %for_exit2
 for_step2:
-  %load_inst16 = load i32, i32* %i2
-  %add_inst2 = add i32 1, %load_inst16
+  %load_inst19 = load i32, i32* %i2
+  %add_inst2 = add i32 1, %load_inst19
   store i32 %add_inst2, i32* %i2
   br label %for_condition2
 for_repeat2:
-  %load_inst12 = load i32, i32* %i2
-  %load_inst13 = load %struct.foo**, %struct.foo*** @b
-  %get_element_ptr_inst8 = getelementptr inbounds %struct.foo*, %struct.foo** %load_inst13, i32 %load_inst12
-  %load_inst14 = load %struct.foo*, %struct.foo** %get_element_ptr_inst8
-  %get_element_ptr_inst9 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst14, i32 0, i32 0
-  %load_inst15 = load i32, i32* %get_element_ptr_inst9
-  call void @printlnInt(i32 %load_inst15)
+  %load_inst15 = load i32, i32* %i2
+  %load_inst16 = load %struct.foo**, %struct.foo*** @b
+  %get_element_ptr_inst9 = getelementptr inbounds %struct.foo*, %struct.foo** %load_inst16, i32 %load_inst15
+  %load_inst17 = load %struct.foo*, %struct.foo** %get_element_ptr_inst9
+  %get_element_ptr_inst10 = getelementptr inbounds %struct.foo, %struct.foo* %load_inst17, i32 0, i32 0
+  %load_inst18 = load i32, i32* %get_element_ptr_inst10
+  call void @printlnInt(i32 %load_inst18)
   br label %for_step2
 for_exit2:
   ret i32 0
@@ -127,8 +137,8 @@ for_exit2:
 mainexit:
   ret i32 0
   %allo = alloca i32
-  %load_inst17 = load i32, i32* %allo
-  ret i32 %load_inst17
+  %load_inst20 = load i32, i32* %allo
+  ret i32 %load_inst20
 }
 
 define dso_local void @__init_function__() #0 {

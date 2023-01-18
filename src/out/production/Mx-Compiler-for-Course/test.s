@@ -46,7 +46,7 @@ __constructor__foo:
    .type   main,@function
 main:
 .main.mainentry:
-   addi sp, sp, -272
+   addi sp, sp, -312
    mv s1, ra
    sw s1, 0(sp)
    mv s1, s0
@@ -214,124 +214,163 @@ main:
    lw s1, 156(sp)
    add s0, s0, s1
    sw s0, 164(sp)
-   lw s0, 164(sp)
-   lw s1, 0(s0)
-   sw s1, 168(sp)
-   li s0, 0
-   sw s0, 172(sp)
+   li s0, 4
+   sw s0, 168(sp)
    lw s0, 168(sp)
-   lw s1, 172(sp)
-   add s0, s0, s1
-   sw s0, 176(sp)
+   mv a0, s0
+   call __built_in_malloc
+   mv s1, a0
+   sw s1, 172(sp)
+   lw s0, 172(sp)
+   mv s1, s0
+   sw s1, 176(sp)
+   lw s0, 176(sp)
+   mv a0, s0
+   call __constructor__foo
+   lw s0, 176(sp)
+   sw s0, 180(sp)
+   lw s1, 180(sp)
+   sw s1, 184(sp)
+   lw s0, 184(sp)
+   lw s1, 164(sp)
+   sw s0, 0(s1)
    lw s1, 116(sp)
-   sw s1, 180(sp)
-   lw s0, 180(sp)
-   lw s1, 176(sp)
+   sw s1, 188(sp)
+   la s0, b
+   sw s0, 192(sp)
+   lw s0, 192(sp)
+   lw s1, 0(s0)
+   sw s1, 196(sp)
+   lw s0, 188(sp)
+   lw s1, 188(sp)
+   add s0, s0, s1
+   sw s0, 200(sp)
+   lw s0, 200(sp)
+   lw s1, 200(sp)
+   add s0, s0, s1
+   sw s0, 200(sp)
+   lw s0, 200(sp)
+   lw s1, 196(sp)
+   add s0, s0, s1
+   sw s0, 204(sp)
+   lw s0, 204(sp)
+   lw s1, 0(s0)
+   sw s1, 208(sp)
+   li s0, 0
+   sw s0, 212(sp)
+   lw s0, 208(sp)
+   lw s1, 212(sp)
+   add s0, s0, s1
+   sw s0, 216(sp)
+   lw s1, 116(sp)
+   sw s1, 220(sp)
+   lw s0, 220(sp)
+   lw s1, 216(sp)
    sw s0, 0(s1)
    j .main.for_step
 .main.for_exit:
    j .main.for_init2
 .main.for_init2:
    li s0, 0
-   sw s0, 184(sp)
-   lw s0, 184(sp)
-   sw s0, 188(sp)
+   sw s0, 224(sp)
+   lw s0, 224(sp)
+   sw s0, 228(sp)
    j .main.for_condition2
 .main.for_condition2:
-   lw s1, 188(sp)
-   sw s1, 192(sp)
+   lw s1, 228(sp)
+   sw s1, 232(sp)
    li s0, 10
-   sw s0, 196(sp)
-   lw s0, 192(sp)
-   lw s1, 196(sp)
+   sw s0, 236(sp)
+   lw s0, 232(sp)
+   lw s1, 236(sp)
    slt s0, s0, s1
-   sw s0, 200(sp)
+   sw s0, 240(sp)
    li s0, 10
-   sw s0, 204(sp)
-   lw s0, 192(sp)
-   lw s1, 204(sp)
+   sw s0, 244(sp)
+   lw s0, 232(sp)
+   lw s1, 244(sp)
    blt s0, s1, .main.for_repeat2
    j .main.for_exit2
 .main.for_step2:
-   lw s1, 188(sp)
-   sw s1, 208(sp)
+   lw s1, 228(sp)
+   sw s1, 248(sp)
    li s0, 1
-   sw s0, 212(sp)
-   lw s0, 212(sp)
-   lw s1, 208(sp)
+   sw s0, 252(sp)
+   lw s0, 252(sp)
+   lw s1, 248(sp)
    add s0, s0, s1
-   sw s0, 216(sp)
-   lw s0, 216(sp)
-   sw s0, 188(sp)
+   sw s0, 256(sp)
+   lw s0, 256(sp)
+   sw s0, 228(sp)
    j .main.for_condition2
 .main.for_repeat2:
-   lw s1, 188(sp)
-   sw s1, 220(sp)
-   la s0, b
-   sw s0, 224(sp)
-   lw s0, 224(sp)
-   lw s1, 0(s0)
-   sw s1, 228(sp)
-   lw s0, 220(sp)
-   lw s1, 220(sp)
-   add s0, s0, s1
-   sw s0, 232(sp)
-   lw s0, 232(sp)
-   lw s1, 232(sp)
-   add s0, s0, s1
-   sw s0, 232(sp)
-   lw s0, 232(sp)
    lw s1, 228(sp)
-   add s0, s0, s1
-   sw s0, 236(sp)
-   lw s0, 236(sp)
+   sw s1, 260(sp)
+   la s0, b
+   sw s0, 264(sp)
+   lw s0, 264(sp)
    lw s1, 0(s0)
-   sw s1, 240(sp)
+   sw s1, 268(sp)
+   lw s0, 260(sp)
+   lw s1, 260(sp)
+   add s0, s0, s1
+   sw s0, 272(sp)
+   lw s0, 272(sp)
+   lw s1, 272(sp)
+   add s0, s0, s1
+   sw s0, 272(sp)
+   lw s0, 272(sp)
+   lw s1, 268(sp)
+   add s0, s0, s1
+   sw s0, 276(sp)
+   lw s0, 276(sp)
+   lw s1, 0(s0)
+   sw s1, 280(sp)
    li s0, 0
-   sw s0, 244(sp)
-   lw s0, 240(sp)
-   lw s1, 244(sp)
+   sw s0, 284(sp)
+   lw s0, 280(sp)
+   lw s1, 284(sp)
    add s0, s0, s1
-   sw s0, 248(sp)
-   lw s0, 248(sp)
+   sw s0, 288(sp)
+   lw s0, 288(sp)
    lw s1, 0(s0)
-   sw s1, 252(sp)
-   lw s0, 252(sp)
+   sw s1, 292(sp)
+   lw s0, 292(sp)
    mv a0, s0
    call printlnInt
    j .main.for_step2
 .main.for_exit2:
    li s0, 0
-   sw s0, 256(sp)
-   lw s0, 256(sp)
+   sw s0, 296(sp)
+   lw s0, 296(sp)
    mv a0, s0
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 272
+   addi sp, sp, 312
    ret
    j .main.mainexit
 .main.mainexit:
    li s0, 0
-   sw s0, 260(sp)
-   lw s0, 260(sp)
+   sw s0, 300(sp)
+   lw s0, 300(sp)
    mv a0, s0
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 272
+   addi sp, sp, 312
    ret
-   lw s1, 264(sp)
-   sw s1, 268(sp)
-   lw s0, 268(sp)
+   lw s1, 304(sp)
+   sw s1, 308(sp)
+   lw s0, 308(sp)
    mv a0, s0
    lw s0, 4(sp)
    mv s0, s0
    lw s0, 0(sp)
    mv ra, s0
-   addi sp, sp, 272
+   addi sp, sp, 312
    ret
 .Lfunc_end1:
    .size   main, .Lfunc_end1-main

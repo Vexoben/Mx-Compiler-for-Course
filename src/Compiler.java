@@ -26,7 +26,7 @@ public class Compiler {
         String inputfile = "test.mx";
         String out_ll = "test.ll";
         OutputStream out_ll_stream = new FileOutputStream(out_ll);
-        String out_asm = "test.s";
+        String out_asm = is_online_judge ? "output.s" : "test.s";
         OutputStream out_asm_stream = new FileOutputStream(out_asm);
         String out_asm_without_allocate = "test_without_allocate.s";
         OutputStream out_asm_without_allocate_stream = new FileOutputStream(out_asm_without_allocate);
@@ -54,11 +54,16 @@ public class Compiler {
             semantic_checker.visit(astroot);
             // System.out.println("-----------------IR Building-------------------");
             IRPrinter ir_printer = new IRPrinter(astroot, out_ll_stream, is_online_judge);
-            ir_printer.IR_print();
+            if (!is_online_judge) {
+                ir_printer.IR_print();
+            }
             // System.out.println("-----------------ASM Building-------------------");
             ASMBuilder asm_builder = new ASMBuilder(ir_printer);
-            ASMPrinter asm_printer1 = new ASMPrinter(asm_builder.asm, out_asm_without_allocate_stream, is_online_judge);
-            asm_printer1.ASM_print();
+            if (!is_online_judge) {
+                ASMPrinter asm_printer1 = new ASMPrinter(asm_builder.asm, out_asm_without_allocate_stream, is_online_judge);
+                asm_printer1.ASM_print();
+            }
+            // System.out.println("-----------------REG Allocating-------------------");
             RegAllocator reg_allocator = new RegAllocator(asm_builder.asm);
             ASMPrinter asm_printer = new ASMPrinter(reg_allocator.asm, out_asm_stream, is_online_judge);
             asm_printer.ASM_print();

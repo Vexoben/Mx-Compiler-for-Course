@@ -100,6 +100,22 @@ main:
    add tmp, load_inst, load_inst
    add tmp, tmp, tmp
    add get_element_ptr_inst, tmp, load_inst
+   li tmp, 4
+   mv a0, tmp
+   call __built_in_malloc
+   mv function_call_inst, a0
+   mv bit_cast_inst, function_call_inst
+   mv a0, bit_cast_inst
+   call __constructor__foo
+   sw bit_cast_inst, 0(alloca_inst)
+   lw load_inst, 0(alloca_inst)
+   sw load_inst, 0(get_element_ptr_inst)
+   lw load_inst, 0(i)
+   la b_addr, b
+   lw load_inst, 0(b_addr)
+   add tmp, load_inst, load_inst
+   add tmp, tmp, tmp
+   add get_element_ptr_inst, tmp, load_inst
    lw load_inst, 0(get_element_ptr_inst)
    li tmp, 0
    add get_element_ptr_inst, load_inst, tmp
