@@ -5,6 +5,7 @@ import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.PointerType;
+import Middleend.llvmir.Type.StructType;
 import Middleend.llvmir.Value;
 
 import java.util.ArrayList;
@@ -39,12 +40,22 @@ public class GetElementPtrInst extends BaseInst{
         });
     }
 
+    // for asm
+    public int get_prefix_size(int number) {
+        int ret = 0;
+        Value pointer = get_operand(0);
+        StructType struct = (StructType) ((PointerType) pointer.get_type()).get_pointed_type();
+        for (int i = 0; i < number; ++i) {
+            ret += struct.get_type(i).size();
+        }
+        return ret;
+    }
 
     @Override
     public String output() {
         Value pointer = get_operand(0);
         String ans = "getelementptr inbounds " + ((PointerType) pointer.get_type()).get_pointed_type().toString() + ", ";
-        ans += ((PointerType) pointer.get_type()).toString() + " " + pointer.get_name();
+        ans += pointer.get_type().toString() + " " + pointer.get_name();
         for (int i = 1; i < get_operands_size(); ++i) {
             ans += ", ";
             ans += get_operand(i).get_tyme();

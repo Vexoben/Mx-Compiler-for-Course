@@ -58,12 +58,12 @@ public class Compiler {
             semantic_checker.visit(astroot);
             // System.out.println("-----------------IR Building-------------------");
             IRPrinter ir_printer = new IRPrinter(astroot, out_ll_stream, is_online_judge);
-            if (!is_online_judge) {
+            if (!is_online_judge || debug_mode) {
                 ir_printer.IR_print();
             }
             // System.out.println("-----------------ASM Building-------------------");
             ASMBuilder asm_builder = new ASMBuilder(ir_printer);
-            if (!is_online_judge) {
+            if (!is_online_judge || debug_mode) {
                 ASMPrinter asm_printer1 = new ASMPrinter(asm_builder.asm, out_asm_without_allocate_stream, is_online_judge);
                 asm_printer1.ASM_print();
             }

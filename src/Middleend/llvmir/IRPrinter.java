@@ -18,11 +18,12 @@ public class IRPrinter extends IRBuilder{
     }
 
     void printf(String str) throws IOException {
-        if (is_online_judge) {
+/*        if (is_online_judge) {
             System.out.print(str);
         } else {
             os.write(str.getBytes());
-        }
+        }*/
+        os.write(str.getBytes());
     }
 
     void global_string_declare() throws IOException {

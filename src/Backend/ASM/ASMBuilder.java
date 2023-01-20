@@ -7,6 +7,9 @@ import Frontend.ast.expr.BinaryExprNode;
 import Middleend.llvmir.*;
 import Middleend.llvmir.Constant.*;
 import Middleend.llvmir.Inst.*;
+import Middleend.llvmir.Type.IRBaseType;
+import Middleend.llvmir.Type.PointerType;
+import Middleend.llvmir.Type.StructType;
 import Middleend.llvmir.Type.VoidType;
 
 import java.util.HashMap;
@@ -267,13 +270,23 @@ public class ASMBuilder implements IRVisitor {
 
     @Override
     public void visit(GetElementPtrInst inst) {
-        // class/string: only one index
-        // array: two indexes
-        if (inst.get_operands_size() == 3) {
-            Register tmp = new VirtualReg("tmp");
-            new AsmLi(tmp, new Immediate(((IntConst)inst.get_operand(2)).data), cur_block);
-            new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
-/*
+        // array: only one index
+        // class/string: two indexes
+
+        IRBaseType type = ((PointerType) inst.get_operand(0).get_type()).get_pointed_type();
+
+         if (inst.get_operands_size() == 3) {
+             if (type instanceof StructType) {
+                 Register tmp = new VirtualReg("tmp");
+                 int prefix_size = inst.get_prefix_size(((IntConst)inst.get_operand(2)).data);
+                 new AsmLi(tmp, new Immediate(prefix_size), cur_block);
+                 new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
+             } else {
+                 Register tmp = new VirtualReg("tmp");
+                 new AsmLi(tmp, new Immediate(((IntConst)inst.get_operand(2)).data), cur_block);
+                 new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
+             }
+             /*
             if (is_zero_const(inst.get_operand(1)) && is_zero_const(inst.get_operand(2))) {
                 inst.reg_asm = inst.get_operand(0).reg_asm;
             } else {
@@ -281,15 +294,17 @@ public class ASMBuilder implements IRVisitor {
                 new AsmLi(tmp, new Immediate(((IntConst)inst.get_operand(2)).data), cur_block);
                 new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
             }*/
-        } else if (inst.get_operands_size() == 2) {
-            Register tmp = new VirtualReg("tmp");
-            Register index = get_register(inst.get_operand(1));
-            new AsmBinary("add", tmp, index, index, cur_block);
-            new AsmBinary("add", tmp, tmp, tmp, cur_block);
-            new AsmBinary("add", get_register(inst), tmp, get_register(inst.get_operand(0)),cur_block);
-        } else {
-            throw new AsmError("ASMBuilder.java: GetElementPtrInst");
-        }
+         } else if (inst.get_operands_size() == 2) {
+             int type_size = ((PointerType) type).get_pointed_type().size();
+             Register tmp = new VirtualReg("tmp");
+             Register index = get_register(inst.get_operand(1));
+             //new AsmBinary("add", tmp, index, index, cur_block);
+             //new AsmBinary("add", tmp, tmp, tmp, cur_block);
+             new AsmBinary("mul", tmp, tmp, new Immediate(type_size), cur_block);
+             new AsmBinary("add", get_register(inst), tmp, get_register(inst.get_operand(0)),cur_block);
+         } else {
+             throw new AsmError("ASMBuilder.java: GetElementPtrInst");
+         }
     }
 
     boolean is_zero_const(Value value) {
