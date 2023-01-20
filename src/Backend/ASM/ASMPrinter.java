@@ -83,8 +83,8 @@ public class ASMPrinter {
             printf(".section   .rodata.str1.1,\"aMS\",@progbits,1\n");
         }
         printf(str.toString() + ":\n");
-        printf("   .asciz   \"" + str.context + "\"");
-        printf("   .size   " + str.toString() + ", 4\n");
+        printf("   .asciz   \"" + str.context + "\"\n");
+        // printf("   .size   " + str.toString() + ", 4\n");
     }
 
     void print_global_variable(GlobalReg reg) throws IOException {

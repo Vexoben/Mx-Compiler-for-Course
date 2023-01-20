@@ -29,7 +29,7 @@ public class ASMBuilder implements IRVisitor {
         asm = new ASMModule();
         ir = _ir;
         for (GlobalValue value : ir.const_string_table.values()) {
-            asm.const_strings.add(new GlobalReg("." + value.get_name().substring(1), value.const_string_data));
+            asm.const_strings.add(new GlobalReg("." + value.get_name().substring(1), value.origin_string_data));
         }
         for (GlobalValue value : ir.global_vars) {
             asm.global_vars.add(new GlobalReg(value.get_name().substring(1)));

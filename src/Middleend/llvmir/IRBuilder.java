@@ -755,7 +755,8 @@ public class IRBuilder implements ASTVisitor {
             obj.result = new BoolConst(obj.ctx.True() != null);
         } else if (obj.ctx.StringConst() != null) {
             String str = obj.ctx.StringConst().toString();
-            str = str.substring(1, str.length() - 1);
+            int str_length = str.length();
+            str = str.substring(1, str_length - 1);
             str = str.replaceAll( "\\\\n", "\\\\0A");
             str = str.replaceAll("\\\\\"", "\\\\22");
             str = str + "\\00";
@@ -776,6 +777,7 @@ public class IRBuilder implements ASTVisitor {
                 value.mem_pos = value;
                 const_string_table.put(str, value);
             }
+            value.origin_string_data = obj.ctx.StringConst().toString().substring(1, str_length - 1);
             obj.result = value;
         } else if (obj.ctx.Null() != null) {
             obj.result = new NullConst();
