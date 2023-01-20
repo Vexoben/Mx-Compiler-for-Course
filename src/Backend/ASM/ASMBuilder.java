@@ -298,10 +298,8 @@ public class ASMBuilder implements IRVisitor {
              int type_size = type.size();
              Register tmp = new VirtualReg("tmp");
              Register index = get_register(inst.get_operand(1));
-             //new AsmBinary("add", tmp, index, index, cur_block);
-             //new AsmBinary("add", tmp, tmp, tmp, cur_block);
              Register size_each = new VirtualReg("tmp");
-             new AsmLi(size_each, new Immediate(type_size), cur_block);
+             new AsmLi(size_each, new Immediate(4), cur_block);
              new AsmBinary("mul", tmp, index, size_each, cur_block);
              new AsmBinary("add", get_register(inst), tmp, get_register(inst.get_operand(0)),cur_block);
          } else {

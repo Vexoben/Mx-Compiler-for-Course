@@ -7,7 +7,7 @@ public class BoolType extends DerivedType{
 
     @Override
     public int size() {
-        return 1;
+        return 4;
     }
 
     @Override
