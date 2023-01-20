@@ -63,10 +63,11 @@ public class RegAllocator implements InstVisitor {
     }
 
     BaseOperand load(BaseOperand reg, PhysicalReg rd) {
-        if (reg instanceof Immediate) {
-            new AsmLi(rd, (Immediate) reg, cur_block);
-            return rd;
-        }
+/*        if (reg instanceof Immediate) {
+            PhysicalReg ret = new PhysicalReg("s2");
+            new AsmLi(ret, (Immediate) reg, cur_block);
+            return ret;
+        }*/
         if (!(reg instanceof VirtualReg)) return reg;
         if (((VirtualReg) reg).color == -1) {
             PhysicalReg ret = new PhysicalReg("sp");
