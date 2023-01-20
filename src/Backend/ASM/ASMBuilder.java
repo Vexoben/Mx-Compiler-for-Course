@@ -295,12 +295,12 @@ public class ASMBuilder implements IRVisitor {
                 new AsmBinary("add", get_register(inst), get_register(inst.get_operand(0)), tmp, cur_block);
             }*/
          } else if (inst.get_operands_size() == 2) {
-             int type_size = ((PointerType) type).get_pointed_type().size();
+             int type_size = type.size();
              Register tmp = new VirtualReg("tmp");
              Register index = get_register(inst.get_operand(1));
              //new AsmBinary("add", tmp, index, index, cur_block);
              //new AsmBinary("add", tmp, tmp, tmp, cur_block);
-             new AsmBinary("mul", tmp, tmp, new Immediate(type_size), cur_block);
+             new AsmBinary("mul", tmp, index, new Immediate(type_size), cur_block);
              new AsmBinary("add", get_register(inst), tmp, get_register(inst.get_operand(0)),cur_block);
          } else {
              throw new AsmError("ASMBuilder.java: GetElementPtrInst");

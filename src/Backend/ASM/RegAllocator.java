@@ -7,6 +7,7 @@ import Middleend.llvmir.Inst.LoadInst;
 import java.awt.image.RGBImageFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class RegAllocator implements InstVisitor {
 
@@ -62,6 +63,10 @@ public class RegAllocator implements InstVisitor {
     }
 
     BaseOperand load(BaseOperand reg, PhysicalReg rd) {
+        if (reg instanceof Immediate) {
+            new AsmLi(rd, (Immediate) reg, cur_block);
+            return rd;
+        }
         if (!(reg instanceof VirtualReg)) return reg;
         if (((VirtualReg) reg).color == -1) {
             PhysicalReg ret = new PhysicalReg("sp");
