@@ -22,7 +22,7 @@ import java.io.OutputStream;
 public class Compiler {
 
     static boolean is_online_judge = true;
-    static boolean debug_mode = false;
+    static boolean debug_mode = true;
 
     public static void main(String[] args) throws Exception {
         String inputfile = "test.mx";
