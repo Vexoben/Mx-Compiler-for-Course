@@ -335,10 +335,10 @@ public class ASMBuilder implements IRVisitor {
         if (inst.get_operands_size() > 0) {
             new AsmMv(ASMModule.get_reg_a(0), get_register(inst.get_operand(0)), cur_block);
         }
+        new AsmMv(ASMModule.get_reg("ra"), cur_func.callee_saved_virtual.get(0), cur_block);
         for (int i = 0; i < ASMModule.get_callee_saved_reg().size(); ++i) { // 0 is ra
             new AsmMv(ASMModule.get_callee_saved_reg().get(i), cur_func.callee_saved_virtual.get(i + 1), cur_block);
         }
-        new AsmMv(ASMModule.get_reg("ra"), cur_func.callee_saved_virtual.get(0), cur_block);
         new AsmRet(cur_block);
     }
 

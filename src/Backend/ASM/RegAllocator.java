@@ -48,7 +48,9 @@ public class RegAllocator implements InstVisitor {
         cur_block = new ASMBlock(block.label);
         ArrayList<AsmBaseInst> insts = block.instructions;
         block.instructions = new ArrayList<>();
-        insts.forEach(i -> i.accept(this));
+        insts.forEach(i -> {
+            i.accept(this);
+        });
         cur_func.add_block(cur_block);
     }
 
@@ -138,7 +140,12 @@ public class RegAllocator implements InstVisitor {
 
     @Override
     public void visit(AsmMv inst) {
-        inst.rs1 = load(inst.rs1, new PhysicalReg("s0"));
+        if (inst.rs1 instanceof VirtualReg) {
+            PhysicalReg reg = new PhysicalReg("s0");
+            new AsmLoad(reg, ASMModule.get_reg("sp"), get_stack_position((VirtualReg) inst.rs1), 4, cur_block);
+            inst.rs1 = reg;
+        }
+        // inst.rs1 = load(inst.rs1, new PhysicalReg("s0"));
         cur_block.push_back(inst);
         inst.rd = store((Register) inst.rd, new PhysicalReg("s1"));
         /*if (inst.rs1 instanceof PhysicalReg) {

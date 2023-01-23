@@ -497,7 +497,7 @@ public class IRBuilder implements ASTVisitor {
     @Override
     public void visit(FuncCallExprNode obj) {
         obj.func_name.accept(this);
-        if (!(obj.func_name.result instanceof IRFunction)) { // array.size()
+        if (!(obj.func_name.result instanceof IRFunction func)) { // array.size()
             obj.result = obj.func_name.result;
             return;
         }
@@ -506,8 +506,7 @@ public class IRBuilder implements ASTVisitor {
             LoadInst load = new LoadInst(((MemberVisitExprNode) obj.func_name).callee, "load_inst", cur_block);
             cur_block.push_back(load);
             args.add(load);
-        }
-        else if (is_member_function && ((IRFunction) obj.func_name.result).is_member_function) {
+        } else if (is_member_function && ((IRFunction) obj.func_name.result).is_member_function) {
             LoadInst load = new LoadInst(cur_func.this_alloca, "load_inst", cur_block);
             cur_block.push_back(load);
             args.add(load);
@@ -530,9 +529,16 @@ public class IRBuilder implements ASTVisitor {
                 args.add(i.result);
             }
         });
-        FuncCallInst inst = new FuncCallInst((IRFunction) obj.func_name.result, cur_block, args);
-        obj.result = inst;
+        FuncCallInst inst = new FuncCallInst(func, cur_block, args);
         cur_block.push_back(inst);
+        if (obj.expr_type.is_class() && !obj.expr_type.is_array()) {
+            AllocaInst allo = new AllocaInst((DerivedType) inst.type, "allo_inst", cur_block);
+            cur_block.push_back(allo);
+            cur_block.push_back(new StoreInst(inst, allo, cur_block));
+            obj.result = allo;
+        } else {
+            obj.result = inst;
+        }
     }
     @Override
     public void visit(MemberVisitExprNode obj) {
@@ -963,19 +969,21 @@ public class IRBuilder implements ASTVisitor {
                 obj.return_value.accept(this);
             }
             if (!((IRFuncType)cur_func.get_type()).get_ret_type().match(new VoidType())) {
-                if (obj.return_value instanceof AtomExprNode && ((AtomExprNode)obj.return_value).ctx.Null() != null) {
+                if (obj.return_value instanceof AtomExprNode && ((AtomExprNode)obj.return_value).ctx.Null() != null) { // ret null
                     AllocaInst null_ptr = new AllocaInst(((PointerType)cur_func.get_ret_type()).get_pointed_type(1), "null", cur_block);
                     cur_block.push_back(new RetInst(null_ptr, cur_block));
                 } else {
-                    if (obj.return_value.result instanceof StringConst) {
+                    if (obj.return_value.result instanceof StringConst) { // ret string const
                         cur_block.push_back(new RetInst(string_convert(obj.return_value.result), cur_block));
-                    } else if (obj.return_value.result.get_type().is_string()) {
+                    } else if (obj.return_value.result.get_type().is_string()) { // ret string expr/variable
                         cur_block.push_back(new RetInst(obj.return_value.result, cur_block));
                     } else {
                         if (cur_func.get_ret_type() instanceof PointerType) {
                             DerivedType type = ((PointerType) cur_func.get_ret_type()).get_pointed_type();
-                            boolean flag = (type instanceof PointerType) && (((PointerType) type).get_pointed_type()) instanceof StructType;
-                            if (obj.return_value instanceof FuncCallExprNode) flag = true;
+                            // boolean flag = (type instanceof PointerType) && (((PointerType) type).get_pointed_type()) instanceof StructType;
+                            // if (obj.return_value instanceof FuncCallExprNode) flag = true;
+                            boolean tmp = type instanceof StructType;
+                            boolean flag = obj.return_value instanceof FuncCallExprNode && !tmp;
                             if (!flag) {
                                 LoadInst load = new LoadInst(obj.return_value.result, "load_inst", cur_block);
                                 cur_block.push_back(load);
@@ -983,12 +991,12 @@ public class IRBuilder implements ASTVisitor {
                             } else {
                                 cur_block.push_back(new RetInst(obj.return_value.result, cur_block));
                             }
-                        } else {
+                        } else { // int or bool
                             cur_block.push_back(new RetInst(get_data(obj.return_value.result), cur_block));
                         }
                     }
                 }
-            } else {
+            } else { // ret void
                 cur_block.push_back(new RetInst(null, cur_block));
             }
         }
@@ -1036,9 +1044,9 @@ public class IRBuilder implements ASTVisitor {
         });
         DerivedType ret_type = translate_vartype(type.ret_type);
         if (type.ret_type.match_type(BaseType.BuiltinType.STRING)) ret_type = new PointerType(ret_type);
-        if (ret_type.is_class_ptr()) {
+        /*if (ret_type.is_class_ptr()) {
             ret_type = new PointerType(ret_type);
-        }
+        }*/
         IRFuncType functype = new IRFuncType(_belong, ret_type, args);
         IRFunction func;
         if (_belong != null) {
