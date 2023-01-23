@@ -531,7 +531,7 @@ public class IRBuilder implements ASTVisitor {
         });
         FuncCallInst inst = new FuncCallInst(func, cur_block, args);
         cur_block.push_back(inst);
-        if (obj.expr_type.is_class() && !obj.expr_type.is_array()) {
+        if ((obj.expr_type.is_class() || obj.expr_type.is_string()) && !obj.expr_type.is_array()) {
             AllocaInst allo = new AllocaInst((DerivedType) inst.type, "allo_inst", cur_block);
             cur_block.push_back(allo);
             cur_block.push_back(new StoreInst(inst, allo, cur_block));
@@ -974,9 +974,15 @@ public class IRBuilder implements ASTVisitor {
                     cur_block.push_back(new RetInst(null_ptr, cur_block));
                 } else {
                     if (obj.return_value.result instanceof StringConst) { // ret string const
-                        cur_block.push_back(new RetInst(string_convert(obj.return_value.result), cur_block));
+                        Value tmp = string_convert(obj.return_value.result);
+                        LoadInst load = new LoadInst(tmp, "load_inst", cur_block);
+                        cur_block.push_back(load);
+                        cur_block.push_back(new RetInst(load, cur_block));
                     } else if (obj.return_value.result.get_type().is_string()) { // ret string expr/variable
-                        cur_block.push_back(new RetInst(obj.return_value.result, cur_block));
+                        Value tmp = obj.return_value.result;
+                        LoadInst load = new LoadInst(tmp, "load_inst", cur_block);
+                        cur_block.push_back(load);
+                        cur_block.push_back(new RetInst(load, cur_block));
                     } else {
                         if (cur_func.get_ret_type() instanceof PointerType) {
                             DerivedType type = ((PointerType) cur_func.get_ret_type()).get_pointed_type();
@@ -1043,7 +1049,7 @@ public class IRBuilder implements ASTVisitor {
             args.add(tp);
         });
         DerivedType ret_type = translate_vartype(type.ret_type);
-        if (type.ret_type.match_type(BaseType.BuiltinType.STRING)) ret_type = new PointerType(ret_type);
+        // if (type.ret_type.match_type(BaseType.BuiltinType.STRING)) ret_type = new PointerType(ret_type);
         /*if (ret_type.is_class_ptr()) {
             ret_type = new PointerType(ret_type);
         }*/
