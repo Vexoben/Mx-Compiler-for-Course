@@ -13,7 +13,22 @@ ExitCode: 0
 InstLimit: -1
 Origin Package: Codegen Pretest-533
 */
+int qpow(int a,int p,int mod) {
+    int t = 1;
+    int y = a;
+    while(p>0){
+        if((p&1) == 1)t=t*y % mod;
+        y=y*y % mod;
+        p=p / 2;
+    }
+    return t;
+}
+
+
+
+
+
 int main() {
-    println("a" + "B");
+    println(toString(qpow(2,10,10000)));
     return 0;
 }
