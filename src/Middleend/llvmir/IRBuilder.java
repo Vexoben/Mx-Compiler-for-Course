@@ -45,9 +45,9 @@ public class IRBuilder implements ASTVisitor {
             func_println = new IRFunction("println", new IRFuncType(null, void_type, char_ptr)),
             func_printInt = new IRFunction("printInt", new IRFuncType(null, void_type, int_type)),
             func_printlnInt = new IRFunction("printlnInt", new IRFuncType(null, void_type, int_type)),
-            func_getString = new IRFunction("getString", new IRFuncType(null, new PointerType(char_ptr))),
+            func_getString = new IRFunction("getString", new IRFuncType(null, char_ptr)),
             func_getInt = new IRFunction("getInt", new IRFuncType(null, int_type)),
-            func_toString = new IRFunction("toString", new IRFuncType(null, new PointerType(char_ptr), int_type));
+            func_toString = new IRFunction("toString", new IRFuncType(null, char_ptr, int_type));
     // string operator
     static IRFunction str_eq = new IRFunction("__build_in_str_eq", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
             str_neq = new IRFunction("__build_in_str_neq", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
@@ -55,10 +55,10 @@ public class IRBuilder implements ASTVisitor {
             str_sle = new IRFunction("__build_in_str_sle", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
             str_sgt = new IRFunction("__build_in_str_sgt", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
             str_sge = new IRFunction("__build_in_str_sge", new IRFuncType(null, bool_type, char_ptr, char_ptr)),
-            str_add = new IRFunction("__build_in_str_add", new IRFuncType(null, new PointerType(char_ptr), char_ptr, char_ptr));
+            str_add = new IRFunction("__build_in_str_add", new IRFuncType(null, char_ptr, char_ptr, char_ptr));
     // string built-in method
     static IRFunction str_length = new IRFunction("__built_in_length", new IRFuncType(null, int_type, char_ptr)),
-            str_substring = new IRFunction("__built_in_substring", new IRFuncType(null, new PointerType(char_ptr), char_ptr, int_type, int_type)),
+            str_substring = new IRFunction("__built_in_substring", new IRFuncType(null, char_ptr, char_ptr, int_type, int_type)),
             str_parseInt = new IRFunction("__built_in_parseInt", new IRFuncType(null, int_type, char_ptr)),
             str_ord = new IRFunction("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
 
@@ -416,6 +416,12 @@ public class IRBuilder implements ASTVisitor {
             }
             cur_block.push_back(inst);
             obj.result = inst;
+            if (obj.op == BinaryExprNode.BinaryOperator.ADD) {
+                AllocaInst allo = new AllocaInst((DerivedType) inst.type, "allo_inst", cur_block);
+                cur_block.push_back(allo);
+                cur_block.push_back(new StoreInst(inst, allo, cur_block));
+                obj.result = allo;
+            }
         }
         else {
             if (obj.op.is_compare()) {
