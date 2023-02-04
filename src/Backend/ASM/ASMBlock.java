@@ -9,6 +9,7 @@ public class ASMBlock {
     public ArrayList<AsmBaseInst> instructions = new ArrayList<>();
     public ArrayList<ASMBlock> succ_blocks = new ArrayList<>();
     public ArrayList<ASMBlock> prev_blocks = new ArrayList<>();
+    public double block_weight;
 
     public ASMBlock(String _label) {
         label = _label;

@@ -23,8 +23,8 @@ public class IRFunction extends User {
 
     public IRFunction(String _name, IRFuncType _type) {
         super(_type, _name);
-        entry_block = new BasicBlock(_name + "entry", this);
-        exit_block = new BasicBlock(_name + "exit", this);
+        entry_block = new BasicBlock(_name + "entry", this, 0);
+        exit_block = new BasicBlock(_name + "exit", this, 0);
         blocks.remove(blocks.size() - 1);
         entry_block.link(exit_block);
     }

@@ -8,6 +8,7 @@ import Backend.ASM.Operands.Immediate;
 import Backend.ASM.Operands.PhysicalReg;
 import Backend.ASM.Operands.Register;
 import Backend.ASM.Operands.VirtualReg;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -164,7 +165,13 @@ public class RegAllocator {
       }
       initial.removeAll(precolored);
 
-      // todo : priority
+      for (ASMBlock block : function.blocks) {
+         double value = Math.pow(10, block.block_weight);
+         for (AsmBaseInst inst : block.instructions) {
+            inst.get_defs().forEach(i -> i.node.priority += Math.pow(10, value));
+            inst.get_uses().forEach(i -> i.node.priority += Math.pow(10, value));
+         }
+      }
    }
 
    static int cnt_debug = 0;
@@ -361,8 +368,11 @@ public class RegAllocator {
       Register result = null;
       double min_cost = 1e100;
       for (Register reg : spill_work_list) {   // todo： 启发式选择
-         // if (new_temps.contains(reg)) continue;
-         result = reg;
+         double cost = reg.node.priority / reg.node.degree;
+         if (cost < min_cost) {
+            min_cost = cost;
+            result = reg;
+         }
       }
       spill_work_list.remove(result);
       simplify_work_list.add(result);

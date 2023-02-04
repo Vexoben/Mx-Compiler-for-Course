@@ -62,6 +62,7 @@ public class ASMBuilder implements IRVisitor {
     ASMBlock create_asm_block(BasicBlock ir_block) {
         String name = "." + ir_block.parent_function.get_origin_name() + "." + ir_block.get_label().toString();
         ASMBlock asm_block = new ASMBlock(name);
+        asm_block.block_weight = ir_block.block_weight;
         block_map.put(ir_block, asm_block);
         cur_func.add_block(asm_block);
         return asm_block;
