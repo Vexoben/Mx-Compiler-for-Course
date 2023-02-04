@@ -66,6 +66,8 @@ public class IRBuilder implements ASTVisitor {
             str_parseInt = new IRFunction("__built_in_parseInt", new IRFuncType(null, int_type, char_ptr)),
             str_ord = new IRFunction("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
 
+    // for opt
+    static double loop_weight = 1.5;
     double weight;
 
     static ArrayList<Value> zero_index = new ArrayList<>();
@@ -680,8 +682,8 @@ public class IRBuilder implements ASTVisitor {
         cur_block.push_back(arr_cur_ptr);
         cur_block.push_back(new StoreInst(arr_head, arr_cur_ptr, cur_block));
 
-        BasicBlock condition_block = new BasicBlock("while_condition", cur_func, weight + 1);
-        BasicBlock repeat_block = new BasicBlock("while_repeat", cur_func, weight + 1);
+        BasicBlock condition_block = new BasicBlock("while_condition", cur_func, weight + loop_weight);
+        BasicBlock repeat_block = new BasicBlock("while_repeat", cur_func, weight + loop_weight);
         BasicBlock exit_block = new BasicBlock("while_exit", cur_func, weight);
         cur_block.insert(condition_block);
         condition_block.insert(exit_block);
@@ -689,16 +691,16 @@ public class IRBuilder implements ASTVisitor {
         repeat_block.link(condition_block);
 
         cur_block = condition_block;
-        weight += 1;
+        weight += loop_weight;
         LoadInst arr_cur = new LoadInst(arr_cur_ptr, "arr_cur", cur_block);
         cur_block.push_back(arr_cur);
         BinaryInst cmp = new BinaryInst(new BoolType(), "reach_end", BinaryExprNode.BinaryOperator.EQUAL, arr_cur, arr_tail, cur_block);
         cur_block.push_back(cmp);
         cur_block.push_back(new BrInst(get_data(cmp), exit_block, repeat_block, cur_block));
-        weight -= 1;
+        weight -= loop_weight;
 
         cur_block = repeat_block;
-        weight += 1;
+        weight += loop_weight;
         BaseInst sub_inst;
         if (deep + 1 != dim) {
             sub_inst = arr_allo_dfs(deep + 1, indexes, dim, (PointerType) type.get_pointed_type());
@@ -713,7 +715,7 @@ public class IRBuilder implements ASTVisitor {
         GetElementPtrInst arr_next = new GetElementPtrInst(arr_cur, one_arr, type, cur_block);
         cur_block.push_back(arr_next);
         cur_block.push_back(new StoreInst(arr_next, arr_cur_ptr, cur_block));
-        weight -= 1;
+        weight -= loop_weight;
 
         cur_block = exit_block;
         return arr_head;
@@ -878,9 +880,9 @@ public class IRBuilder implements ASTVisitor {
         // after: cur -> init -> condition; condition(branch); repeat -> step -> condition; exit -> cur_next
         cur_scope = new IRScope(cur_scope);
         BasicBlock init_block = new BasicBlock("for_init", cur_func, weight);
-        BasicBlock condition_block = new BasicBlock("for_condition", cur_func, weight + 1);
-        BasicBlock step_block = new BasicBlock("for_step", cur_func, weight + 1);
-        BasicBlock repeat_block = new BasicBlock("for_repeat", cur_func, weight + 1);
+        BasicBlock condition_block = new BasicBlock("for_condition", cur_func, weight + loop_weight);
+        BasicBlock step_block = new BasicBlock("for_step", cur_func, weight + loop_weight);
+        BasicBlock repeat_block = new BasicBlock("for_repeat", cur_func, weight + loop_weight);
         BasicBlock exit_block = new BasicBlock("for_exit", cur_func, weight);
         cur_block.insert(init_block);
         init_block.insert(condition_block);
@@ -892,7 +894,7 @@ public class IRBuilder implements ASTVisitor {
         cur_block = init_block;
         if (obj.init != null) obj.init.accept(this);
 
-        weight += 1;
+        weight += loop_weight;
         cur_block = condition_block;
         if (obj.condition != null) {
             obj.condition.accept(this);
@@ -900,21 +902,21 @@ public class IRBuilder implements ASTVisitor {
         } else {
             cur_block.push_back(new BrInst(repeat_block, cur_block));
         }
-        weight -= 1;
+        weight -= loop_weight;
 
-        weight += 1;
+        weight += loop_weight;
         cur_block = repeat_block;
         continue_jump_to.push(step_block);
         break_jump_to.push(exit_block);
         obj.stmt.accept(this);
         continue_jump_to.pop();
         break_jump_to.pop();
-        weight -= 1;
+        weight -= loop_weight;
 
-        weight += 1;
+        weight += loop_weight;
         cur_block = step_block;
         if (obj.step != null) obj.step.accept(this);
-        weight -= 1;
+        weight -= loop_weight;
 
         cur_block = exit_block;
         cur_scope = cur_scope.parent;
@@ -923,8 +925,8 @@ public class IRBuilder implements ASTVisitor {
     public void visit(WhileStmtNode obj) {
         // before: cur -> cur_next
         // after: cur -> condition_block; condition(branch); exit_block -> cur_next
-        BasicBlock condition_block = new BasicBlock("while_condition", cur_func, weight + 1);
-        BasicBlock repeat_block = new BasicBlock("while_repeat", cur_func, weight + 1);
+        BasicBlock condition_block = new BasicBlock("while_condition", cur_func, weight + loop_weight);
+        BasicBlock repeat_block = new BasicBlock("while_repeat", cur_func, weight + loop_weight);
         BasicBlock exit_block = new BasicBlock("while_exit", cur_func, weight);
         cur_block.insert(condition_block);
         condition_block.insert(exit_block);
@@ -932,16 +934,16 @@ public class IRBuilder implements ASTVisitor {
         repeat_block.link(condition_block);
 
         if (obj.condition != null) {
-            weight += 1;
+            weight += loop_weight;
             cur_block = condition_block;
             obj.condition.accept(this);
             cur_block.push_back(new BrInst(get_data(obj.condition.result), repeat_block, exit_block, cur_block));
-            weight -= 1;
+            weight -= loop_weight;
         } else {
             cur_block.push_back(new BrInst(repeat_block, cur_block));
         }
 
-        weight += 1;
+        weight += loop_weight;
         cur_block = repeat_block;
         cur_scope = new IRScope(cur_scope);
         continue_jump_to.push(condition_block);
@@ -950,7 +952,7 @@ public class IRBuilder implements ASTVisitor {
         continue_jump_to.pop();
         break_jump_to.pop();
         cur_scope = cur_scope.parent;
-        weight -= 1;
+        weight -= loop_weight;
 
         cur_block = exit_block;
     }
