@@ -68,9 +68,9 @@ public class RegAllocator {
          }
          assign_colors();
          //------------debug---------------
-         graph.output();
+/*         graph.output();
          for (Register reg : colored_nodes) System.out.println(reg.identifier);
-         System.out.println("---------------");
+         System.out.println("---------------");*/
          //--------------------------------
          if (spilled_nodes.size() > 0) rewrite_program(function);
          else {

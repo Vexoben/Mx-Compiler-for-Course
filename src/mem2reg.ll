@@ -23,58 +23,67 @@ declare i1 @__build_in_str_slt(i8*, i8*)
 declare i1 @__build_in_str_sge(i8*, i8*)
 declare i1 @__build_in_str_sgt(i8*, i8*)
 
+define dso_local void @foo(i32 %foo_d, i32 %foo_x, i32 %foo_y) #0 {
+fooentry:
+  br label %first_block__foo
+first_block__foo:
+  store i32 %foo_d, i32 d
+  store i32 %foo_x, i32 x
+  store i32 %foo_y, i32 y
+  store i32 d, i32 tmp
+  %r = mul i32 tmp, 1000
+  store i32 x, i32 tmp
+  %r2 = mul i32 tmp, 10
+  %r3 = add i32 %r, %r2
+  store i32 y, i32 tmp
+  %r4 = add i32 %r3, tmp
+  %function_call_inst = call i8* @toString(i32 %r4)
+  store i8* %function_call_inst, i8* allo_inst
+  store i8* allo_inst, i8* tmp
+  call void @println(i8* tmp)
+  store i32 d, i32 tmp
+  %r5 = icmp eq i32 tmp, 1
+  br i1 %r5, label %if_true, label %if_false
+if_true:
+  ret void
+  br label %if_exit
+if_false:
+  br label %if_exit
+if_exit:
+  store i32 x, i32 tmp
+  store i32 tmp, i32 t
+  store i32 x, i32 tmp
+  store i32 y, i32 tmp
+  store i32 tmp, i32 x
+  store i32 y, i32 tmp
+  store i32 t, i32 tmp
+  store i32 tmp, i32 y
+  store i32 x, i32 tmp
+  store i32 y, i32 tmp
+  call void @foo(i32 1, i32 tmp, i32 tmp)
+  store i32 d, i32 tmp
+  %r6 = mul i32 tmp, 1000
+  store i32 x, i32 tmp
+  %r7 = mul i32 tmp, 10
+  %r8 = add i32 %r6, %r7
+  store i32 y, i32 tmp
+  %r9 = add i32 %r8, tmp
+  %function_call_inst4 = call i8* @toString(i32 %r9)
+  store i8* %function_call_inst4, i8* allo_inst
+  store i8* allo_inst, i8* tmp
+  call void @println(i8* tmp)
+  br label %fooexit
+fooexit:
+  ret void
+}
+
 define dso_local i32 @main() #0 {
 mainentry:
   call void @__init_function__()
   br label %first_block__main
 first_block__main:
-  %array_size = mul i32 8, 999
-  %alloca_size = add i32 4, %array_size
-  %function_call_inst2 = call i8* @__built_in_malloc(i32 %alloca_size)
-  %bit_cast_inst = bitcast i8* %function_call_inst2 to i32*
-  store i32 999, i32* %bit_cast_inst
-  %get_element_ptr_inst = getelementptr inbounds i32, i32* %bit_cast_inst, i32 1
-  %arr_head = bitcast i32* %get_element_ptr_inst to i32**
-  %arr_tail = getelementptr inbounds i32*, i32** %arr_head, i32 999
-  store i32** %arr_head, i32** arr_cur_ptr
-  br label %while_condition
-while_condition:
-  store i32** arr_cur_ptr, i32** tmp
-  %reach_end = icmp eq i32** tmp, %arr_tail
-  br i1 %reach_end, label %while_exit, label %while_repeat
-while_repeat:
-  %get_element_ptr_inst2 = getelementptr inbounds i32*, i32** tmp, i32 0
-  store i32 0, i32** %get_element_ptr_inst2
-  %get_element_ptr_inst3 = getelementptr inbounds i32*, i32** tmp, i32 1
-  store i32** %get_element_ptr_inst3, i32** arr_cur_ptr
-  br label %while_condition
-while_exit:
-  store i32** %arr_head, i32** new_result
-  store i32** new_result, i32** tmp
-  store i32** tmp, i32** a
-  store i32** a, i32** tmp
-  %get_element_ptr_inst4 = getelementptr inbounds i32*, i32** tmp, i32 1
-  %array_size2 = mul i32 4, 10
-  %alloca_size2 = add i32 4, %array_size2
-  %function_call_inst3 = call i8* @__built_in_malloc(i32 %alloca_size2)
-  %bit_cast_inst2 = bitcast i8* %function_call_inst3 to i32*
-  store i32 10, i32* %bit_cast_inst2
-  %get_element_ptr_inst5 = getelementptr inbounds i32, i32* %bit_cast_inst2, i32 1
-  %arr_head2 = bitcast i32* %get_element_ptr_inst5 to i32*
-  store i32* %arr_head2, i32* new_result
-  store i32* new_result, i32* tmp
-  store i32* tmp, i32** %get_element_ptr_inst4
-  store i32** a, i32** tmp
-  %get_element_ptr_inst6 = getelementptr inbounds i32*, i32** tmp, i32 1
-  %load_inst5 = load i32*, i32** %get_element_ptr_inst6
-  %get_element_ptr_inst7 = getelementptr inbounds i32, i32* %load_inst5, i32 1
-  store i32 1, i32* %get_element_ptr_inst7
-  store i32** a, i32** tmp
-  %get_element_ptr_inst8 = getelementptr inbounds i32*, i32** tmp, i32 1
-  %load_inst7 = load i32*, i32** %get_element_ptr_inst8
-  %get_element_ptr_inst9 = getelementptr inbounds i32, i32* %load_inst7, i32 1
-  %load_inst8 = load i32, i32* %get_element_ptr_inst9
-  call void @printlnInt(i32 %load_inst8)
+  call void @foo(i32 7, i32 5, i32 3)
+  ret i32 0
   br label %mainexit
 mainexit:
   ret i32 0
