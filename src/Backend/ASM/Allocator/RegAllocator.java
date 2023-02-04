@@ -57,7 +57,8 @@ public class RegAllocator {
          LivenessAnalyzer analyzer = new LivenessAnalyzer();
          analyzer.run_on_function(function);
          build(function, analyzer);
-         graph.output();
+         // System.out.print("!!!");
+         // graph.output();
          make_work_list();
          while (true) {
             if (simplify_work_list.size() > 0) simplify();
@@ -68,8 +69,8 @@ public class RegAllocator {
          }
          assign_colors();
          //------------debug---------------
-/*         graph.output();
-         for (Register reg : colored_nodes) System.out.println(reg.identifier);
+         // graph.output();
+         /*for (Register reg : colored_nodes) System.out.println(reg.identifier);
          System.out.println("---------------");*/
          //--------------------------------
          if (spilled_nodes.size() > 0) rewrite_program(function);
@@ -166,6 +167,8 @@ public class RegAllocator {
       // todo : priority
    }
 
+   static int cnt_debug = 0;
+
    void build(ASMFunction function, LivenessAnalyzer analyzer) throws FileNotFoundException {
       for (ASMBlock block : function.blocks) {
          HashSet<Register> live = analyzer.get_live_out(block);
@@ -180,6 +183,7 @@ public class RegAllocator {
             live.addAll(inst.get_defs());
             for (Register d : inst.get_defs())  {
                for (Register l : live) {
+                  cnt_debug++;
                   graph.add_edge(d, l);
                }
             }
