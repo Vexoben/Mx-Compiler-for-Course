@@ -75,7 +75,7 @@ public class Compiler {
                 asm_printer1.ASM_print();
             }
             // System.out.println("-----------------REG Allocating-------------------");
-            //RegAllocatorNaive reg_allocator = new RegAllocatorNaive(asm_builder.asm);
+//            RegAllocatorNaive reg_allocator = new RegAllocatorNaive(asm_builder.asm);
             RegAllocator reg_allocator = new RegAllocator();
             ASMModule asm = asm_builder.asm;
             reg_allocator.run_on_module(asm);

@@ -23,112 +23,69 @@ declare i1 @__build_in_str_slt(i8*, i8*)
 declare i1 @__build_in_str_sge(i8*, i8*)
 declare i1 @__build_in_str_sgt(i8*, i8*)
 
-@a = dso_local global i32* zeroinitializer
-@i = dso_local global i32 zeroinitializer
-@k = dso_local global i32 zeroinitializer
-@m = dso_local global i32 zeroinitializer
+@a = dso_local global i32** zeroinitializer
 
 define dso_local i32 @main() #0 {
 mainentry:
   call void @__init_function__()
   br label %first_block__main
 first_block__main:
-  %load_inst2 = load i32, i32* @m
-  %function_call_inst3 = call i32 @getInt()
-  store i32 %function_call_inst3, i32* @m
-  %load_inst3 = load i32, i32* @k
-  %function_call_inst4 = call i32 @getInt()
-  store i32 %function_call_inst4, i32* @k
-  br label %for_init
-for_init:
-  %load_inst4 = load i32, i32* @i
-  store i32 0, i32* @i
-  br label %for_condition
-for_condition:
-  %load_inst5 = load i32, i32* @i
-  %load_inst6 = load i32, i32* @m
-  %r = icmp slt i32 %load_inst5, %load_inst6
-  br i1 %r, label %for_repeat, label %for_exit
-for_step:
-  %load_inst9 = load i32, i32* @i
-  %add_inst = add i32 1, %load_inst9
-  store i32 %add_inst, i32* @i
-  br label %for_condition
-for_repeat:
-  %load_inst7 = load i32, i32* @i
-  %load_inst8 = load i32*, i32** @a
-  %get_element_ptr_inst2 = getelementptr inbounds i32, i32* %load_inst8, i32 %load_inst7
-  %function_call_inst5 = call i32 @getInt()
-  store i32 %function_call_inst5, i32* %get_element_ptr_inst2
-  br label %for_step
-for_exit:
-  br label %for_init2
-for_init2:
-  %load_inst10 = load i32, i32* @i
-  store i32 0, i32* @i
-  br label %for_condition2
-for_condition2:
-  %load_inst11 = load i32, i32* @i
-  %load_inst12 = load i32*, i32** @a
-  %get_element_ptr_inst3 = getelementptr inbounds i32, i32* %load_inst12, i32 %load_inst11
-  %load_inst13 = load i32, i32* @k
-  %r2 = sub i32 %load_inst13, 1
-  %load_inst14 = load i32*, i32** @a
-  %get_element_ptr_inst4 = getelementptr inbounds i32, i32* %load_inst14, i32 %r2
-  %load_inst15 = load i32, i32* %get_element_ptr_inst3
-  %load_inst16 = load i32, i32* %get_element_ptr_inst4
-  %r3 = icmp sge i32 %load_inst15, %load_inst16
-  assign allo, 0
-  br i1 %r3, label %logic_right, label %logic_exit
-for_step2:
-  %load_inst22 = load i32, i32* @i
-  %add_inst2 = add i32 1, %load_inst22
-  store i32 %add_inst2, i32* @i
-  br label %for_condition2
-for_repeat2:
-  br label %for_step2
-for_exit2:
-  %load_inst23 = load i32, i32* @i
-  call void @printInt(i32 %load_inst23)
+  %load_inst2 = load i32**, i32*** @a
+  %get_element_ptr_inst3 = getelementptr inbounds i32*, i32** %load_inst2, i32 0
+  %array_size2 = mul i32 4, 10
+  %alloca_size2 = add i32 4, %array_size2
+  %function_call_inst3 = call i8* @__built_in_malloc(i32 %alloca_size2)
+  %bit_cast_inst2 = bitcast i8* %function_call_inst3 to i32*
+  store i32 10, i32* %bit_cast_inst2
+  %get_element_ptr_inst4 = getelementptr inbounds i32, i32* %bit_cast_inst2, i32 1
+  %arr_head2 = bitcast i32* %get_element_ptr_inst4 to i32*
+  assign new_result, %arr_head2
+  assign tmp, new_result
+  store i32* tmp, i32** %get_element_ptr_inst3
+  %load_inst4 = load i32**, i32*** @a
+  %get_element_ptr_inst5 = getelementptr inbounds i32*, i32** %load_inst4, i32 0
+  %load_inst5 = load i32*, i32** %get_element_ptr_inst5
+  %get_element_ptr_inst6 = getelementptr inbounds i32, i32* %load_inst5, i32 0
+  store i32 1, i32* %get_element_ptr_inst6
+  %load_inst6 = load i32**, i32*** @a
+  %get_element_ptr_inst7 = getelementptr inbounds i32*, i32** %load_inst6, i32 0
+  %load_inst7 = load i32*, i32** %get_element_ptr_inst7
+  %get_element_ptr_inst8 = getelementptr inbounds i32, i32* %load_inst7, i32 0
+  %load_inst8 = load i32, i32* %get_element_ptr_inst8
+  call void @printlnInt(i32 %load_inst8)
+  ret i32 0
   br label %mainexit
-logic_right:
-  %load_inst17 = load i32, i32* @i
-  %load_inst18 = load i32*, i32** @a
-  %get_element_ptr_inst5 = getelementptr inbounds i32, i32* %load_inst18, i32 %load_inst17
-  %load_inst19 = load i32, i32* %get_element_ptr_inst5
-  %r4 = icmp sgt i32 %load_inst19, 0
-  assign allo, %r4
-  br label %logic_exit
-logic_exit:
-  assign allo, 0
-  br i1 allo, label %logic_right2, label %logic_exit2
-logic_right2:
-  %load_inst20 = load i32, i32* @i
-  %load_inst21 = load i32, i32* @m
-  %r5 = icmp slt i32 %load_inst20, %load_inst21
-  assign allo, %r5
-  br label %logic_exit2
-logic_exit2:
-  br i1 allo, label %for_repeat2, label %for_exit2
 mainexit:
   ret i32 0
-  ret i32 allo
+  assign tmp, allo
+  ret i32 tmp
 }
 
 define dso_local void @__init_function__() #0 {
 __init_function__entry:
-  %array_size = mul i32 4, 50
+  %array_size = mul i32 8, 10
   %alloca_size = add i32 4, %array_size
   %function_call_inst = call i8* @__built_in_malloc(i32 %alloca_size)
   %bit_cast_inst = bitcast i8* %function_call_inst to i32*
-  store i32 50, i32* %bit_cast_inst
+  store i32 10, i32* %bit_cast_inst
   %get_element_ptr_inst = getelementptr inbounds i32, i32* %bit_cast_inst, i32 1
-  %arr_head = bitcast i32* %get_element_ptr_inst to i32*
+  %arr_head = bitcast i32* %get_element_ptr_inst to i32**
+  %arr_tail = getelementptr inbounds i32*, i32** %arr_head, i32 10
+  assign arr_cur_ptr, %arr_head
+  br label %while_condition
+while_condition:
+  assign tmp, arr_cur_ptr
+  %reach_end = icmp eq i32** tmp, %arr_tail
+  br i1 %reach_end, label %while_exit, label %while_repeat
+while_repeat:
+  assign tmp, 0
+  %get_element_ptr_inst2 = getelementptr inbounds i32*, i32** tmp, i32 1
+  assign arr_cur_ptr, %get_element_ptr_inst2
+  br label %while_condition
+while_exit:
   assign new_result, %arr_head
-  store i32* new_result, i32** @a
-  store i32 0, i32* @m
-  store i32 0, i32* @k
-  store i32 0, i32* @i
+  assign tmp, new_result
+  store i32** tmp, i32*** @a
   br label %__init_function__exit
 __init_function__exit:
   ret void
