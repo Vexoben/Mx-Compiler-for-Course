@@ -34,6 +34,7 @@ public class GetElementPtrInst extends BaseInst{
     public GetElementPtrInst(Value pointer, ArrayList<Value> indexes, DerivedType type, String _name, BasicBlock _belong) {
         super(type, _name, _belong);
         add_operand(pointer);
+        pointer.add_user(this);
         indexes.forEach(i -> {
             add_operand(i);
             i.add_user(this);

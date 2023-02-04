@@ -367,11 +367,21 @@ public class RegAllocator {
    void select_spill() {
       Register result = null;
       double min_cost = 1e100;
-      for (Register reg : spill_work_list) {   // todo： 启发式选择
+      for (Register reg : spill_work_list) {
+         if (new_temps.contains(reg)) continue;
          double cost = reg.node.priority / reg.node.degree;
          if (cost < min_cost) {
             min_cost = cost;
             result = reg;
+         }
+      }
+      if (result == null) {
+         for (Register reg : spill_work_list) {
+            double cost = reg.node.priority / reg.node.degree;
+            if (cost < min_cost) {
+               min_cost = cost;
+               result = reg;
+            }
          }
       }
       spill_work_list.remove(result);
