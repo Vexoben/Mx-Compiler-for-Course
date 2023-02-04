@@ -958,12 +958,15 @@ public class IRBuilder implements ASTVisitor {
     public void visit(BlockStmtNode obj) {
         obj.block.accept(this);
     }
+
+    static double para = 0.1;
+
     @Override
     public void visit(IfStmtNode obj) {
         // before: cur -> cur_next
         // after: cur, branch ; exit_block -> cur_next
-        BasicBlock if_block = new BasicBlock ("if_true", cur_func, weight);
-        BasicBlock else_block = new BasicBlock("if_false", cur_func, weight);
+        BasicBlock if_block = new BasicBlock ("if_true", cur_func, weight + para);
+        BasicBlock else_block = new BasicBlock("if_false", cur_func, weight + para);
         BasicBlock exit_block = new BasicBlock("if_exit", cur_func, weight);
         cur_block.insert(exit_block);
         cur_block.cut();
@@ -974,17 +977,21 @@ public class IRBuilder implements ASTVisitor {
         obj.condition.accept(this);
         cur_block.push_back(new BrInst(get_data(obj.condition.result), if_block, else_block, cur_block));
         // if_block
+        weight += para;
         cur_scope = new IRScope(cur_scope);
         cur_block = if_block;
         obj.if_stmt.accept(this);
         cur_scope = cur_scope.parent;
+        weight -= para;
         // else_block
+        weight += para;
         if (obj.else_stmt != null) {
             cur_scope = new IRScope(cur_scope);
             cur_block = else_block;
             obj.else_stmt.accept(this);
             cur_scope = cur_scope.parent;
         }
+        weight -= para;
         // exit
         cur_block = exit_block;
     }
