@@ -23,36 +23,35 @@ declare i1 @__build_in_str_slt(i8*, i8*)
 declare i1 @__build_in_str_sge(i8*, i8*)
 declare i1 @__build_in_str_sgt(i8*, i8*)
 
-@a = dso_local global i32** zeroinitializer
+@const_str = private unnamed_addr constant [9 x i8] c"eternal!\00"
+
+%struct.older = type { i32 }
 
 define dso_local i32 @main() #0 {
 mainentry:
   call void @__init_function__()
   br label %first_block__main
 first_block__main:
-  %load_inst2 = load i32**, i32*** @a
-  %get_element_ptr_inst3 = getelementptr inbounds i32*, i32** %load_inst2, i32 0
-  %array_size2 = mul i32 4, 10
-  %alloca_size2 = add i32 4, %array_size2
-  %function_call_inst3 = call i8* @__built_in_malloc(i32 %alloca_size2)
-  %bit_cast_inst2 = bitcast i8* %function_call_inst3 to i32*
-  store i32 10, i32* %bit_cast_inst2
-  %get_element_ptr_inst4 = getelementptr inbounds i32, i32* %bit_cast_inst2, i32 1
-  %arr_head2 = bitcast i32* %get_element_ptr_inst4 to i32*
-  assign new_result, %arr_head2
-  assign tmp, new_result
-  store i32* tmp, i32** %get_element_ptr_inst3
-  %load_inst4 = load i32**, i32*** @a
-  %get_element_ptr_inst5 = getelementptr inbounds i32*, i32** %load_inst4, i32 0
-  %load_inst5 = load i32*, i32** %get_element_ptr_inst5
-  %get_element_ptr_inst6 = getelementptr inbounds i32, i32* %load_inst5, i32 0
-  store i32 1, i32* %get_element_ptr_inst6
-  %load_inst6 = load i32**, i32*** @a
-  %get_element_ptr_inst7 = getelementptr inbounds i32*, i32** %load_inst6, i32 0
-  %load_inst7 = load i32*, i32** %get_element_ptr_inst7
-  %get_element_ptr_inst8 = getelementptr inbounds i32, i32* %load_inst7, i32 0
-  %load_inst8 = load i32, i32* %get_element_ptr_inst8
-  call void @printlnInt(i32 %load_inst8)
+  %function_call_inst2 = call i8* @__built_in_malloc(i32 4)
+  %bit_cast_inst = bitcast i8* %function_call_inst2 to %struct.older*
+  call void @__constructor__older(%struct.older* %bit_cast_inst)
+  assign alloca_inst, %bit_cast_inst
+  assign tmp, alloca_inst
+  assign mrJiang, tmp
+  assign tmp, mrJiang
+  call void @__in_class__older_solveAge(%struct.older* tmp)
+  assign tmp, mrJiang
+  %get_element_ptr_inst3 = getelementptr inbounds %struct.older, %struct.older* tmp, i32 0, i32 0
+  %load_inst41 = load i32, i32* %get_element_ptr_inst3
+  %r34 = icmp sgt i32 %load_inst41, 10000
+  br i1 %r34, label %if_true2, label %if_false2
+if_true2:
+  %get_element_ptr_inst4 = getelementptr inbounds [9 x i8], [9 x i8]* @const_str, i32 0, i32 0
+  call void @println(i8* %get_element_ptr_inst4)
+  br label %if_exit2
+if_false2:
+  br label %if_exit2
+if_exit2:
   ret i32 0
   br label %mainexit
 mainexit:
@@ -63,31 +62,145 @@ mainexit:
 
 define dso_local void @__init_function__() #0 {
 __init_function__entry:
-  %array_size = mul i32 8, 10
-  %alloca_size = add i32 4, %array_size
-  %function_call_inst = call i8* @__built_in_malloc(i32 %alloca_size)
-  %bit_cast_inst = bitcast i8* %function_call_inst to i32*
-  store i32 10, i32* %bit_cast_inst
-  %get_element_ptr_inst = getelementptr inbounds i32, i32* %bit_cast_inst, i32 1
-  %arr_head = bitcast i32* %get_element_ptr_inst to i32**
-  %arr_tail = getelementptr inbounds i32*, i32** %arr_head, i32 10
-  assign arr_cur_ptr, %arr_head
-  br label %while_condition
-while_condition:
-  assign tmp, arr_cur_ptr
-  %reach_end = icmp eq i32** tmp, %arr_tail
-  br i1 %reach_end, label %while_exit, label %while_repeat
-while_repeat:
-  assign tmp, 0
-  %get_element_ptr_inst2 = getelementptr inbounds i32*, i32** tmp, i32 1
-  assign arr_cur_ptr, %get_element_ptr_inst2
-  br label %while_condition
-while_exit:
-  assign new_result, %arr_head
-  assign tmp, new_result
-  store i32** tmp, i32*** @a
   br label %__init_function__exit
 __init_function__exit:
+  ret void
+}
+
+define dso_local void @__in_class__older_solveAge(%struct.older* %__in_class__older_solveAge_this) #0 {
+__in_class__older_solveAgeentry:
+  assign this_alloca, %__in_class__older_solveAge_this
+  br label %first_block____in_class__older_solveAge
+first_block____in_class__older_solveAge:
+  br label %for_init
+for_init:
+  assign tmp, i
+  assign i, 1
+  br label %for_condition
+for_condition:
+  assign tmp, i
+  %r = icmp slt i32 tmp, 100
+  br i1 %r, label %for_repeat, label %for_exit
+for_step:
+  assign tmp, i
+  %add_inst3 = add i32 1, tmp
+  assign i, %add_inst3
+  br label %for_condition
+for_repeat:
+  br label %for_init2
+for_exit:
+  br label %__in_class__older_solveAgeexit
+for_init2:
+  assign tmp, j
+  assign tmp, i
+  %r2 = add i32 tmp, 1
+  assign j, %r2
+  br label %for_condition2
+for_condition2:
+  assign tmp, j
+  %r3 = icmp slt i32 tmp, 100
+  br i1 %r3, label %for_repeat2, label %for_exit2
+for_step2:
+  assign tmp, j
+  %add_inst2 = add i32 1, tmp
+  assign j, %add_inst2
+  br label %for_condition2
+for_repeat2:
+  br label %for_init3
+for_exit2:
+  br label %for_step
+for_init3:
+  assign tmp, k
+  assign tmp, j
+  %r4 = add i32 tmp, 1
+  assign k, %r4
+  br label %for_condition3
+for_condition3:
+  assign tmp, k
+  %r5 = icmp slt i32 tmp, 100
+  br i1 %r5, label %for_repeat3, label %for_exit3
+for_step3:
+  assign tmp, k
+  %add_inst = add i32 1, tmp
+  assign k, %add_inst
+  br label %for_condition3
+for_repeat3:
+  assign tmp, i
+  assign tmp, i
+  %r6 = sub i32 tmp, tmp
+  assign tmp, i
+  %r7 = add i32 %r6, tmp
+  assign tmp, j
+  %r8 = add i32 %r7, tmp
+  assign tmp, j
+  %r9 = sub i32 %r8, tmp
+  assign tmp, j
+  %r10 = add i32 %r9, tmp
+  assign tmp, k
+  %r11 = add i32 %r10, tmp
+  assign tmp, k
+  %r12 = sub i32 %r11, tmp
+  assign tmp, k
+  %r13 = add i32 %r12, tmp
+  assign tmp, i
+  %r14 = mul i32 100, tmp
+  assign tmp, j
+  %r15 = mul i32 10, tmp
+  %r16 = add i32 %r14, %r15
+  assign tmp, k
+  %r17 = add i32 %r16, tmp
+  %r18 = mul i32 %r13, %r17
+  %r19 = srem i32 %r18, 1926
+  %r20 = icmp eq i32 %r19, 0
+  br i1 %r20, label %if_true, label %if_false
+for_exit3:
+  br label %for_step2
+if_true:
+  assign tmp, this_alloca
+  %get_element_ptr_inst2 = getelementptr inbounds %struct.older, %struct.older* tmp, i32 0, i32 0
+  assign tmp, i
+  assign tmp, i
+  %r21 = sub i32 tmp, tmp
+  assign tmp, i
+  %r22 = add i32 %r21, tmp
+  assign tmp, j
+  %r23 = add i32 %r22, tmp
+  assign tmp, j
+  %r24 = sub i32 %r23, tmp
+  assign tmp, j
+  %r25 = add i32 %r24, tmp
+  assign tmp, k
+  %r26 = add i32 %r25, tmp
+  assign tmp, k
+  %r27 = sub i32 %r26, tmp
+  assign tmp, k
+  %r28 = add i32 %r27, tmp
+  assign tmp, i
+  %r29 = mul i32 100, tmp
+  assign tmp, j
+  %r30 = mul i32 10, tmp
+  %r31 = add i32 %r29, %r30
+  assign tmp, k
+  %r32 = add i32 %r31, tmp
+  %r33 = mul i32 %r28, %r32
+  store i32 %r33, i32* %get_element_ptr_inst2
+  br label %if_exit
+if_false:
+  br label %if_exit
+if_exit:
+  br label %for_step3
+__in_class__older_solveAgeexit:
+  ret void
+}
+
+define dso_local void @__constructor__older(%struct.older* %__constructor__older_this) #0 {
+__constructor__olderentry:
+  assign this_alloca, %__constructor__older_this
+  assign tmp, this_alloca
+  br label %first_block____constructor__older
+first_block____constructor__older:
+  br label %__constructor__olderexit
+__constructor__olderexit:
   ret void
 }
 
