@@ -21,137 +21,136 @@ main:
    call __init_function__
    j .main.first_block__main
 .main.first_block__main:
-   la n_addr, n
-   lw load_inst, 0(n_addr)
+   la m_addr, m
+   lw load_inst, 0(m_addr)
    call getInt
    mv function_call_inst, a0
-   la n_addr2, n
-   sw function_call_inst, 0(n_addr2)
+   la m_addr2, m
+   sw function_call_inst, 0(m_addr2)
+   la k_addr, k
+   lw load_inst2, 0(k_addr)
+   call getInt
+   mv function_call_inst2, a0
+   la k_addr2, k
+   sw function_call_inst2, 0(k_addr2)
    j .main.for_init
 .main.for_init:
    la i_addr, i
-   lw load_inst2, 0(i_addr)
+   lw load_inst3, 0(i_addr)
    la i_addr2, i
    li tmp, 0
    sw tmp, 0(i_addr2)
    j .main.for_condition
 .main.for_condition:
    la i_addr3, i
-   lw load_inst3, 0(i_addr3)
-   la n_addr3, n
-   lw load_inst4, 0(n_addr3)
-   slt tmp2, load_inst3, load_inst4
-   blt load_inst3, load_inst4, .main.for_repeat
+   lw load_inst4, 0(i_addr3)
+   la m_addr3, m
+   lw load_inst5, 0(m_addr3)
+   slt tmp2, load_inst4, load_inst5
+   blt load_inst4, load_inst5, .main.for_repeat
    j .main.for_exit
 .main.for_step:
    la i_addr4, i
-   lw load_inst5, 0(i_addr4)
+   lw load_inst6, 0(i_addr4)
    li tmp3, 1
-   add add_inst, tmp3, load_inst5
+   add add_inst, tmp3, load_inst6
    la i_addr5, i
    sw add_inst, 0(i_addr5)
    j .main.for_condition
 .main.for_repeat:
-   la p_addr, p
-   lw load_inst6, 0(p_addr)
-   call getInt
-   mv function_call_inst2, a0
-   la p_addr2, p
-   sw function_call_inst2, 0(p_addr2)
-   la q_addr, q
-   lw load_inst7, 0(q_addr)
+   la i_addr6, i
+   lw load_inst7, 0(i_addr6)
+   la a_addr, a
+   lw load_inst8, 0(a_addr)
+   li tmp5, 4
+   mul tmp4, load_inst7, tmp5
+   add get_element_ptr_inst, tmp4, load_inst8
    call getInt
    mv function_call_inst3, a0
-   la q_addr2, q
-   sw function_call_inst3, 0(q_addr2)
-   la r_addr, r
-   lw load_inst8, 0(r_addr)
-   call getInt
-   mv function_call_inst4, a0
-   la r_addr2, r
-   sw function_call_inst4, 0(r_addr2)
-   la x_addr, x
-   lw load_inst9, 0(x_addr)
-   la x_addr2, x
-   lw load_inst10, 0(x_addr2)
-   la p_addr3, p
-   lw load_inst11, 0(p_addr3)
-   add tmp4, load_inst10, load_inst11
-   la x_addr3, x
-   sw tmp4, 0(x_addr3)
-   la y_addr, y
-   lw load_inst12, 0(y_addr)
-   la y_addr2, y
-   lw load_inst13, 0(y_addr2)
-   la q_addr3, q
-   lw load_inst14, 0(q_addr3)
-   add tmp5, load_inst13, load_inst14
-   la y_addr3, y
-   sw tmp5, 0(y_addr3)
-   la z_addr, z
-   lw load_inst15, 0(z_addr)
-   la z_addr2, z
-   lw load_inst16, 0(z_addr2)
-   la r_addr3, r
-   lw load_inst17, 0(r_addr3)
-   add tmp6, load_inst16, load_inst17
-   la z_addr3, z
-   sw tmp6, 0(z_addr3)
+   sw function_call_inst3, 0(get_element_ptr_inst)
    j .main.for_step
 .main.for_exit:
-   la x_addr4, x
-   lw load_inst18, 0(x_addr4)
-   li tmp8, 0
-   xor tmp9, load_inst18, tmp8
-   sltiu tmp7, tmp9, 1
-   li tmp10, 0
-   mv allo, tmp10
-   li tmp11, 0
-   beq load_inst18, tmp11, .main.logic_right
+   j .main.for_init2
+.main.for_init2:
+   la i_addr7, i
+   lw load_inst9, 0(i_addr7)
+   la i_addr8, i
+   li tmp6, 0
+   sw tmp6, 0(i_addr8)
+   j .main.for_condition2
+.main.for_condition2:
+   la i_addr9, i
+   lw load_inst10, 0(i_addr9)
+   la a_addr2, a
+   lw load_inst11, 0(a_addr2)
+   li tmp8, 4
+   mul tmp7, load_inst10, tmp8
+   add get_element_ptr_inst2, tmp7, load_inst11
+   la k_addr3, k
+   lw load_inst12, 0(k_addr3)
+   li tmp10, 1
+   sub tmp9, load_inst12, tmp10
+   la a_addr3, a
+   lw load_inst13, 0(a_addr3)
+   li tmp12, 4
+   mul tmp11, tmp9, tmp12
+   add get_element_ptr_inst3, tmp11, load_inst13
+   lw load_inst14, 0(get_element_ptr_inst2)
+   lw load_inst15, 0(get_element_ptr_inst3)
+   slt tmp14, load_inst14, load_inst15
+   xori tmp13, tmp14, 1
+   li tmp15, 0
+   mv allo, tmp15
+   bge load_inst14, load_inst15, .main.logic_right
    j .main.logic_exit
-.main.if_true:
-   li tmp12, 0
-   la str.addr, .const_str
-   add get_element_ptr_inst, str.addr, tmp12
-   mv a0, get_element_ptr_inst
-   call print
-   j .main.if_exit
-.main.if_false:
-   li tmp13, 0
-   la str.addr2, .const_str2
-   add get_element_ptr_inst2, str.addr2, tmp13
-   mv a0, get_element_ptr_inst2
-   call print
-   j .main.if_exit
-.main.if_exit:
+.main.for_step2:
+   la i_addr10, i
+   lw load_inst16, 0(i_addr10)
+   li tmp16, 1
+   add add_inst2, tmp16, load_inst16
+   la i_addr11, i
+   sw add_inst2, 0(i_addr11)
+   j .main.for_condition2
+.main.for_repeat2:
+   j .main.for_step2
+.main.for_exit2:
+   la i_addr12, i
+   lw load_inst17, 0(i_addr12)
+   mv a0, load_inst17
+   call printInt
    j .main.mainexit
 .main.logic_right:
-   la y_addr4, y
-   lw load_inst19, 0(y_addr4)
-   li tmp15, 0
-   xor tmp16, load_inst19, tmp15
-   sltiu tmp14, tmp16, 1
-   mv allo, tmp14
+   la i_addr13, i
+   lw load_inst18, 0(i_addr13)
+   la a_addr4, a
+   lw load_inst19, 0(a_addr4)
+   li tmp18, 4
+   mul tmp17, load_inst18, tmp18
+   add get_element_ptr_inst4, tmp17, load_inst19
+   lw load_inst20, 0(get_element_ptr_inst4)
+   li tmp20, 0
+   slt tmp19, tmp20, load_inst20
+   mv allo, tmp19
    j .main.logic_exit
 .main.logic_exit:
-   li tmp17, 0
-   mv allo2, tmp17
+   li tmp21, 0
+   mv allo2, tmp21
    bne allo, zero, .main.logic_right2
    j .main.logic_exit2
 .main.logic_right2:
-   la z_addr4, z
-   lw load_inst20, 0(z_addr4)
-   li tmp19, 0
-   xor tmp20, load_inst20, tmp19
-   sltiu tmp18, tmp20, 1
-   mv allo2, tmp18
+   la i_addr14, i
+   lw load_inst21, 0(i_addr14)
+   la m_addr4, m
+   lw load_inst22, 0(m_addr4)
+   slt tmp22, load_inst21, load_inst22
+   mv allo2, tmp22
    j .main.logic_exit2
 .main.logic_exit2:
-   bne allo2, zero, .main.if_true
-   j .main.if_false
+   bne allo2, zero, .main.for_repeat2
+   j .main.for_exit2
 .main.mainexit:
-   li tmp21, 0
-   mv a0, tmp21
+   li tmp23, 0
+   mv a0, tmp23
    mv ra, virtual_ra
    mv s0, virtual_s0
    mv s1, virtual_s1
@@ -201,30 +200,34 @@ __init_function__:
    mv virtual_s92, s9
    mv virtual_s102, s10
    mv virtual_s112, s11
-   la p_addr4, p
-   li tmp22, 0
-   sw tmp22, 0(p_addr4)
-   la q_addr4, q
-   li tmp23, 0
-   sw tmp23, 0(q_addr4)
-   la r_addr4, r
-   li tmp24, 0
-   sw tmp24, 0(r_addr4)
-   la x_addr5, x
-   li tmp25, 0
-   sw tmp25, 0(x_addr5)
-   la y_addr5, y
-   li tmp26, 0
-   sw tmp26, 0(y_addr5)
-   la z_addr5, z
-   li tmp27, 0
-   sw tmp27, 0(z_addr5)
-   la n_addr4, n
-   li tmp28, 0
-   sw tmp28, 0(n_addr4)
-   la i_addr6, i
-   li tmp29, 0
-   sw tmp29, 0(i_addr6)
+   li tmp24, 4
+   li tmp25, 50
+   mul array_size, tmp24, tmp25
+   li tmp26, 4
+   add alloca_size, tmp26, array_size
+   mv a0, alloca_size
+   call __built_in_malloc
+   mv function_call_inst4, a0
+   mv bit_cast_inst, function_call_inst4
+   li tmp27, 50
+   sw tmp27, 0(bit_cast_inst)
+   li tmp29, 1
+   li tmp30, 4
+   mul tmp28, tmp29, tmp30
+   add get_element_ptr_inst5, tmp28, bit_cast_inst
+   mv arr_head, get_element_ptr_inst5
+   mv new_result, arr_head
+   la a_addr5, a
+   sw new_result, 0(a_addr5)
+   la m_addr5, m
+   li tmp31, 0
+   sw tmp31, 0(m_addr5)
+   la k_addr4, k
+   li tmp32, 0
+   sw tmp32, 0(k_addr4)
+   la i_addr15, i
+   li tmp33, 0
+   sw tmp33, 0(i_addr15)
    j .__init_function__.__init_function__exit
 .__init_function__.__init_function__exit:
    mv ra, virtual_ra2
@@ -243,56 +246,25 @@ __init_function__:
    ret
 .Lfunc_end1:
    .size   __init_function__, .Lfunc_end1-__init_function__
-   .type   .const_str,@object
-.section   .rodata.str1.1,"aMS",@progbits,1
-.const_str:
-   .asciz   "YES"
-   .type   .const_str2,@object
-.const_str2:
-   .asciz   "NO"
-   .type   p,@object
+   .type   a,@object
    .section   .rodata.str1.1,"aMS",@progbits,1
-   .globl   p
+   .globl   a
    .p2align   2
-p:
+a:
    .word   0
-   .size   .p, 4
-   .type   q,@object
-   .globl   q
+   .size   .a, 4
+   .type   m,@object
+   .globl   m
    .p2align   2
-q:
+m:
    .word   0
-   .size   .q, 4
-   .type   r,@object
-   .globl   r
+   .size   .m, 4
+   .type   k,@object
+   .globl   k
    .p2align   2
-r:
+k:
    .word   0
-   .size   .r, 4
-   .type   x,@object
-   .globl   x
-   .p2align   2
-x:
-   .word   0
-   .size   .x, 4
-   .type   y,@object
-   .globl   y
-   .p2align   2
-y:
-   .word   0
-   .size   .y, 4
-   .type   z,@object
-   .globl   z
-   .p2align   2
-z:
-   .word   0
-   .size   .z, 4
-   .type   n,@object
-   .globl   n
-   .p2align   2
-n:
-   .word   0
-   .size   .n, 4
+   .size   .k, 4
    .type   i,@object
    .globl   i
    .p2align   2

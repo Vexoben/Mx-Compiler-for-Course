@@ -5,138 +5,142 @@
    .type   main,@function
 main:
 .main.mainentry:
-   addi sp, sp, -8
-   sw ra, 0(sp)
+   addi sp, sp, -12
+   sw ra, 4(sp)
+   sw s2, 8(sp)
    call __init_function__
    j .main.first_block__main
 .main.first_block__main:
-   la t1, n
-   lw t1, 0(t1)
+   la t3, m
+   lw t3, 0(t3)
    call getInt
-   la t1, n
-   sw a0, 0(t1)
+   la t3, m
+   sw a0, 0(t3)
+   la t3, k
+   lw t3, 0(t3)
+   call getInt
+   la t3, k
+   sw a0, 0(t3)
    j .main.for_init
 .main.for_init:
-   la t1, i
-   lw t1, 0(t1)
-   la a7, i
-   li t1, 0
-   sw t1, 0(a7)
+   la t3, i
+   lw t3, 0(t3)
+   la t3, i
+   li a0, 0
+   sw a0, 0(t3)
    j .main.for_condition
 .main.for_condition:
-   la t1, i
-   lw t1, 0(t1)
-   la a7, n
-   lw a7, 0(a7)
-   slt a1, t1, a7
-   blt t1, a7, .main.for_repeat
+   la t3, i
+   lw a0, 0(t3)
+   la t3, m
+   lw t3, 0(t3)
+   slt a6, a0, t3
+   blt a0, t3, .main.for_repeat
    j .main.for_exit
 .main.for_step:
-   la t1, i
-   lw t1, 0(t1)
-   li a7, 1
-   add a7, a7, t1
-   la t1, i
-   sw a7, 0(t1)
+   la t3, i
+   lw a0, 0(t3)
+   li t3, 1
+   add a0, t3, a0
+   la t3, i
+   sw a0, 0(t3)
    j .main.for_condition
 .main.for_repeat:
-   la t1, p
-   lw t1, 0(t1)
+   la t3, i
+   lw a6, 0(t3)
+   la t3, a
+   lw a0, 0(t3)
+   li t3, 4
+   mul t3, a6, t3
+   add s2, t3, a0
    call getInt
-   la t1, p
-   sw a0, 0(t1)
-   la t1, q
-   lw t1, 0(t1)
-   call getInt
-   la t1, q
-   sw a0, 0(t1)
-   la t1, r
-   lw t1, 0(t1)
-   call getInt
-   la t1, r
-   sw a0, 0(t1)
-   la t1, x
-   lw t1, 0(t1)
-   la t1, x
-   lw a7, 0(t1)
-   la t1, p
-   lw t1, 0(t1)
-   add t1, a7, t1
-   la a7, x
-   sw t1, 0(a7)
-   la t1, y
-   lw t1, 0(t1)
-   la t1, y
-   lw t1, 0(t1)
-   la a7, q
-   lw a7, 0(a7)
-   add a7, t1, a7
-   la t1, y
-   sw a7, 0(t1)
-   la t1, z
-   lw t1, 0(t1)
-   la t1, z
-   lw a7, 0(t1)
-   la t1, r
-   lw t1, 0(t1)
-   add a7, a7, t1
-   la t1, z
-   sw a7, 0(t1)
+   sw a0, 0(s2)
    j .main.for_step
 .main.for_exit:
-   la t1, x
-   lw a1, 0(t1)
-   li t1, 0
-   xor t1, a1, t1
-   sltiu t1, t1, 1
-   li a7, 0
-   li t1, 0
-   beq a1, t1, .main.logic_right
+   j .main.for_init2
+.main.for_init2:
+   la t3, i
+   lw t3, 0(t3)
+   la t3, i
+   li a0, 0
+   sw a0, 0(t3)
+   j .main.for_condition2
+.main.for_condition2:
+   la t3, i
+   lw a0, 0(t3)
+   la t3, a
+   lw a6, 0(t3)
+   li t3, 4
+   mul t3, a0, t3
+   add s2, t3, a6
+   la t3, k
+   lw t3, 0(t3)
+   li a0, 1
+   sub t3, t3, a0
+   la a0, a
+   lw a0, 0(a0)
+   li a6, 4
+   mul t3, t3, a6
+   add t3, t3, a0
+   lw a6, 0(s2)
+   lw a0, 0(t3)
+   slt t3, a6, a0
+   xori t3, t3, 1
+   li t3, 0
+   bge a6, a0, .main.logic_right
    j .main.logic_exit
-.main.if_true:
-   li t1, 0
-   la a7, .const_str
-   add a0, a7, t1
-   call print
-   j .main.if_exit
-.main.if_false:
-   li t1, 0
-   la a7, .const_str2
-   add a0, a7, t1
-   call print
-   j .main.if_exit
-.main.if_exit:
+.main.for_step2:
+   la t3, i
+   lw a0, 0(t3)
+   li t3, 1
+   add t3, t3, a0
+   la a0, i
+   sw t3, 0(a0)
+   j .main.for_condition2
+.main.for_repeat2:
+   j .main.for_step2
+.main.for_exit2:
+   la t3, i
+   lw a0, 0(t3)
+   call printInt
    j .main.mainexit
 .main.logic_right:
-   la t1, y
-   lw a7, 0(t1)
-   li t1, 0
-   xor t1, a7, t1
-   sltiu a7, t1, 1
+   la t3, i
+   lw a0, 0(t3)
+   la t3, a
+   lw a6, 0(t3)
+   li t3, 4
+   mul t3, a0, t3
+   add t3, t3, a6
+   lw t3, 0(t3)
+   li a0, 0
+   slt t3, a0, t3
    j .main.logic_exit
 .main.logic_exit:
-   li t1, 0
-   bne a7, zero, .main.logic_right2
+   li a0, 0
+   bne t3, zero, .main.logic_right2
    j .main.logic_exit2
 .main.logic_right2:
-   la t1, z
-   lw a7, 0(t1)
-   li t1, 0
-   xor t1, a7, t1
-   sltiu t1, t1, 1
+   la t3, i
+   lw t3, 0(t3)
+   la a0, m
+   lw a0, 0(a0)
+   slt a0, t3, a0
    j .main.logic_exit2
 .main.logic_exit2:
-   bne t1, zero, .main.if_true
-   j .main.if_false
+   bne a0, zero, .main.for_repeat2
+   j .main.for_exit2
 .main.mainexit:
    li a0, 0
-   lw ra, 0(sp)
+   lw ra, 4(sp)
+   lw s2, 8(sp)
+   addi sp, sp, 12
    ret
-   lw a0, 4(sp)
-   lw ra, 0(sp)
+   lw a0, 0(sp)
+   lw ra, 4(sp)
+   lw s2, 8(sp)
+   addi sp, sp, 12
    ret
-   addi sp, sp, 8
-   addi sp, sp, 8
 .Lfunc_end0:
    .size   main, .Lfunc_end0-main
 .globl   __init_function__
@@ -144,85 +148,57 @@ main:
    .type   __init_function__,@function
 __init_function__:
 .__init_function__.__init_function__entry:
-   la t1, p
-   li a7, 0
-   sw a7, 0(t1)
-   la a7, q
-   li t1, 0
-   sw t1, 0(a7)
-   la a7, r
-   li t1, 0
-   sw t1, 0(a7)
-   la t1, x
-   li a7, 0
-   sw a7, 0(t1)
-   la a7, y
-   li t1, 0
-   sw t1, 0(a7)
-   la t1, z
-   li a7, 0
-   sw a7, 0(t1)
-   la a7, n
-   li t1, 0
-   sw t1, 0(a7)
-   la t1, i
-   li a7, 0
-   sw a7, 0(t1)
+   addi sp, sp, -4
+   sw ra, 0(sp)
+   li a0, 4
+   li t3, 50
+   mul t3, a0, t3
+   li a0, 4
+   add a0, a0, t3
+   call __built_in_malloc
+   li t3, 50
+   sw t3, 0(a0)
+   li a6, 1
+   li t3, 4
+   mul t3, a6, t3
+   add t3, t3, a0
+   la a0, a
+   sw t3, 0(a0)
+   la t3, m
+   li a0, 0
+   sw a0, 0(t3)
+   la t3, k
+   li a0, 0
+   sw a0, 0(t3)
+   la t3, i
+   li a0, 0
+   sw a0, 0(t3)
    j .__init_function__.__init_function__exit
 .__init_function__.__init_function__exit:
+   lw ra, 0(sp)
+   addi sp, sp, 4
    ret
 .Lfunc_end1:
    .size   __init_function__, .Lfunc_end1-__init_function__
-   .type   .const_str,@object
-.section   .rodata.str1.1,"aMS",@progbits,1
-.const_str:
-   .asciz   "YES"
-   .type   .const_str2,@object
-.const_str2:
-   .asciz   "NO"
-   .type   p,@object
+   .type   a,@object
    .section   .rodata.str1.1,"aMS",@progbits,1
-   .globl   p
+   .globl   a
    .p2align   2
-p:
+a:
    .word   0
-   .size   .p, 4
-   .type   q,@object
-   .globl   q
+   .size   .a, 4
+   .type   m,@object
+   .globl   m
    .p2align   2
-q:
+m:
    .word   0
-   .size   .q, 4
-   .type   r,@object
-   .globl   r
+   .size   .m, 4
+   .type   k,@object
+   .globl   k
    .p2align   2
-r:
+k:
    .word   0
-   .size   .r, 4
-   .type   x,@object
-   .globl   x
-   .p2align   2
-x:
-   .word   0
-   .size   .x, 4
-   .type   y,@object
-   .globl   y
-   .p2align   2
-y:
-   .word   0
-   .size   .y, 4
-   .type   z,@object
-   .globl   z
-   .p2align   2
-z:
-   .word   0
-   .size   .z, 4
-   .type   n,@object
-   .globl   n
-   .p2align   2
-n:
-   .word   0
-   .size   .n, 4
+   .size   .k, 4
    .type   i,@object
    .globl   i
    .p2align   2

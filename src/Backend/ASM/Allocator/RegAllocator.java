@@ -89,7 +89,7 @@ public class RegAllocator {
          for (ASMBlock block : function.blocks) {
             for (int i = 0; i < block.instructions.size(); ++i) {
                if (block.instructions.get(i) instanceof AsmRet) {
-                  block.instructions.add(new AsmBinary("addi", ASMModule.get_reg("sp"), ASMModule.get_reg("sp"), new Immediate(offset), null));
+                  block.instructions.add(i, new AsmBinary("addi", ASMModule.get_reg("sp"), ASMModule.get_reg("sp"), new Immediate(offset), null));
                   ++i;
                }
             }
