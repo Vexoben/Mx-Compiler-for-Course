@@ -8,10 +8,7 @@ import Backend.ASM.Operands.Immediate;
 import Backend.ASM.Operands.PhysicalReg;
 import Backend.ASM.Operands.Register;
 import Backend.ASM.Operands.VirtualReg;
-import Middleend.llvmir.Hierarchy.IRFunction;
-import org.jetbrains.annotations.VisibleForTesting;
 
-import javax.swing.plaf.IconUIResource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;

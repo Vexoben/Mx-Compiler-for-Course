@@ -1,9 +1,5 @@
 package Backend.ASM.Allocator;
-import Backend.ASM.Operands.Register;
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Node;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -24,7 +20,7 @@ public class Graph<NodeType> {
       add_edge(edge);
    }
 
-   public void add_edge(@NotNull Edge edge) {
+   public void add_edge(Edge edge) {
       if (edge.u == edge.v || exist_edge(edge)) {
          return;
       }
@@ -37,7 +33,7 @@ public class Graph<NodeType> {
       remove_edge(edge);
    }
 
-   public void remove_edge(@NotNull Edge edge) {
+   public void remove_edge(Edge edge) {
       if (!exist_edge(edge)) return;
       HashSet<NodeType> adj_set = adj_map.get(edge.u);
       adj_set.remove(edge.v);
@@ -49,7 +45,7 @@ public class Graph<NodeType> {
       return adj_set.contains(v);
    }
 
-   public boolean exist_edge(@NotNull Edge edge) {
+   public boolean exist_edge(Edge edge) {
       return exist_edge(edge.u, edge.v);
    }
 }
