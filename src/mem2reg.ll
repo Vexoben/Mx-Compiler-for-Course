@@ -43,12 +43,38 @@ while_condition:
   %reach_end = icmp eq i32** tmp, %arr_tail
   br i1 %reach_end, label %while_exit, label %while_repeat
 while_repeat:
-  store i32 0, i32** tmp
-  %get_element_ptr_inst2 = getelementptr inbounds i32*, i32** tmp, i32 1
-  store i32** %get_element_ptr_inst2, i32** arr_cur_ptr
+  %get_element_ptr_inst2 = getelementptr inbounds i32*, i32** tmp, i32 0
+  store i32 0, i32** %get_element_ptr_inst2
+  %get_element_ptr_inst3 = getelementptr inbounds i32*, i32** tmp, i32 1
+  store i32** %get_element_ptr_inst3, i32** arr_cur_ptr
   br label %while_condition
 while_exit:
   store i32** %arr_head, i32** new_result
+  store i32** new_result, i32** tmp
+  store i32** tmp, i32** a
+  store i32** a, i32** tmp
+  %get_element_ptr_inst4 = getelementptr inbounds i32*, i32** tmp, i32 1
+  %array_size2 = mul i32 4, 10
+  %alloca_size2 = add i32 4, %array_size2
+  %function_call_inst3 = call i8* @__built_in_malloc(i32 %alloca_size2)
+  %bit_cast_inst2 = bitcast i8* %function_call_inst3 to i32*
+  store i32 10, i32* %bit_cast_inst2
+  %get_element_ptr_inst5 = getelementptr inbounds i32, i32* %bit_cast_inst2, i32 1
+  %arr_head2 = bitcast i32* %get_element_ptr_inst5 to i32*
+  store i32* %arr_head2, i32* new_result
+  store i32* new_result, i32* tmp
+  store i32* tmp, i32** %get_element_ptr_inst4
+  store i32** a, i32** tmp
+  %get_element_ptr_inst6 = getelementptr inbounds i32*, i32** tmp, i32 1
+  %load_inst5 = load i32*, i32** %get_element_ptr_inst6
+  %get_element_ptr_inst7 = getelementptr inbounds i32, i32* %load_inst5, i32 1
+  store i32 1, i32* %get_element_ptr_inst7
+  store i32** a, i32** tmp
+  %get_element_ptr_inst8 = getelementptr inbounds i32*, i32** tmp, i32 1
+  %load_inst7 = load i32*, i32** %get_element_ptr_inst8
+  %get_element_ptr_inst9 = getelementptr inbounds i32, i32* %load_inst7, i32 1
+  %load_inst8 = load i32, i32* %get_element_ptr_inst9
+  call void @printlnInt(i32 %load_inst8)
   br label %mainexit
 mainexit:
   ret i32 0

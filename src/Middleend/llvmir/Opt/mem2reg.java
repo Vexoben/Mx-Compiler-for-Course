@@ -53,12 +53,12 @@ public class mem2reg {
                continue;
             }
          }
-         update_operand(block, inst);
+         update_operand(inst);
          block.push_back(inst);
       }
    }
 
-   void update_operand(BasicBlock block, BaseInst inst) {
+   void update_operand(BaseInst inst) {
       for (int i = 0; i < inst.get_operands_size(); ++i) {
          Value value = inst.get_operand(i);
          if (value.get_origin_name().equals("null")) {

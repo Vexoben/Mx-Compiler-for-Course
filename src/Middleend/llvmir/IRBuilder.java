@@ -700,7 +700,11 @@ public class IRBuilder implements ASTVisitor {
         } else { // new foo[10] 需要将malloc出来的指针赋值为null
             sub_inst = new AllocaInst(type.get_pointed_type(2), "null", cur_block);
         }
-        cur_block.push_back(new StoreInst(sub_inst, arr_cur, cur_block));
+        ArrayList<Value> arr_tmp = new ArrayList<>();
+        arr_tmp.add(new IntConst(0));
+        GetElementPtrInst ptr_inst = new GetElementPtrInst(arr_cur, arr_tmp, type, cur_block);
+        cur_block.push_back(ptr_inst);
+        cur_block.push_back(new StoreInst(sub_inst, ptr_inst, cur_block));
         GetElementPtrInst arr_next = new GetElementPtrInst(arr_cur, one_arr, type, cur_block);
         cur_block.push_back(arr_next);
         cur_block.push_back(new StoreInst(arr_next, arr_cur_ptr, cur_block));
