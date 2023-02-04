@@ -38,8 +38,8 @@ public abstract class AsmBaseInst {
 
     public HashSet<Register> get_uses() {
         HashSet<Register> ret = new HashSet<>();
-        if (rs1 != null) ret.add((Register) rs1);
-        if (rs2 != null) ret.add((Register) rs2);
+        if (rs1 != null && rs1 instanceof Register) ret.add((Register) rs1);
+        if (rs2 != null && rs2 instanceof Register) ret.add((Register) rs2);
         return ret;
     }
 
