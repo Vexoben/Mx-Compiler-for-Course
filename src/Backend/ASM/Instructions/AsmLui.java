@@ -19,4 +19,9 @@ public class AsmLui extends AsmBaseInst{
     public String toString() {
         return "lui " + rd.toString() + ", " + immediate.toString();
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

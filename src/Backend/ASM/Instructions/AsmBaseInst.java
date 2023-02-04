@@ -3,6 +3,10 @@ package Backend.ASM.Instructions;
 import Backend.ASM.ASMBlock;
 import Backend.ASM.Operands.BaseOperand;
 import Backend.ASM.Operands.Immediate;
+import Backend.ASM.Operands.Register;
+import Middleend.llvmir.Inst.RetInst;
+
+import java.util.HashSet;
 
 public abstract class AsmBaseInst {
     public ASMBlock parent_block;
@@ -20,4 +24,28 @@ public abstract class AsmBaseInst {
     public abstract void accept(InstVisitor visitor);
 
     abstract public String toString();
+
+    abstract public boolean is_move_instruction();
+
+    public void replace_use(Register older, Register newer) {
+        if (rs1 == older) rs1 = newer;
+        if (rs2 == older) rs2 = newer;
+    }
+
+    public void replace_def(Register older, Register newer) {
+        if (rd == older) rd = newer;
+    }
+
+    public HashSet<Register> get_uses() {
+        HashSet<Register> ret = new HashSet<>();
+        if (rs1 != null) ret.add((Register) rs1);
+        if (rs2 != null) ret.add((Register) rs2);
+        return ret;
+    }
+
+    public HashSet<Register> get_defs() {
+        HashSet<Register> ret = new HashSet<>();
+        if (rd != null) ret.add((Register) rd);
+        return ret;
+    }
 }

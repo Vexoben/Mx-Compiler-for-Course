@@ -1,9 +1,9 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.VoidType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class RetInst extends BaseInst{
     public RetInst(Value ret_value, BasicBlock _belong) {

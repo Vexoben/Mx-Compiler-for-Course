@@ -19,4 +19,9 @@ public class AsmLi extends AsmBaseInst{
     public String toString() {
         return "li " + rd.toString() + ", " + immediate.toString();
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

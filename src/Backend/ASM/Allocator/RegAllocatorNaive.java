@@ -1,15 +1,15 @@
-package Backend.ASM;
+package Backend.ASM.Allocator;
 
+import Backend.ASM.ASMBlock;
+import Backend.ASM.ASMFunction;
+import Backend.ASM.ASMModule;
 import Backend.ASM.Instructions.*;
 import Backend.ASM.Operands.*;
-import Middleend.llvmir.Inst.LoadInst;
 
-import java.awt.image.RGBImageFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class RegAllocator implements InstVisitor {
+public class RegAllocatorNaive implements InstVisitor {
 
 
     //
@@ -25,7 +25,7 @@ public class RegAllocator implements InstVisitor {
 
     ArrayList<AsmBinary> sp_addi_list = new ArrayList<>();
 
-    public RegAllocator(ASMModule _asm) {
+    public RegAllocatorNaive(ASMModule _asm) {
         asm = _asm;
         for (ASMFunction func: asm.functions) {
             visit(func);
@@ -71,7 +71,7 @@ public class RegAllocator implements InstVisitor {
             return ret;
         }*/
         if (!(reg instanceof VirtualReg)) return reg;
-        if (((VirtualReg) reg).color == -1) {
+        if (((VirtualReg) reg).color2 == -1) {
             PhysicalReg ret = new PhysicalReg("sp");
             ret.offset = get_stack_position((VirtualReg) reg);
             return ret;
@@ -83,7 +83,7 @@ public class RegAllocator implements InstVisitor {
 
     BaseOperand store(Register rd, PhysicalReg tmp_reg) {
         if (!(rd instanceof VirtualReg)) return rd;
-        if (rd.color == -1) {
+        if (rd.color2 == -1) {
             PhysicalReg ret = new PhysicalReg("sp");
             ret.offset = get_stack_position((VirtualReg) rd);
             return ret;

@@ -1,10 +1,10 @@
 package Middleend.llvmir.Inst;
 
 import Frontend.ast.expr.BinaryExprNode;
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class BinaryInst extends BaseInst{   // binary && icmp
     public BinaryExprNode.BinaryOperator operator;

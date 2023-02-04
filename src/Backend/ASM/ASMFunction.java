@@ -18,7 +18,7 @@ public class ASMFunction {
 
     public boolean is_built_in;
 
-    void add_block(ASMBlock block) {
+    public void add_block(ASMBlock block) {
         blocks.add(block);
     }
 

@@ -1,7 +1,9 @@
 import Backend.ASM.ASMBuilder;
+import Backend.ASM.ASMModule;
 import Backend.ASM.ASMPrinter;
+import Backend.ASM.Allocator.RegAllocator;
 import Backend.ASM.BuiltInPrinter;
-import Backend.ASM.RegAllocator;
+import Backend.ASM.Allocator.RegAllocatorNaive;
 import Frontend.ASTBuilder;
 import Frontend.SemanticChecker;
 import Frontend.ast.RootNode;
@@ -10,6 +12,8 @@ import Frontend.parser.MxStarParser;
 import Frontend.Tools.Error.BaseError;
 import Frontend.Tools.MxStarErrorListener;
 import Middleend.llvmir.IRPrinter;
+import Middleend.llvmir.Opt.mem2reg;
+import Middleend.llvmir.ValueAndUser.toRegValue;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -60,6 +64,9 @@ public class Compiler {
             IRPrinter ir_printer = new IRPrinter(astroot, out_ll_stream, is_online_judge);
             if (!is_online_judge || debug_mode) {
                 ir_printer.IR_print();
+                new mem2reg(ir_printer);
+                ir_printer.os = new FileOutputStream("mem2reg.ll");
+                ir_printer.IR_print();
             }
             // System.out.println("-----------------ASM Building-------------------");
             ASMBuilder asm_builder = new ASMBuilder(ir_printer);
@@ -68,8 +75,11 @@ public class Compiler {
                 asm_printer1.ASM_print();
             }
             // System.out.println("-----------------REG Allocating-------------------");
-            RegAllocator reg_allocator = new RegAllocator(asm_builder.asm);
-            ASMPrinter asm_printer = new ASMPrinter(reg_allocator.asm, out_asm_stream, is_online_judge);
+            //RegAllocatorNaive reg_allocator = new RegAllocatorNaive(asm_builder.asm);
+            RegAllocator reg_allocator = new RegAllocator();
+            ASMModule asm = asm_builder.asm;
+            reg_allocator.run_on_module(asm);
+            ASMPrinter asm_printer = new ASMPrinter(asm, out_asm_stream, is_online_judge);
             asm_printer.ASM_print();
             if (is_online_judge) {
                 new BuiltInPrinter(out_built_in_stream);

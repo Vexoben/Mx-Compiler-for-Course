@@ -17,4 +17,9 @@ public class AsmRet extends AsmBaseInst{
     public String toString() {
         return "ret";
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

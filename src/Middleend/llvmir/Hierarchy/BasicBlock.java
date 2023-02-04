@@ -1,13 +1,15 @@
-package Middleend.llvmir;
+package Middleend.llvmir.Hierarchy;
 
 import Middleend.llvmir.Inst.BaseInst;
+import Middleend.llvmir.ValueAndUser.Label;
+import Middleend.llvmir.ValueAndUser.Value;
 
 import java.util.ArrayList;
 
 public class BasicBlock extends Value {
-    ArrayList<BaseInst> instructions = new ArrayList<>();
+    public ArrayList<BaseInst> instructions = new ArrayList<>();
     public IRFunction parent_function;
-    BasicBlock next_block;
+    public BasicBlock next_block;
     Label label;
 
     public BasicBlock(String _name, IRFunction _parent_function) {

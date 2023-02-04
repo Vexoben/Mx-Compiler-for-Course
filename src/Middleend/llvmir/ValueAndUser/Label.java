@@ -1,6 +1,6 @@
-package Middleend.llvmir;
+package Middleend.llvmir.ValueAndUser;
 
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class Label extends Value {
 

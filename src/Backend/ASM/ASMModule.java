@@ -20,7 +20,9 @@ public class ASMModule {
             "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
             "t3", "t4", "t5", "t6"
     };
-   /* static ArrayList<PhysicalReg> callee_saved_reg = new ArrayList<>();
+    public static ArrayList<PhysicalReg> callee_saved_reg = new ArrayList<>();
+    public static ArrayList<PhysicalReg> caller_saved_reg = new ArrayList<>();
+    public static ArrayList<PhysicalReg> assignable_colors = new ArrayList<>();
 
     static {
         for (int i = 0; i < reg_name.length; ++i) {
@@ -28,45 +30,44 @@ public class ASMModule {
             phy_id_map.put(i, reg);
             phy_name_map.put(reg_name[i], reg);
         }
-        // callee_saved_reg.add(get_reg("sp"));
+
+        for (int i = 0; i <= 6; ++i) caller_saved_reg.add(get_reg_t(i));
+        for (int i = 0; i <= 7; ++i) caller_saved_reg.add(get_reg_a(i));
+        caller_saved_reg.add(get_reg("ra"));
+
         for (int i = 0; i < 12; ++i) {
-            callee_saved_reg.add(get_reg("s" + i));
+            callee_saved_reg.add(get_reg_s(i));
         }
-    }*/
+
+        assignable_colors.addAll(callee_saved_reg);
+        assignable_colors.addAll(caller_saved_reg);
+    }
 
     public ASMModule() {
     }
 
     public static PhysicalReg get_reg(int id) {
-        return new PhysicalReg(reg_name[id]);
-        // return phy_name_map.get(reg_name[id]);
+        return phy_name_map.get(reg_name[id]);
     }
 
     public static PhysicalReg get_reg(String name) {
-        return new PhysicalReg(name);
-        //return phy_name_map.get(name);
+        return phy_name_map.get(name);
     }
 
     public static PhysicalReg get_reg_a(int id) {
-        return new PhysicalReg("a" + id);
-        //return phy_name_map.get("a" + id);
+        return phy_name_map.get("a" + id);
     }
 
     public static PhysicalReg get_reg_s(int id) {
-        return new PhysicalReg("s" + id);
-        //return phy_name_map.get("s" + id);
+        return phy_name_map.get("s" + id);
     }
 
     public static PhysicalReg get_reg_t(int id) {
-        return new PhysicalReg("t" + id);
-//        return phy_name_map.get("t" + id);
+        return phy_name_map.get("t" + id);
     }
 
     public static ArrayList<PhysicalReg> get_callee_saved_reg() {
-        ArrayList<PhysicalReg> ret = new ArrayList<>();
-        ret.add(get_reg("s0"));
-        return ret;
-        // return callee_saved_reg;
+        return callee_saved_reg;
     }
 
     @Override

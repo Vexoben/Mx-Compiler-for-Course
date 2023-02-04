@@ -1,16 +1,17 @@
-package Middleend.llvmir;
+package Middleend.llvmir.Hierarchy;
 
 import Middleend.llvmir.Inst.*;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.IRFuncType;
 import Middleend.llvmir.Type.VoidType;
+import Middleend.llvmir.ValueAndUser.User;
 
 import java.util.ArrayList;
 
 public class IRFunction extends User {
 
-    ArrayList<BasicBlock> blocks = new ArrayList<>();
+    public ArrayList<BasicBlock> blocks = new ArrayList<>();
     ArrayList<String> args_name = new ArrayList<>();
 
     public BasicBlock entry_block, exit_block;
@@ -66,7 +67,7 @@ public class IRFunction extends User {
     String print_inst(BaseInst inst) {
         if (inst instanceof StoreInst ||
                 (inst instanceof FuncCallInst && ((FuncCallInst)inst).get_func().get_ret_type().match(new VoidType())) ||
-                (inst instanceof BrInst) || (inst instanceof RetInst)) {
+                (inst instanceof BrInst) || (inst instanceof RetInst) || (inst instanceof AssignInst)) {
             return "  " + inst.output() + "\n";
         } else return "  " + inst.get_name() + " = " + inst.output() + "\n";
     }

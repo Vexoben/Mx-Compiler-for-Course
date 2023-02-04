@@ -13,8 +13,12 @@ import Frontend.ast.def.*;
 import Frontend.ast.expr.*;
 import Frontend.ast.stmt.*;
 import Middleend.llvmir.Constant.*;
+import Middleend.llvmir.Hierarchy.BasicBlock;
+import Middleend.llvmir.Hierarchy.IRFunction;
 import Middleend.llvmir.Inst.*;
 import Middleend.llvmir.Type.*;
+import Middleend.llvmir.ValueAndUser.GlobalValue;
+import Middleend.llvmir.ValueAndUser.Value;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class PhiInst extends BaseInst{
     public PhiInst(IRBaseType _type, String _name, BasicBlock _belong, Value... values) {

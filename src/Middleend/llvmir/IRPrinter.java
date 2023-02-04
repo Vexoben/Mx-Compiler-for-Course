@@ -1,14 +1,17 @@
 package Middleend.llvmir;
 
 import Frontend.ast.RootNode;
+import Middleend.llvmir.Hierarchy.IRFunction;
 import Middleend.llvmir.Type.PointerType;
 import Middleend.llvmir.Type.StructType;
+import Middleend.llvmir.ValueAndUser.GlobalValue;
+import Middleend.llvmir.ValueAndUser.Value;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 public class IRPrinter extends IRBuilder{
-    OutputStream os;
+    public OutputStream os;
     Boolean is_online_judge;
 
     public IRPrinter(RootNode root, OutputStream output, boolean is_online_flag) {

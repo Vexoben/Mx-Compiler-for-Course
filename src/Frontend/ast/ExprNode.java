@@ -1,7 +1,7 @@
 package Frontend.ast;
 import Frontend.Tools.Position;
 import Frontend.Tools.Type.BaseType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public abstract class ExprNode extends ASTNode {
 

@@ -4,7 +4,7 @@ import Frontend.ast.ASTVisitor;
 import Frontend.ast.ExprNode;
 import Frontend.Tools.Position;
 import Frontend.Tools.Registry.VarRegistry;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class VarSingleDefNode extends VarDefNode {
     public VarRegistry registry;

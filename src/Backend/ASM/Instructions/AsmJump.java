@@ -20,4 +20,9 @@ public class AsmJump extends AsmBaseInst{
     public String toString() {
         return "j " + dest.toString();
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

@@ -36,4 +36,9 @@ public class AsmBr extends AsmBaseInst{
     public String toString() {
         return trans_op() + " " + rs1.toString() + ", " + rs2.toString() + ", " + dest.toString();
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

@@ -1,10 +1,10 @@
-package Middleend.llvmir;
+package Middleend.llvmir.ValueAndUser;
 
 import Backend.ASM.Operands.Register;
-import Backend.ASM.Operands.VirtualReg;
 import Middleend.llvmir.Constant.BaseConst;
 import Middleend.llvmir.Constant.NullConst;
 import Middleend.llvmir.Constant.StringConst;
+import Middleend.llvmir.Hierarchy.IRFunction;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.PointerType;
 
@@ -13,11 +13,12 @@ import java.util.HashMap;
 
 public class Value {
 
-    protected IRBaseType type;
-    protected ArrayList<User> users = new ArrayList<User>();
-    protected boolean has_name = false;
-    protected String ori_name, name;
-    protected Value mem_pos;
+    public IRBaseType type;
+    public ArrayList<User> users = new ArrayList<User>();
+    public boolean has_name = false;
+    public String ori_name;
+    public String name;
+    public Value mem_pos;
 
     // for asm
     public Register reg_asm;
@@ -30,7 +31,8 @@ public class Value {
     public Value(IRBaseType _type, String _name) {
         type = _type;
         has_name = true;
-        ori_name = _name;
+        if (_name.equals("")) ori_name = "tmp";
+        else ori_name = _name;
         name = rename(_name);
     }
 
@@ -69,6 +71,7 @@ public class Value {
     static HashMap<String, Integer> name_table = new HashMap<>();
 
     private String rename(String _name) {
+        if (this instanceof toRegValue) return _name;
         if (_name.equals("null")) return "null";
         if (_name.equals("")) _name = "r";
         if (this instanceof IRFunction) _name = "@" + _name;
@@ -87,7 +90,6 @@ public class Value {
 
     // to printer
     public String global_variable_declare() {
-        String ans = name + " = dso_local global " + ((PointerType) get_type()).get_pointed_type().toString() + " zeroinitializer\n";
-        return ans;
+        return name + " = dso_local global " + ((PointerType) get_type()).get_pointed_type().toString() + " zeroinitializer\n";
     }
 }

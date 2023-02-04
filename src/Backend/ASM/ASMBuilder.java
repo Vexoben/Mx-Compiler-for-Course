@@ -6,11 +6,15 @@ import Frontend.Tools.Error.AsmError;
 import Frontend.ast.expr.BinaryExprNode;
 import Middleend.llvmir.*;
 import Middleend.llvmir.Constant.*;
+import Middleend.llvmir.Hierarchy.BasicBlock;
+import Middleend.llvmir.Hierarchy.IRFunction;
 import Middleend.llvmir.Inst.*;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.PointerType;
 import Middleend.llvmir.Type.StructType;
 import Middleend.llvmir.Type.VoidType;
+import Middleend.llvmir.ValueAndUser.GlobalValue;
+import Middleend.llvmir.ValueAndUser.Value;
 
 import java.util.HashMap;
 
@@ -110,6 +114,7 @@ public class ASMBuilder implements IRVisitor {
         VirtualReg _ra = new VirtualReg("virtual_ra");
         asm_func.callee_saved_virtual.add(_ra);
         new AsmMv(_ra, ASMModule.get_reg("ra"), cur_block);
+
         for (PhysicalReg reg: ASMModule.get_callee_saved_reg()) {
             VirtualReg _reg = new VirtualReg("virtual_" + reg.toString());
             new AsmMv(_reg, reg, cur_block);
@@ -150,7 +155,7 @@ public class ASMBuilder implements IRVisitor {
     @Override
     public void visit(AllocaInst inst) {
         Register reg = get_register(inst);
-        reg.color = -1; // placed in stack memory
+        reg.color2 = -1; // placed in stack memory
         // cur_func.delta_sp +=
     }
 
@@ -235,10 +240,12 @@ public class ASMBuilder implements IRVisitor {
     public void visit(BrInst inst) {
         if (inst.get_operands_size() == 1) {
             new AsmJump(block_map.get(inst.get_operand(0)), cur_block);
+            cur_block.add_edge(block_map.get(inst.get_operand(0)));
         } else {
             ASMBlock if_block = block_map.get(inst.get_operand(1));
             ASMBlock else_block = block_map.get(inst.get_operand(2));
-
+            cur_block.add_edge(if_block);
+            cur_block.add_edge(else_block);
             if (inst.get_operand(0) instanceof BinaryInst cmp && cmp.operator.is_compare()) { // cmp inst
                 new AsmBr(cmp.operator, get_register(cmp.get_operand(0)), get_register(cmp.get_operand(1)), if_block, cur_block);
             } else {
@@ -363,5 +370,12 @@ public class ASMBuilder implements IRVisitor {
     @Override
     public void visit(ZextInst inst) {
         throw new AsmError("AsmBuilder.java: visit ZextInst");
+    }
+
+    @Override
+    public void visit(AssignInst assign) {
+        Value variable = assign.get_operand(0);
+        Value expr = assign.get_operand(1);
+        new AsmMv(get_register(variable), get_register(expr), cur_block);
     }
 }

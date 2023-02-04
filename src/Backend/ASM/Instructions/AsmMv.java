@@ -18,4 +18,9 @@ public class AsmMv extends AsmBaseInst{
     public String toString() {
         return "mv " + rd.toString() + ", " + rs1.toString();
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return true;
+    }
 }

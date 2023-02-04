@@ -1,11 +1,11 @@
 package Middleend.llvmir.Inst;
 
 import Frontend.ast.expr.BinaryExprNode;
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.BoolType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class CmpInst extends BaseInst{
 

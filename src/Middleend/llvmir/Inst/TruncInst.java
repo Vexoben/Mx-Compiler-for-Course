@@ -5,10 +5,10 @@ package Middleend.llvmir.Inst;
 // The ‘trunc’ instruction truncates its operand to the type ty2.
 // %X = trunc i32 257 to i8
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class TruncInst extends BaseInst{
     public TruncInst(Value data, IRBaseType trunc_to, String _name, BasicBlock _belong) {

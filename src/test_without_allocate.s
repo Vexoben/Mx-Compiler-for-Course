@@ -1,139 +1,144 @@
 	.text
 	.file	"test.mx"
-.globl   qpow
-   .p2align   2
-   .type   qpow,@function
-qpow:
-.qpow.qpowentry:
-   mv virtual_ra, ra
-   mv virtual_s0, s0
-   mv qpow_a, a0
-   mv qpow_p, a1
-   mv qpow_mod, a2
-   j .qpow.first_block__qpow
-.qpow.first_block__qpow:
-   sw qpow_a, 0(a)
-   sw qpow_p, 0(p)
-   sw qpow_mod, 0(mod)
-   li tmp, 1
-   sw tmp, 0(t)
-   lw load_inst, 0(a)
-   sw load_inst, 0(y)
-   j .qpow.while_condition
-.qpow.while_condition:
-   lw load_inst2, 0(p)
-   li tmp2, 0
-   slt , tmp2, load_inst2
-   li tmp3, 0
-   bgt load_inst2, tmp3, .qpow.while_repeat
-   j .qpow.while_exit
-.qpow.while_repeat:
-   lw load_inst3, 0(p)
-   li tmp4, 1
-   and 2, load_inst3, tmp4
-   li tmp5, 1
-   xor tmp6, 2, tmp5
-   sltiu 3, tmp6, 1
-   li tmp7, 1
-   beq 2, tmp7, .qpow.if_true
-   j .qpow.if_false
-.qpow.while_exit:
-   lw load_inst4, 0(t)
-   mv a0, load_inst4
-   mv ra, virtual_ra
-   mv s0, virtual_s0
-   ret
-   j .qpow.qpowexit
-.qpow.if_true:
-   lw load_inst5, 0(t)
-   lw load_inst6, 0(t)
-   lw load_inst7, 0(y)
-   mul 4, load_inst6, load_inst7
-   lw load_inst8, 0(mod)
-   rem 5, 4, load_inst8
-   sw 5, 0(t)
-   j .qpow.if_exit
-.qpow.if_false:
-   j .qpow.if_exit
-.qpow.if_exit:
-   lw load_inst9, 0(y)
-   lw load_inst10, 0(y)
-   lw load_inst11, 0(y)
-   mul 6, load_inst10, load_inst11
-   lw load_inst12, 0(mod)
-   rem 7, 6, load_inst12
-   sw 7, 0(y)
-   lw load_inst13, 0(p)
-   lw load_inst14, 0(p)
-   li tmp8, 2
-   div 8, load_inst14, tmp8
-   sw 8, 0(p)
-   j .qpow.while_condition
-.qpow.qpowexit:
-   lw load_inst15, 0(allo)
-   mv a0, load_inst15
-   mv ra, virtual_ra
-   mv s0, virtual_s0
-   ret
-.Lfunc_end0:
-   .size   qpow, .Lfunc_end0-qpow
 .globl   main
    .p2align   2
    .type   main,@function
 main:
 .main.mainentry:
-   mv virtual_ra2, ra
-   mv virtual_s02, s0
+   mv virtual_ra, ra
+   mv virtual_s0, s0
+   mv virtual_s1, s1
+   mv virtual_s2, s2
+   mv virtual_s3, s3
+   mv virtual_s4, s4
+   mv virtual_s5, s5
+   mv virtual_s6, s6
+   mv virtual_s7, s7
+   mv virtual_s8, s8
+   mv virtual_s9, s9
+   mv virtual_s10, s10
+   mv virtual_s11, s11
    call __init_function__
    j .main.first_block__main
 .main.first_block__main:
-   li tmp9, 2
-   mv a0, tmp9
-   li tmp10, 10
-   mv a1, tmp10
-   li tmp11, 10000
-   mv a2, tmp11
-   call qpow
-   mv function_call_inst, a0
-   mv a0, function_call_inst
-   call toString
-   mv function_call_inst2, a0
-   sw function_call_inst2, 0(allo_inst)
-   lw load_inst16, 0(allo_inst)
-   mv a0, load_inst16
-   call println
-   li tmp12, 0
-   mv a0, tmp12
-   mv ra, virtual_ra2
-   mv s0, virtual_s02
+   la b_addr, b
+   lw load_inst, 0(b_addr)
+   la b_addr2, b
+   li tmp, 2
+   sw tmp, 0(b_addr2)
+   la a_addr, a
+   lw load_inst2, 0(a_addr)
+   la b_addr3, b
+   lw load_inst3, 0(b_addr3)
+   add tmp2, load_inst2, load_inst3
+   mv c, tmp2
+   mv a0, c
+   call printlnInt
+   li tmp3, 0
+   mv a0, tmp3
+   mv ra, virtual_ra
+   mv s0, virtual_s0
+   mv s1, virtual_s1
+   mv s2, virtual_s2
+   mv s3, virtual_s3
+   mv s4, virtual_s4
+   mv s5, virtual_s5
+   mv s6, virtual_s6
+   mv s7, virtual_s7
+   mv s8, virtual_s8
+   mv s9, virtual_s9
+   mv s10, virtual_s10
+   mv s11, virtual_s11
    ret
    j .main.mainexit
 .main.mainexit:
-   li tmp13, 0
-   mv a0, tmp13
-   mv ra, virtual_ra2
-   mv s0, virtual_s02
+   li tmp4, 0
+   mv a0, tmp4
+   mv ra, virtual_ra
+   mv s0, virtual_s0
+   mv s1, virtual_s1
+   mv s2, virtual_s2
+   mv s3, virtual_s3
+   mv s4, virtual_s4
+   mv s5, virtual_s5
+   mv s6, virtual_s6
+   mv s7, virtual_s7
+   mv s8, virtual_s8
+   mv s9, virtual_s9
+   mv s10, virtual_s10
+   mv s11, virtual_s11
    ret
-   lw load_inst17, 0(allo2)
-   mv a0, load_inst17
-   mv ra, virtual_ra2
-   mv s0, virtual_s02
+   mv a0, allo
+   mv ra, virtual_ra
+   mv s0, virtual_s0
+   mv s1, virtual_s1
+   mv s2, virtual_s2
+   mv s3, virtual_s3
+   mv s4, virtual_s4
+   mv s5, virtual_s5
+   mv s6, virtual_s6
+   mv s7, virtual_s7
+   mv s8, virtual_s8
+   mv s9, virtual_s9
+   mv s10, virtual_s10
+   mv s11, virtual_s11
    ret
-.Lfunc_end1:
-   .size   main, .Lfunc_end1-main
+.Lfunc_end0:
+   .size   main, .Lfunc_end0-main
 .globl   __init_function__
    .p2align   2
    .type   __init_function__,@function
 __init_function__:
 .__init_function__.__init_function__entry:
-   mv virtual_ra3, ra
-   mv virtual_s03, s0
+   mv virtual_ra2, ra
+   mv virtual_s02, s0
+   mv virtual_s12, s1
+   mv virtual_s22, s2
+   mv virtual_s32, s3
+   mv virtual_s42, s4
+   mv virtual_s52, s5
+   mv virtual_s62, s6
+   mv virtual_s72, s7
+   mv virtual_s82, s8
+   mv virtual_s92, s9
+   mv virtual_s102, s10
+   mv virtual_s112, s11
+   la a_addr2, a
+   li tmp5, 1
+   sw tmp5, 0(a_addr2)
+   la b_addr4, b
+   li tmp6, 0
+   sw tmp6, 0(b_addr4)
    j .__init_function__.__init_function__exit
 .__init_function__.__init_function__exit:
-   mv ra, virtual_ra3
-   mv s0, virtual_s03
+   mv ra, virtual_ra2
+   mv s0, virtual_s02
+   mv s1, virtual_s12
+   mv s2, virtual_s22
+   mv s3, virtual_s32
+   mv s4, virtual_s42
+   mv s5, virtual_s52
+   mv s6, virtual_s62
+   mv s7, virtual_s72
+   mv s8, virtual_s82
+   mv s9, virtual_s92
+   mv s10, virtual_s102
+   mv s11, virtual_s112
    ret
-.Lfunc_end2:
-   .size   __init_function__, .Lfunc_end2-__init_function__
+.Lfunc_end1:
+   .size   __init_function__, .Lfunc_end1-__init_function__
+   .type   a,@object
+   .section   .rodata.str1.1,"aMS",@progbits,1
+   .globl   a
+   .p2align   2
+a:
+   .word   0
+   .size   .a, 4
+   .type   b,@object
+   .globl   b
+   .p2align   2
+b:
+   .word   0
+   .size   .b, 4
 	.ident	"clang version 10.0.0-4ubuntu1 "
 	.section	".note.GNU-stack","",@progbits

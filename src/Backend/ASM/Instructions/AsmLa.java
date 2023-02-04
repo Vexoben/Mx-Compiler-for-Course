@@ -20,4 +20,9 @@ public class AsmLa extends AsmBaseInst{
     public String toString() {
         return "la " + rd.toString() + ", " + symbol;
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

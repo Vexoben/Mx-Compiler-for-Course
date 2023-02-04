@@ -1,11 +1,11 @@
-package Middleend.llvmir;
+package Middleend.llvmir.ValueAndUser;
 
 import Middleend.llvmir.Type.IRBaseType;
 
 import java.util.ArrayList;
 
 public class User extends Value{
-    ArrayList<Value> operands = new ArrayList<>();
+    public ArrayList<Value> operands = new ArrayList<>();
 
     public User(IRBaseType _type, String _name) {
         super(_type, _name);
@@ -22,6 +22,14 @@ public class User extends Value{
 
     public int get_operands_size() {
         return operands.size();
+    }
+
+    public void replace_operand(Value older, Value newer) {
+        for (int i = 0; i < operands.size(); ++i) {
+            if (operands.get(i) == older) {
+                operands.set(i, newer);
+            }
+        }
     }
 
 }

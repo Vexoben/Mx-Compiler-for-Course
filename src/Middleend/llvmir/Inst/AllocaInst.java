@@ -1,8 +1,7 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
-import Middleend.llvmir.Type.IRBaseType;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.PointerType;
 

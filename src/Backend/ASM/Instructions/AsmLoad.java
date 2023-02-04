@@ -11,7 +11,7 @@ public class AsmLoad extends AsmBaseInst{
 
     public AsmLoad(Register rd, Register rs1, Immediate offset, int _size, ASMBlock parent) {
         super(rd, rs1, null, offset, parent);
-        rs1.offset = offset;
+        immediate = offset;
         size = _size;
     }
 
@@ -27,7 +27,12 @@ public class AsmLoad extends AsmBaseInst{
         else if (size == 2) ret = "lh";
         else if (size == 4) ret = "lw";
         else throw new AsmError("AsmLoad.java: load size = " + size);
-        ret = ret + " " + rd.toString() + ", " + ((Register)rs1).offset.toString() + "(" + rs1.toString() + ")";
+        ret = ret + " " + rd.toString() + ", " + immediate.toString() + "(" + rs1.toString() + ")";
         return ret;
+    }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
     }
 }

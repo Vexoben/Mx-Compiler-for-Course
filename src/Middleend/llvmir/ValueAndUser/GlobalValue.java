@@ -1,4 +1,4 @@
-package Middleend.llvmir;
+package Middleend.llvmir.ValueAndUser;
 
 import Middleend.llvmir.Type.DerivedType;
 

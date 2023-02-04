@@ -1,11 +1,9 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.DerivedType;
-import Middleend.llvmir.Value;
-
-import java.util.ArrayList;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class BitCastInst extends BaseInst{
     public BitCastInst(Value value, DerivedType target_type, BasicBlock _belong) {

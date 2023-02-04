@@ -1,10 +1,10 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
-import Middleend.llvmir.IRFunction;
+import Middleend.llvmir.Hierarchy.BasicBlock;
+import Middleend.llvmir.Hierarchy.IRFunction;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRFuncType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 import java.util.ArrayList;
 

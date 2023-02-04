@@ -1,10 +1,10 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.DerivedType;
 import Middleend.llvmir.Type.PointerType;
-import Middleend.llvmir.Value;
+import Middleend.llvmir.ValueAndUser.Value;
 
 public class LoadInst extends BaseInst{
 

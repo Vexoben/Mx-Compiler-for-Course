@@ -1,6 +1,9 @@
 package Middleend.llvmir;
 
+import Middleend.llvmir.Hierarchy.BasicBlock;
+import Middleend.llvmir.Hierarchy.IRFunction;
 import Middleend.llvmir.Inst.*;
+import Middleend.llvmir.ValueAndUser.GlobalValue;
 
 public interface IRVisitor {
     void visit(IRFunction func);
@@ -34,4 +37,6 @@ public interface IRVisitor {
     void visit(TruncInst inst);
 
     void visit(ZextInst inst);
+
+   void visit(AssignInst assignInst);
 }

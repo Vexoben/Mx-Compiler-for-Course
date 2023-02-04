@@ -2,6 +2,7 @@ package Middleend.llvmir;
 
 import Frontend.Tools.Error.IRError;
 import Frontend.Tools.Position;
+import Middleend.llvmir.ValueAndUser.Value;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.HashMap;

@@ -24,4 +24,9 @@ public class AsmBinary extends AsmBaseInst{
     public String toString() {
         return op + " " + rd.toString() + ", " + rs1.toString() + ", " + rs2.toString();
     }
+
+    @Override
+    public boolean is_move_instruction() {
+        return false;
+    }
 }

@@ -1,9 +1,9 @@
 package Middleend.llvmir.Inst;
 
-import Middleend.llvmir.BasicBlock;
+import Middleend.llvmir.Hierarchy.BasicBlock;
 import Middleend.llvmir.IRVisitor;
 import Middleend.llvmir.Type.IRBaseType;
-import Middleend.llvmir.User;
+import Middleend.llvmir.ValueAndUser.User;
 
 public abstract class BaseInst extends User {
     BasicBlock belong;
