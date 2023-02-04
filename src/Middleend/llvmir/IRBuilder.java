@@ -67,7 +67,7 @@ public class IRBuilder implements ASTVisitor {
             str_ord = new IRFunction("__built_in_ord", new IRFuncType(null, int_type, char_ptr, int_type));
 
     // for opt
-    static double loop_weight = 1.5;
+    static double loop_weight = 0.5;
     double weight;
 
     static ArrayList<Value> zero_index = new ArrayList<>();
