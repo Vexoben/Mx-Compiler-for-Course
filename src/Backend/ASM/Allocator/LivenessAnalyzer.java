@@ -47,13 +47,13 @@ public class LivenessAnalyzer {
    void run_on_block(ASMBlock block) {
       if (visited.contains(block)) return;
       visited.add(block);
-      HashSet<Register> live_in_new = new HashSet<>(block_live_out_map.get(block));
       HashSet<Register> live_out_new = new HashSet<>();
 
       for (ASMBlock succ : block.succ_blocks) {
          live_out_new.addAll(block_live_in_map.get(succ));
       }
 
+      HashSet<Register> live_in_new = new HashSet<>(live_out_new);
       live_in_new.removeAll(block_def_map.get(block));
       live_in_new.addAll(block_use_map.get(block));
 
