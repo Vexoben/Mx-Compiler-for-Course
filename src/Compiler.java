@@ -62,9 +62,9 @@ public class Compiler {
             semantic_checker.visit(astroot);
             // System.out.println("-----------------IR Building-------------------");
             IRPrinter ir_printer = new IRPrinter(astroot, out_ll_stream, is_online_judge);
+            new mem2reg(ir_printer);
             if (!is_online_judge || debug_mode) {
                 ir_printer.IR_print();
-                new mem2reg(ir_printer);
                 ir_printer.os = new FileOutputStream("mem2reg.ll");
                 ir_printer.IR_print();
             }
