@@ -1,5 +1,7 @@
 package Middleend.llvmir.Opt;
 
+import Backend.ASM.ASMBlock;
+import Backend.ASM.Instructions.AsmBaseInst;
 import Backend.ASM.Instructions.AsmMv;
 import Middleend.llvmir.Constant.IntConst;
 import Middleend.llvmir.Hierarchy.BasicBlock;
@@ -43,34 +45,32 @@ public class mem2reg {
             toRegValue value = new toRegValue(allo.get_pointed_type(), inst.get_origin_name());
             alloca_map.put(allo, value);
             continue;
-         }
-         if (inst instanceof LoadInst load) {
+         } else if (inst instanceof LoadInst load) {
             if (load.get_operand(0) instanceof AllocaInst allo) {
                toRegValue value = new toRegValue(allo.get_pointed_type(), "tmp");
-               block.push_back(new AssignInst((DerivedType) value.type, value, alloca_map.get(allo), "tmp", null));
+               block.push_back(new StoreInst(alloca_map.get(allo), value, block));
                load_map.put(load, value);
                continue;
-            } else {
-               load_map.put(load, load);
             }
          }
-         for (Value value : inst.operands) {
-            if (value.get_origin_name().equals("null")) {
-               inst.replace_operand(value, new IntConst(0));
-            }
-            else if (value instanceof AllocaInst allo) {
-               inst.replace_operand(allo, alloca_map.get(allo));
-            } else if (value instanceof LoadInst load) {
-               inst.replace_operand(load, load_map.get(load));
+         update_operand(block, inst);
+         block.push_back(inst);
+      }
+   }
+
+   void update_operand(BasicBlock block, BaseInst inst) {
+      for (int i = 0; i < inst.get_operands_size(); ++i) {
+         Value value = inst.get_operand(i);
+         if (value.get_origin_name().equals("null")) {
+            inst.replace_operand(i, new IntConst(0));
+         }
+         else if (value instanceof AllocaInst allo) {
+            inst.replace_operand(i, alloca_map.get(allo));
+         } else if (value instanceof LoadInst load) {
+            if (load_map.containsKey(load)) {
+               inst.replace_operand(i, load_map.get(load));
             }
          }
-         if (inst instanceof StoreInst store) {
-            if (store.get_operand(1) instanceof toRegValue allo) {
-               block.push_back(new AssignInst((DerivedType) store.type, allo, store.get_operand(0), "assign", block));
-            } else {
-               block.push_back(store);
-            }
-         } else block.push_back(inst);
       }
    }
 }

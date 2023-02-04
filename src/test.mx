@@ -1,18 +1,28 @@
-class older{
-	int age;
-	void solveAge(){
-		int i;
-		int j;
-		int k;
-		for(i = 1; i < 100; i++)
-			for(j = i + 1; j < 100; j++)
-				for(k = j + 1; k < 100; k++)
-					if((i - i + i + j - j + j + k - k + k) * (100 * i + 10 * j + k) % 1926 == 0) age = (i - i + i + j - j + j + k - k + k) * (100 * i + 10 * j + k);
-	}
-};
-int main(){
-	older mrJiang = new older;
-	mrJiang.solveAge();
-	if(mrJiang.age > 10000)println("eternal!");
-    return 0;
+/*
+Test Package: Codegen
+Author: Haojun Mao
+Time: 2020-01-25
+Input:
+=== input ===
+1
+2
+3
+4
+=== end ===
+Output:
+=== output ===
+4
+1234
+0000
+=== end ===
+ExitCode: 0
+InstLimit: -1
+Origin Package: Codegen Pretest-532
+*/
+// input: 1 2 3 4
+
+int main()
+{
+    new int[999][];
 }
+

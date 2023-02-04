@@ -24,11 +24,7 @@ public class User extends Value{
         return operands.size();
     }
 
-    public void replace_operand(Value older, Value newer) {
-        for (int i = 0; i < operands.size(); ++i) {
-            if (operands.get(i) == older) {
-                operands.set(i, newer);
-            }
-        }
+    public void replace_operand(int id, Value newer) {
+        operands.set(id, newer);
     }
 }

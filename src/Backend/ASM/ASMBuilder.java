@@ -15,6 +15,7 @@ import Middleend.llvmir.Type.StructType;
 import Middleend.llvmir.Type.VoidType;
 import Middleend.llvmir.ValueAndUser.GlobalValue;
 import Middleend.llvmir.ValueAndUser.Value;
+import Middleend.llvmir.ValueAndUser.toRegValue;
 
 import java.util.HashMap;
 
@@ -358,7 +359,11 @@ public class ASMBuilder implements IRVisitor {
             new AsmLa(reg, addr.get_origin_name(), cur_block);
             new AsmStore(get_register(data), reg, new Immediate(0), 4, cur_block);
         } else {
-            new AsmStore(get_register(data), get_register(addr), new Immediate(0), 4, cur_block);
+            if (addr instanceof toRegValue) {
+                new AsmMv(get_register(addr), get_register(data), cur_block);
+            } else {
+                new AsmStore(get_register(data), get_register(addr), new Immediate(0), 4, cur_block);
+            }
         }
     }
 
